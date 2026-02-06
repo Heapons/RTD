@@ -73,12 +73,12 @@ public Action Sickness_Tick(const int client)
 	return Plugin_Continue;
 }
 
-void Sickness_Cough(const int client, const float fMinDamage, const float fMaxDamage, const int iAttacker=0)
+void Sickness_Cough(const int client, const float fMinDamage, const float fMaxDamage, const int attacker=0)
 {
 	SendTEParticleAttached(TEParticles.GreenGoop, client, .fOffset={0.0, 0.0, 36.0});
 
 	float fDamage = GetRandomFloat(fMinDamage, fMaxDamage);
-	TakeDamage(client, iAttacker, iAttacker, fDamage, DMG_PREVENT_PHYSICS_FORCE);
+	TakeDamage(client, attacker, attacker, fDamage, DMG_PREVENT_PHYSICS_FORCE);
 
 	float fShake[3];
 	fShake[0] = GetRandomFloat(10.0, 15.0);
@@ -138,8 +138,8 @@ public Action Timer_Sickness_Infected(Handle hTimer, DataPack hData)
 	if (!client || !IsPlayerAlive(client) || g_eInGodmode.Test(client))
 		return Plugin_Stop;
 
-	int iAttacker = GetClientOfUserId(hData.ReadCell());
-	if (!iAttacker)
+	int attacker = GetClientOfUserId(hData.ReadCell());
+	if (!attacker)
 		return Plugin_Stop;
 
 	float fMinDamage = hData.ReadFloat();
@@ -150,13 +150,13 @@ public Action Timer_Sickness_Infected(Handle hTimer, DataPack hData)
 		case 0:
 		{
 			EmitSoundToAll(g_sSoundCough[GetRandomInt(0, 3)], client);
-			Sickness_Cough(client, fMinDamage, fMaxDamage, iAttacker);
+			Sickness_Cough(client, fMinDamage, fMaxDamage, attacker);
 			// fallthrough
 		}
 
 		case -1:
 		{
-			Sickness_Cough(client, fMinDamage, fMaxDamage, iAttacker);
+			Sickness_Cough(client, fMinDamage, fMaxDamage, attacker);
 
 			hData.Reset();
 			hData.WriteCell(iTicks - 1);

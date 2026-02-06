@@ -84,12 +84,12 @@ void Blind_UpdateAnnotations(const int client, const bool bForceDisable=false)
 	}
 }
 
-public void Blind_OnPlayerAttacked(const int client, const int iVictim, const int iDamage, const int iRemainingHealth)
+public void Blind_OnPlayerAttacked(const int client, const int victim, const int damage, const int health)
 {
 	if(!Cache[client].TriggerUnblind)
 		return;
 
-	if (client == iVictim)
+	if (client == victim)
 		return;
 
 	Blind_SendFade(client, 0);

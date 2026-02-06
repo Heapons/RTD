@@ -196,39 +196,45 @@ enum struct AttachmentPointCache
 
 enum struct AttributesCache
 {
-	int Damage;
-	int VoicePitch;
-	int FireRate;
-	int ReloadSpeed;
-	int MaxHealth;
-	int MeleeRange;
-	int JumpHeight;
-	int PreventJump;
-	int NoFallDamage;
-	int ForceDamageTaken;
-	int OverhealBonus;
-	int AirblastVulnerability;
-	int DeploySpeed;
-	int SilentRev;
-	int MeltsInFire;
+	char Damage[64];
+	char VoicePitch[64];
+	char FireRate[64];
+	char ReloadSpeed[64];
+	char MaxHealth[64];
+	char MeleeRange[64];
+	char JumpHeight[64];
+	char PreventJump[64];
+	char NoFallDamage[64];
+	char ForceDamageTaken[64];
+	char OverhealBonus[64];
+	char AirblastVulnerability[64];
+	char DeploySpeed[64];
+	char SilentRev[64];
+	char MeltsInFire[64];
+	char CaptureValue[64];
+	char CannotPickupIntelligence[64];
+	char MoveSpeed[64];
 
 	void Init()
 	{
-		this.Damage = 476;
-		this.VoicePitch = 2048;
-		this.FireRate = 394;
-		this.ReloadSpeed = 241;
-		this.MaxHealth = 26;
-		this.MeleeRange = 264;
-		this.JumpHeight = 326;
-		this.PreventJump = 819;
-		this.NoFallDamage = 275;
-		this.ForceDamageTaken = 535;
-		this.OverhealBonus = 11;
-		this.AirblastVulnerability = 329;
-		this.DeploySpeed = 178;
-		this.SilentRev = 238;
-		this.MeltsInFire = 359;
+		strcopy(this.Damage, sizeof(this.Damage), "damage bonus HIDDEN");
+		strcopy(this.VoicePitch, sizeof(this.VoicePitch), "voice pitch scale");
+		strcopy(this.FireRate, sizeof(this.FireRate), "fire rate bonus HIDDEN");
+		strcopy(this.ReloadSpeed, sizeof(this.ReloadSpeed), "reload time increased hidden");
+		strcopy(this.MaxHealth, sizeof(this.MaxHealth), "max health additive bonus");
+		strcopy(this.MeleeRange, sizeof(this.MeleeRange), "melee range multiplier");
+		strcopy(this.JumpHeight, sizeof(this.JumpHeight), "increased jump height");
+		strcopy(this.PreventJump, sizeof(this.PreventJump), "no_jump");
+		strcopy(this.NoFallDamage, sizeof(this.NoFallDamage), "cancel falling damage");
+		strcopy(this.ForceDamageTaken, sizeof(this.ForceDamageTaken), "damage force increase hidden");
+		strcopy(this.OverhealBonus, sizeof(this.OverhealBonus), "overheal bonus");
+		strcopy(this.AirblastVulnerability, sizeof(this.AirblastVulnerability), "airblast vulnerability multiplier");
+		strcopy(this.DeploySpeed, sizeof(this.DeploySpeed), "deploy time decreased");
+		strcopy(this.SilentRev, sizeof(this.SilentRev), "minigun no spin sounds");
+		strcopy(this.MeltsInFire, sizeof(this.MeltsInFire), "melts in fire");
+		strcopy(this.CaptureValue, sizeof(this.CaptureValue), "increase player capture value");
+		strcopy(this.CannotPickupIntelligence, sizeof(this.CannotPickupIntelligence), "cannot pick up intelligence");
+		strcopy(this.MoveSpeed, sizeof(this.MoveSpeed), "move speed bonus");
 	}
 }
 

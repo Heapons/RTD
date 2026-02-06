@@ -32,6 +32,7 @@ public void LowGravity_ApplyPerk(int client, Perk perk)
 {
 	float fMultiplier = perk.GetPrefFloat("multiplier", 0.25);
 	float fBaseSpeed = GetBaseSpeed(client);
+	TFEntity player = TFEntity(client);
 
 	Cache[client].JumpMode = perk.GetPrefCell("jump_mode", 1);
 	Cache[client].FallDamage = perk.GetPrefCell("fall_damage", 0);
@@ -40,7 +41,7 @@ public void LowGravity_ApplyPerk(int client, Perk perk)
 
 	if (Cache[client].JumpMode)
 	{
-		TF2Attrib_SetByDefIndex(client, Attribs.JumpHeight, 1.0 / fMultiplier);
+		player.AddAttribute(Attribs.JumpHeight, 1.0 / fMultiplier);
 	}
 	else
 	{
@@ -48,14 +49,15 @@ public void LowGravity_ApplyPerk(int client, Perk perk)
 	}
 
 	if (!Cache[client].FallDamage)
-		TF2Attrib_SetByDefIndex(client, Attribs.NoFallDamage, 1.0);
+		player.AddAttribute(Attribs.NoFallDamage, 1.0);
 }
 
 public void LowGravity_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
 {
+	TFEntity player = TFEntity(client);
 	if (Cache[client].JumpMode)
 	{
-		TF2Attrib_RemoveByDefIndex(client, Attribs.JumpHeight);
+		player.RemoveAttribute(Attribs.JumpHeight);
 	}
 	else
 	{
@@ -63,7 +65,7 @@ public void LowGravity_RemovePerk(const int client, const RTDRemoveReason eRemov
 	}
 
 	if (!Cache[client].FallDamage)
-		TF2Attrib_RemoveByDefIndex(client, Attribs.NoFallDamage);
+		player.RemoveAttribute(Attribs.NoFallDamage);
 }
 
 bool LowGravity_OnPlayerRunCmd(const int client, int& iButtons, float fVel[3], float fAng[3])

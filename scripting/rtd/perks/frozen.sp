@@ -512,10 +512,10 @@ void Frozen_DuplicateAndAttachWearable(const int iOriginalWearable, const int iT
 	SetEntProp(iWearable, Prop_Send, "m_fEffects", (0x001 + 0x080)); // EF_BONEMERGE + EF_BONEMERGE_FASTCULL
 }
 
-void Frozen_OnTakeDamage(int client, int iAttacker, int iInflictor, float fDamage, int iType, float fPos[3], bool bFriendly)
+void Frozen_OnTakeDamage(int client, int attacker, int iInflictor, float fDamage, int iType, float fPos[3], bool bFriendly)
 {
 	if (!bFriendly)
-		TakeDamage(client, iInflictor, iAttacker, fDamage * Cache[client].Resistance, iType);
+		TakeDamage(client, iInflictor, attacker, fDamage * Cache[client].Resistance, iType);
 
 	if (!Cache[client].IsBreakable)
 		return;
@@ -563,9 +563,9 @@ void Frozen_OnTakeDamage(int client, int iAttacker, int iInflictor, float fDamag
 	RemovePerk(client);
 }
 
-public Action Frozen_OnTakeDamageClient(int client, int &iAttacker, int &iInflictor, float &fDamage, int &iType, int &iWeapon, float fForce[3], float fPos[3], int iCustom)
+public Action Frozen_OnTakeDamageClient(int client, int &attacker, int &iInflictor, float &fDamage, int &iType, int &iWeapon, float fForce[3], float fPos[3], int iCustom)
 {
-	if (!(1 <= iAttacker <= MaxClients))
+	if (!(1 <= attacker <= MaxClients))
 		return Plugin_Handled;
 
 	if (iType & DMG_BLAST) // explosions can hit bot ice and client, make sure it's handled by ice only
@@ -574,20 +574,20 @@ public Action Frozen_OnTakeDamageClient(int client, int &iAttacker, int &iInflic
 	if (iType & (DMG_BURN | DMG_PLASMA)) // flamethrower doesn't provide position
 		GetClientAbsOrigin(client, fPos);
 
-	Frozen_OnTakeDamage(client, iAttacker, iInflictor, fDamage, iType, fPos, false);
+	Frozen_OnTakeDamage(client, attacker, iInflictor, fDamage, iType, fPos, false);
 
 	return Plugin_Handled;
 }
 
-public Action Frozen_OnTakeDamageIce(int iIce, int &iAttacker, int &iInflictor, float &fDamage, int &iType, int &iWeapon, float fForce[3], float fPos[3], int iCustom)
+public Action Frozen_OnTakeDamageIce(int iIce, int &attacker, int &iInflictor, float &fDamage, int &iType, int &iWeapon, float fForce[3], float fPos[3], int iCustom)
 {
-	if (!(1 <= iAttacker <= MaxClients))
+	if (!(1 <= attacker <= MaxClients))
 		return Plugin_Handled;
 
 	int client = GetEntProp(iIce, Prop_Data, "m_iMaxHealth");
-	bool bFriendly = TF2_GetClientTeam(client) == TF2_GetClientTeam(iAttacker);
+	bool bFriendly = TF2_GetClientTeam(client) == TF2_GetClientTeam(attacker);
 
-	Frozen_OnTakeDamage(client, iAttacker, iInflictor, fDamage, iType, fPos, bFriendly);
+	Frozen_OnTakeDamage(client, attacker, iInflictor, fDamage, iType, fPos, bFriendly);
 
 	return Plugin_Handled;
 }

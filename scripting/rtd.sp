@@ -20,11 +20,9 @@
 #include <rtd2>
 #include <sdktools>
 #include <sdkhooks>
-#include <tf2_stocks>
-#include <tf2attributes>
+#include <heapons/tf2>
 
 #undef REQUIRE_PLUGIN
-#tryinclude <updater>
 #tryinclude <friendly>
 #tryinclude <friendlysimple>
 
@@ -52,10 +50,10 @@
 
 public Plugin myinfo = {
 	name = "Roll The Dice (Revamped)",
-	author = "Phil25",
+	author = "Phil25, Heapons",
 	description = "Lets players roll for temporary benefits.",
 	version	= PLUGIN_VERSION,
-	url = "https://forums.alliedmods.net/showthread.php?t=278579"
+	url = "https://github.com/Heapons/RTD/"
 };
 
 static char g_sTeamColors[][] = {"\x07B2B2B2", "\x07B2B2B2", "\x07FF4040", "\x0799CCFF"};
@@ -110,8 +108,8 @@ public APLRes AskPluginLoad2(Handle hMyself, bool bLate, char[] sError, int iErr
 	char sGame[32];
 	sGame[0] = '\0';
 
-	GetGameFolderName(sGame, sizeof(sGame));
-	if (!StrEqual(sGame, "tf"))
+	GameInfo game;
+	if (!game.tf2_mod)
 	{
 		Format(sError, iErrorSize, CONS_PREFIX ... " This plugin only works for Team Fortress 2.");
 		return APLRes_Failure;
@@ -665,21 +663,21 @@ public Action Listener_Sound(int clients[MAXPLAYERS], int& iLen, char sSample[PL
 	return (Stocks_Sound(iEnt, sSample) && Events.Sound(iEnt, sSample)) ? Plugin_Continue : Plugin_Stop;
 }
 
-public Action Event_PlayerDeath(Event hEvent, const char[] sEventName, bool dontBroadcast)
+public Action Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
 {
-	int iUserId = hEvent.GetInt("userid");
+	int iUserId = event.GetInt("userid");
 	int client = GetClientOfUserId(iUserId);
 
 	if (!client)
 		return Plugin_Continue;
 
-	if (hEvent.GetInt("death_flags") & TF_DEATHFLAG_DEADRINGER)
+	if (event.GetInt("death_flags") & TF_DEATHFLAG_DEADRINGER)
 		return Plugin_Continue;
 
 	Events.PlayerDied(client);
 
 	if (g_hCvarDeathcamPerk.BoolValue)
-		ShowKillersPerk(iUserId, hEvent);
+		ShowKillersPerk(iUserId, event);
 
 	if (!g_hRollers.GetInRoll(client))
 		return Plugin_Continue;
@@ -688,14 +686,14 @@ public Action Event_PlayerDeath(Event hEvent, const char[] sEventName, bool dont
 	return Plugin_Continue;
 }
 
-public Action Event_ClassChange(Handle hEvent, const char[] sEventName, bool dontBroadcast)
+public Action Event_ClassChange(Event event, const char[] name, bool dontBroadcast)
 {
-	int iUserId = GetEventInt(hEvent, "userid");
+	int iUserId = event.GetInt("userid");
 	int client = GetClientOfUserId(iUserId);
 	if (client == 0)
 		return Plugin_Continue;
 
-	int iClass = GetEventInt(hEvent, "class");
+	int iClass = event.GetInt("class");
 	if (view_as<int>(TF2_GetPlayerClass(client)) == iClass)
 		return Plugin_Continue; // no actual class change in effect
 
@@ -725,7 +723,7 @@ public Action Timer_ClassChangePost(Handle hTimer, DataPack hData)
 	return Plugin_Stop;
 }
 
-public Action Event_RoundActive(Handle hEvent, const char[] sEventName, bool dontBroadcast)
+public Action Event_RoundActive(Event event, const char[] name, bool dontBroadcast)
 {
 	if (g_bCvarPluginEnabled && (g_iCvarChat & view_as<int>(ChatFlag_Ad)) && IsRTDInRound())
 		RTDPrintAll("%t", "RTD2_Ad", 0x03, 0x01);
@@ -733,38 +731,38 @@ public Action Event_RoundActive(Handle hEvent, const char[] sEventName, bool don
 	return Plugin_Continue;
 }
 
-public Action Event_Resupply(Handle hEvent, const char[] sEventName, bool bDontBroadcast)
+public Action Event_Resupply(Event event, const char[] name, bool dontBroadcast)
 {
-	int client = GetClientOfUserId(GetEventInt(hEvent, "userid"));
+	int client = GetClientOfUserId(event.GetInt("userid"));
 
-	if (1 <= client <= MaxClients)
+	if (client > 0 && client <= MaxClients)
 		Events.Resupply(client);
 
 	return Plugin_Continue;
 }
 
-public Action Event_PlayerHurt(Handle hEvent, const char[] sEventName, bool bDontBroadcast)
+public Action Event_PlayerHurt(Event event, const char[] name, bool dontBroadcast)
 {
-	int iVictim = GetClientOfUserId(GetEventInt(hEvent, "userid"));
-	int iAttacker = GetClientOfUserId(GetEventInt(hEvent, "attacker"));
-	int iDamage = GetEventInt(hEvent, "damageamount");
-	int iRemainingHealth = GetEventInt(hEvent, "health");
+	int victim = GetClientOfUserId(event.GetInt("userid"));
+	int attacker = GetClientOfUserId(event.GetInt("attacker"));
+	int damage = event.GetInt("damageamount");
+	int health = event.GetInt("health");
 
-	if (1 <= iVictim <= MaxClients && 1 <= iAttacker <= MaxClients)
-		Events.PlayerAttacked(iAttacker, iVictim, iDamage, iRemainingHealth);
+	if (victim > 0 && victim <= MaxClients && attacker > 0 && attacker <= MaxClients)
+		Events.PlayerAttacked(attacker, victim, damage, health);
 
 	return Plugin_Continue;
 }
 
-public Action Event_UberchargeDeployed(Handle hEvent, const char[] sEventName, bool bDontBroadcast)
+public Action Event_UberchargeDeployed(Event event, const char[] name, bool dontBroadcast)
 {
-	int client = GetClientOfUserId(GetEventInt(hEvent, "userid"));
-	int iTarget = GetClientOfUserId(GetEventInt(hEvent, "targetid"));
+	int client = GetClientOfUserId(event.GetInt("userid"));
+	int iTarget = GetClientOfUserId(event.GetInt("targetid"));
 	Events.UberchargeDeployed(client, iTarget);
 	return Plugin_Continue;
 }
 
-public Action Event_RoundStart(Handle hEvent, const char[] sEventName, bool dontBroadcast)
+public Action Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
 {
 	ResetAllClients(RTDRemove_NoPrint, .bForce=false);
 	return Plugin_Continue;
@@ -1541,14 +1539,14 @@ void RemovedPerk(int client, RTDRemoveReason reason, const char[] sReason="")
 		PrintPerkEndReason(client, reason, sReason);
 }
 
-void ShowKillersPerk(const int iUserId, const Event hEvent)
+void ShowKillersPerk(const int iUserId, const Event event)
 {
-	int iAttackerUserId = hEvent.GetInt("attacker");
-	int iAttacker = GetClientOfUserId(iAttackerUserId);
-	if (!iAttacker)
+	int attackerUserId = event.GetInt("attacker");
+	int attacker = GetClientOfUserId(attackerUserId);
+	if (!attacker)
 		return;
 
-	Perk perk = g_hRollers.GetPerk(iAttacker);
+	Perk perk = g_hRollers.GetPerk(attacker);
 	if (perk == null)
 		return;
 
@@ -1557,7 +1555,7 @@ void ShowKillersPerk(const int iUserId, const Event hEvent)
 
 	DataPack hData = new DataPack();
 	hData.WriteCell(iUserId);
-	hData.WriteCell(iAttackerUserId);
+	hData.WriteCell(attackerUserId);
 	hData.WriteCell(sizeof(sAnnotation));
 	hData.WriteString(sAnnotation);
 
@@ -1572,15 +1570,15 @@ public Action Timer_ShowKillersPerk(Handle hTimer, DataPack hData)
 	if (!client || IsPlayerAlive(client))
 		return Plugin_Stop;
 
-	int iAttacker = GetClientOfUserId(hData.ReadCell());
-	if (!iAttacker)
+	int attacker = GetClientOfUserId(hData.ReadCell());
+	if (!attacker)
 		return Plugin_Stop;
 
 	int iAnnotationSize = hData.ReadCell();
 	char[] sAnnotation = new char[iAnnotationSize];
 	hData.ReadString(sAnnotation, iAnnotationSize);
 
-	ShowAnnotationFor(client, iAttacker, FREEZECAM_DURATION, sAnnotation);
+	ShowAnnotationFor(client, attacker, FREEZECAM_DURATION, sAnnotation);
 	return Plugin_Stop;
 }
 

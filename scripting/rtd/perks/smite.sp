@@ -180,10 +180,10 @@ public Action Smite_Tick(const int client)
 	return Plugin_Continue;
 }
 
-public void Smite_OnTakeDamage(int client, int iAttacker, int iInflictor, float fDamage, int iType)
+public void Smite_OnTakeDamage(int client, int attacker, int iInflictor, float fDamage, int iType)
 {
 	// Speed up the electrocution after getting hit
-	if (client != iAttacker && !Cache[client].IsElectrocuted && fDamage > 8.0)
+	if (client != attacker && !Cache[client].IsElectrocuted && fDamage > 8.0)
 		Cache[client].TicksLeft -= 10;
 }
 

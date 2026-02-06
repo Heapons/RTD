@@ -82,7 +82,7 @@ public void TF2_OnWaitingForPlayersStart()
 	ServerCommand("mp_waitingforplayers_cancel 1");
 }
 
-public Action Event_RoundStart(Handle hEvent, const char[] sEventName, bool dontBroadcast)
+public Action Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
 {
 	RemoveObjectives();
 	return Plugin_Continue;

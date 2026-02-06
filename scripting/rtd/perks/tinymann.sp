@@ -27,8 +27,8 @@ public void TinyMann_ApplyPerk(const int client, const Perk perk)
 
 	Cache[client].SpeedBoost = perk.GetPrefCell("boost", 1);
 	Cache[client].BaseScale = GetEntPropFloat(client, Prop_Send, "m_flModelScale");
-
-	TF2Attrib_SetByDefIndex(client, Attribs.VoicePitch, 1.0 / fScale / 2.0);
+	TFEntity player = TFEntity(client);
+	player.AddAttribute(Attribs.VoicePitch, 1.0 / fScale / 2.0);
 	SetEntPropFloat(client, Prop_Send, "m_flModelScale", fScale);
 
 	if (Cache[client].SpeedBoost)
@@ -37,7 +37,8 @@ public void TinyMann_ApplyPerk(const int client, const Perk perk)
 
 public void TinyMann_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
 {
-	TF2Attrib_RemoveByDefIndex(client, Attribs.VoicePitch);
+	TFEntity player = TFEntity(client);
+	player.RemoveAttribute(Attribs.VoicePitch);
 	SetEntPropFloat(client, Prop_Send, "m_flModelScale", Cache[client].BaseScale);
 
 	if (Cache[client].SpeedBoost)

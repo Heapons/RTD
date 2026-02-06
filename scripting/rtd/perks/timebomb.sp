@@ -126,7 +126,7 @@ public void Timebomb_RemovePerk(const int client, const RTDRemoveReason eRemoveR
 	FakeClientCommandEx(client, "explode");
 }
 
-public Action Timebomb_OnTakeDamage(int client, int& iAttacker, int& iInflictor, float& fDamage, int& iType, int& iWeapon, float fForce[3], float fPos[3], int iCustomType)
+public Action Timebomb_OnTakeDamage(int client, int& attacker, int& iInflictor, float& fDamage, int& iType, int& iWeapon, float fForce[3], float fPos[3], int iCustomType)
 {
 	int iValue = iCustomType == TF_CUSTOM_HEADSHOT ? Cache[client].Headshot : Cache[client].Resistance;
 	fDamage *= float(iValue) / 100.0;

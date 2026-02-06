@@ -149,9 +149,9 @@ public Action Event_HatThrow_OnHatTouch(int iHat, int client)
 {
 	if (1 <= client <= MaxClients)
 	{
-		int iAttacker = GetEntPropEnt(iHat, Prop_Send, "m_hOwnerEntity");
-		if (iAttacker && CanPlayerBeHurt(client, iAttacker))
-			TakeDamage(client, iHat, iAttacker, Cache[iAttacker].Damage, DMG_CLUB);
+		int attacker = GetEntPropEnt(iHat, Prop_Send, "m_hOwnerEntity");
+		if (attacker && CanPlayerBeHurt(client, attacker))
+			TakeDamage(client, iHat, attacker, Cache[attacker].Damage, DMG_CLUB);
 
 		EmitSoundToAll(g_sSoundHatHit[GetRandomInt(0, 2)], iHat);
 	}

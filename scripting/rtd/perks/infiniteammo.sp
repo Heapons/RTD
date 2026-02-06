@@ -21,7 +21,13 @@
 #define Clip Int[2]
 #define Ammo Int[3]
 
-DEFINE_CALL_APPLY(InfiniteAmmo)
+public void InfiniteAmmo_Call(const int client, const Perk perk, const bool apply)
+{
+	if (apply)
+	{
+		InfiniteAmmo_ApplyPerk(client, perk);
+	}
+}
 
 public void InfiniteAmmo_ApplyPerk(const int client, const Perk perk)
 {
@@ -97,7 +103,7 @@ public Action InfiniteAmmo_ResupplyAmmo(const int client)
 	return Plugin_Continue;
 }
 
-#define NoReload Int[0]
-#define Weapon Int[1]
-#define Clip Int[2]
-#define Ammo Int[3]
+#undef NoReload
+#undef Weapon
+#undef Clip
+#undef Ammo

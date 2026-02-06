@@ -57,8 +57,8 @@ public Action Timer_Firework_Explode(Handle hTimer, DataPack hData)
 	SendTEParticle(TEParticles.ExplosionWooden, fPos);
 	SendTEParticle(TEParticles.ShockwaveFlat, fPos);
 
-	int iDamage = hData.ReadCell();
-	switch (iDamage)
+	int damage = hData.ReadCell();
+	switch (damage)
 	{
 		case -1:
 			FakeClientCommandEx(client, "explode");
@@ -74,7 +74,7 @@ public Action Timer_Firework_Explode(Handle hTimer, DataPack hData)
 			if (hData.ReadCell())
 				TF2_IgnitePlayer(client, client);
 
-			TakeDamage(client, 0, 0, float(iDamage), DMG_PREVENT_PHYSICS_FORCE | DMG_CRUSH | DMG_ALWAYSGIB | DMG_BLAST);
+			TakeDamage(client, 0, 0, float(damage), DMG_PREVENT_PHYSICS_FORCE | DMG_CRUSH | DMG_ALWAYSGIB | DMG_BLAST);
 		}
 	}
 

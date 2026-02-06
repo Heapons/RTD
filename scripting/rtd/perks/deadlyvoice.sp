@@ -72,7 +72,7 @@ void DeadlyVoice_OnVoice(const int client)
 	EmitSoundToAll(DEADLYVOICE_SOUND_ATTACK, client);
 }
 
-void DeadlyVoice_OnDamage(int client, int iAttacker, float fDamage)
+void DeadlyVoice_OnDamage(int client, int attacker, float fDamage)
 {
 	if (!IsFakeClient(client))
 		ViewPunchRand(client, 15.0);

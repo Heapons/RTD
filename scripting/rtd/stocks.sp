@@ -152,9 +152,9 @@ methodmap NotifyMessages
 		RTDPrint(client, "%t", "RTD2_Perk_Attack", 0x03, 0x01);
 	}
 
-	public void PlayerDamage(const int client, const int iDamage)
+	public void PlayerDamage(const int client, const int damage)
 	{
-		RTDPrint(client, "%t", "RTD2_Perk_Timebomb_Damage", 0x03, iDamage, 0x01);
+		RTDPrint(client, "%t", "RTD2_Perk_Timebomb_Damage", 0x03, damage, 0x01);
 	}
 
 	public void PlayersIgnited(const int client, const int iAmount)
@@ -218,7 +218,7 @@ bool Stocks_Sound(int client, const char[] sSound)
 	return true;
 }
 
-public Action Event_Homing_RoundStart(Handle hEvent, const char[] sName, bool bDontBroadcast)
+public Action Event_Homing_RoundStart(Event event, const char[] sName, bool dontBroadcast)
 {
 	g_hHoming.Clear();
 	return Plugin_Continue;
@@ -414,24 +414,26 @@ stock float GetCaptureValue(const int client)
 				fValue += 1.0;
 	}
 
-	// We could iterate weapons and use TF2Attrib_ListDefIndices on each of them instead of checking
-	// for Pain Train directly, but native attributes cannot be read without parsing the itemschema,
-	// which I don't think is worth for the ~1% of cases when it's needed.
+	// We could iterate weapons and inspect their attributes instead of checking for Pain Train
+	// directly, but native attributes cannot be read without parsing the itemschema, which I don't
+	// think is worth for the ~1% of cases when it's needed.
 
 	return fValue;
 }
 
 stock void ApplyPreventCapture(const int client)
 {
-	TF2Attrib_SetByDefIndex(client, 400, 1.0); // cannot pick up intel
-	TF2Attrib_SetByDefIndex(client, 68, -GetCaptureValue(client)); // balance capture value to 0
+	TFEntity entity = TFEntity(client);
+	entity.AddAttribute(Attribs.CannotPickupIntelligence, 1.0); // cannot pick up intel
+	entity.AddAttribute(Attribs.CaptureValue, -GetCaptureValue(client)); // balance capture value to 0
 	FakeClientCommandEx(client, "dropitem"); // in case intel is already picked up
 }
 
 stock void RemovePreventCapture(const int client)
 {
-	TF2Attrib_RemoveByDefIndex(client, 400);
-	TF2Attrib_RemoveByDefIndex(client, 68);
+	TFEntity entity = TFEntity(client);
+	entity.RemoveAttribute(Attribs.CannotPickupIntelligence);
+	entity.RemoveAttribute(Attribs.CaptureValue);
 }
 
 stock int GetUniqueId(const int client, const int iOther)
@@ -528,7 +530,7 @@ stock void SetOverlay(const int client, const ClientOverlay eOverlay)
 * DAMAGE
 */
 
-stock void DamageRadius(float fOrigin[3], int iInflictor=0, int iAttacker=0, float fRadius, float fDamage, int iFlags=0, float fSelfDamage=0.0, bool bCheckSight=true, Function call=INVALID_FUNCTION)
+stock void DamageRadius(float fOrigin[3], int iInflictor=0, int attacker=0, float fRadius, float fDamage, int iFlags=0, float fSelfDamage=0.0, bool bCheckSight=true, Function call=INVALID_FUNCTION)
 {
 	fRadius *= fRadius;
 	float fOtherPos[3];
@@ -539,22 +541,22 @@ stock void DamageRadius(float fOrigin[3], int iInflictor=0, int iAttacker=0, flo
 
 		GetClientAbsOrigin(i, fOtherPos);
 		if (GetVectorDistance(fOrigin, fOtherPos, true) <= fRadius)
-			if (CanPlayerBeHurt(i, iAttacker, fSelfDamage > 0.0))
-				if (!bCheckSight || (bCheckSight && CanEntitySeeTarget(iAttacker, i)))
-					TakeDamage(i, iInflictor, iAttacker, i == iAttacker ? fSelfDamage : fDamage, iFlags, call);
+			if (CanPlayerBeHurt(i, attacker, fSelfDamage > 0.0))
+				if (!bCheckSight || (bCheckSight && CanEntitySeeTarget(attacker, i)))
+					TakeDamage(i, iInflictor, attacker, i == attacker ? fSelfDamage : fDamage, iFlags, call);
 	}
 }
 
-stock void TakeDamage(int client, int iInflictor, int iAttacker, float fDamage, int iFlags=0, Function call=INVALID_FUNCTION)
+stock void TakeDamage(int client, int iInflictor, int attacker, float fDamage, int iFlags=0, Function call=INVALID_FUNCTION)
 {
-	SDKHooks_TakeDamage(client, iInflictor, iAttacker, fDamage, iFlags, .bypassHooks = false);
+	SDKHooks_TakeDamage(client, iInflictor, attacker, fDamage, iFlags, .bypassHooks = false);
 
 	if (call == INVALID_FUNCTION)
 		return;
 
 	Call_StartFunction(INVALID_HANDLE, call);
 	Call_PushCell(client);
-	Call_PushCell(iAttacker);
+	Call_PushCell(attacker);
 	Call_PushFloat(fDamage);
 	Call_Finish();
 }
@@ -1123,30 +1125,30 @@ stock int AttachGlow(const int iEntity)
 
 stock void ShowAnnotationFor(int client, int iOther, float fLifetime, char[] sText="", char[] sSound="")
 {
-	Event hEvent = CreateEvent("show_annotation");
-	if (hEvent == null)
+	Event event = CreateEvent("show_annotation");
+	if (event == null)
 		return;
 
-	hEvent.SetInt("follow_entindex", iOther);
-	hEvent.SetInt("id", GetUniqueId(client, iOther));
-	hEvent.SetFloat("lifetime", fLifetime);
-	hEvent.SetString("text", sText);
-	hEvent.SetString("play_sound", sSound);
+	event.SetInt("follow_entindex", iOther);
+	event.SetInt("id", GetUniqueId(client, iOther));
+	event.SetFloat("lifetime", fLifetime);
+	event.SetString("text", sText);
+	event.SetString("play_sound", sSound);
 
-	hEvent.FireToClient(client);
-	hEvent.Cancel();
+	event.FireToClient(client);
+	event.Cancel();
 }
 
 stock void HideAnnotationFor(int client, int iOther)
 {
-	Event hEvent = CreateEvent("hide_annotation");
-	if (hEvent == null)
+	Event event = CreateEvent("hide_annotation");
+	if (event == null)
 		return;
 
-	hEvent.SetInt("id", GetUniqueId(client, iOther));
+	event.SetInt("id", GetUniqueId(client, iOther));
 
-	hEvent.FireToClient(client);
-	hEvent.Cancel();
+	event.FireToClient(client);
+	event.Cancel();
 }
 
 
@@ -1290,14 +1292,15 @@ stock void ResetSpeed(const int client)
 
 stock void SetSpeed(int client, float fBase, float fMul=1.0)
 {
+	TFEntity player = TFEntity(client);
 	if (fMul == 1.0)
 	{
-		TF2Attrib_RemoveByDefIndex(client, 107);
+		player.RemoveAttribute(Attribs.MoveSpeed);
 		SetEntPropFloat(client, Prop_Send, "m_flMaxspeed", fBase);
 	}
 	else
 	{
-		TF2Attrib_SetByDefIndex(client, 107, fMul);
+		player.AddAttribute(Attribs.MoveSpeed, fMul);
 		SetEntPropFloat(client, Prop_Send, "m_flMaxspeed", fBase *fMul);
 	}
 }
@@ -1305,13 +1308,14 @@ stock void SetSpeed(int client, float fBase, float fMul=1.0)
 // calcualtes m_flMaxspeed itself, tad overkill for small, frequent updates (like drunkwalk)
 stock void SetSpeedEx(int client, float fMul=1.0)
 {
+	TFEntity player = TFEntity(client);
 	if (fMul == 1.0)
 	{
-		TF2Attrib_RemoveByDefIndex(client, 107);
+		player.RemoveAttribute(Attribs.MoveSpeed);
 	}
 	else
 	{
-		TF2Attrib_SetByDefIndex(client, 107, fMul);
+		player.AddAttribute(Attribs.MoveSpeed, fMul);
 	}
 
 	TriggerSpeedRecalc(client);

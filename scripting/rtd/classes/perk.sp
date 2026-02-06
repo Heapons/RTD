@@ -16,39 +16,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define GET_PROP(%1,%2) \
-	public get(){ \
-		%1 i; \
-		this.GetValue("m_" ... #%2, i); \
-		return i;}
-
-#define SET_PROP(%1,%2) \
-	public set(%1 i){ \
-		this.SetValue("m_" ... #%2, i);}
-
-#define GET_VALUE(%1,%2) \
-	public %1 Get%2(){ \
-		%1 i; \
-		this.GetValue("m_" ... #%2, i); \
-		return i;}
-
-#define SET_VALUE(%1,%2) \
-	public void Set%2(%1 i){ \
-		this.SetValue("m_" ... #%2, i);}
-
-#define GET_STRING(%1) \
-	public void Get%1(char[] s, int i){ \
-		this.GetString("m_" ... #%1, s, i);}
-
-#define SET_STRING(%1) \
-	public void Set%1(const char[] s){ \
-		this.SetString("m_" ... #%1, s);}
-
-#define DISPOSE_MEMBER(%1) \
-	Handle m_h%1; \
-	if(this.GetValue("m_" ... #%1, m_h%1)){ \
-		delete m_h%1;}
-
 enum PerkPropType
 {
 	Type_Invalid = 0,
@@ -83,10 +50,21 @@ methodmap Perk < StringMap
 
 	public void Dispose()
 	{
-		DISPOSE_MEMBER(WeaponClass)
-		DISPOSE_MEMBER(Tags)
-		DISPOSE_MEMBER(ActiveCount)
-		DISPOSE_MEMBER(Call)
+		Handle hWeaponClass;
+		if (this.GetValue("m_WeaponClass", hWeaponClass))
+			delete hWeaponClass;
+
+		Handle hTags;
+		if (this.GetValue("m_Tags", hTags))
+			delete hTags;
+
+		Handle hActiveCount;
+		if (this.GetValue("m_ActiveCount", hActiveCount))
+			delete hActiveCount;
+
+		Handle hCall;
+		if (this.GetValue("m_Call", hCall))
+			delete hCall;
 
 		this.Clear();
 		delete this;
@@ -94,41 +72,92 @@ methodmap Perk < StringMap
 
 	property int Id
 	{
-		GET_PROP(int,Id)
-		SET_PROP(int,Id)
+		public get()
+		{
+			int value;
+			this.GetValue("m_Id", value);
+			return value;
+		}
+		public set(int value)
+		{
+			this.SetValue("m_Id", value);
+		}
 	}
-
-	GET_STRING(Name)
-	SET_STRING(Name)
+	public void GetName(char[] s, int i)
+	{
+		this.GetString("m_Name", s, i);
+	}
+	public void SetName(const char[] s)
+	{
+		this.SetString("m_Name", s);
+	}
 
 	property bool Good
 	{
-		GET_PROP(bool,Good)
-		SET_PROP(bool,Good)
+		public get()
+		{
+			bool value;
+			this.GetValue("m_Good", value);
+			return value;
+		}
+		public set(bool value)
+		{
+			this.SetValue("m_Good", value);
+		}
+	}
+	public void GetSound(char[] s, int i)
+	{
+		this.GetString("m_Sound", s, i);
+	}
+	public void SetSound(const char[] s)
+	{
+		this.SetString("m_Sound", s);
 	}
 
-	GET_STRING(Sound)
-	SET_STRING(Sound)
-
-	GET_STRING(Token)
-	SET_STRING(Token)
+	public void GetToken(char[] s, int i)
+	{
+		this.GetString("m_Token", s, i);
+	}
+	public void SetToken(const char[] s)
+	{
+		this.SetString("m_Token", s);
+	}
 
 	property int Time
 	{
-		GET_PROP(int,Time)
-		SET_PROP(int,Time)
+		public get()
+		{
+			int value;
+			this.GetValue("m_Time", value);
+			return value;
+		}
+		public set(int value)
+		{
+			this.SetValue("m_Time", value);
+		}
 	}
 
 	property int Class
 	{
-		GET_PROP(int,Class)
+		public get()
+		{
+			int value;
+			this.GetValue("m_Class", value);
+			return value;
+		}
 	}
 	public void SetClass(const char[] s){
 		int iClassFlags = StringToClass(s);
 		this.SetValue("m_Class", iClassFlags);
 	}
 
-	GET_VALUE(ArrayList,WeaponClass) // ArrayList storing strings of weapon classes
+	// ArrayList storing strings of weapon classes
+	public ArrayList GetWeaponClass()
+	{
+		ArrayList value;
+		this.GetValue("m_WeaponClass", value);
+		return value;
+	}
 	public void SetWeaponClass(const char[] s)
 	{
 		delete this.GetWeaponClass();
@@ -176,7 +205,14 @@ methodmap Perk < StringMap
 		return true;
 	}
 
-	GET_VALUE(ArrayList,Tags) // ArrayList storing strings of perk tags
+
+	// ArrayList storing strings of perk tags
+	public ArrayList GetTags()
+	{
+		ArrayList value;
+		this.GetValue("m_Tags", value);
+		return value;
+	}
 	public void SetTags(const char[] s)
 	{
 		delete this.GetTags();
@@ -186,49 +222,113 @@ methodmap Perk < StringMap
 
 	property bool Enabled
 	{
-		GET_PROP(bool,Enabled)
-		SET_PROP(bool,Enabled)
+		public get()
+		{
+			bool value;
+			this.GetValue("m_Enabled", value);
+			return value;
+		}
+		public set(bool value)
+		{
+			this.SetValue("m_Enabled", value);
+		}
 	}
 
 	property bool External
 	{
-		GET_PROP(bool,External)
-		SET_PROP(bool,External)
+		public get()
+		{
+			bool value;
+			this.GetValue("m_External", value);
+			return value;
+		}
+		public set(bool value)
+		{
+			this.SetValue("m_External", value);
+		}
 	}
 
 	property Handle Parent
 	{
-		GET_PROP(Handle,Parent)
-		SET_PROP(Handle,Parent)
+		public get()
+		{
+			Handle value;
+			this.GetValue("m_Parent", value);
+			return value;
+		}
+		public set(Handle value)
+		{
+			this.SetValue("m_Parent", value);
+		}
+	}
+	public void GetInternalCall(char[] s, int i)
+	{
+		this.GetString("m_InternalCall", s, i);
+	}
+	public void SetInternalCall(const char[] s)
+	{
+		this.SetString("m_InternalCall", s);
 	}
 
-	GET_STRING(InternalCall)
-	SET_STRING(InternalCall)
-
-	GET_STRING(InternalInit)
-	SET_STRING(InternalInit)
+	public void GetInternalInit(char[] s, int i)
+	{
+		this.GetString("m_InternalInit", s, i);
+	}
+	public void SetInternalInit(const char[] s)
+	{
+		this.SetString("m_InternalInit", s);
+	}
 
 	property bool NoMedieval
 	{
-		GET_PROP(bool,NoMedieval)
-		SET_PROP(bool,NoMedieval)
+		public get()
+		{
+			bool value;
+			this.GetValue("m_NoMedieval", value);
+			return value;
+		}
+		public set(bool value)
+		{
+			this.SetValue("m_NoMedieval", value);
+		}
 	}
 
 	property int LimitGlobal
 	{
-		GET_PROP(int,LimitGlobal)
-		SET_PROP(int,LimitGlobal)
+		public get()
+		{
+			int value;
+			this.GetValue("m_LimitGlobal", value);
+			return value;
+		}
+		public set(int value)
+		{
+			this.SetValue("m_LimitGlobal", value);
+		}
 	}
 
 	property int LimitTeam
 	{
-		GET_PROP(int,LimitTeam)
-		SET_PROP(int,LimitTeam)
+		public get()
+		{
+			int value;
+			this.GetValue("m_LimitTeam", value);
+			return value;
+		}
+		public set(int value)
+		{
+			this.SetValue("m_LimitTeam", value);
+		}
 	}
 
 	property ArrayList ActiveCount
 	{
-		GET_PROP(ArrayList,ActiveCount)
+		public get()
+		{
+			ArrayList value;
+			this.GetValue("m_ActiveCount", value);
+			return value;
+		}
 	}
 
 	public void IncrementActiveCount(const int client)
@@ -307,7 +407,7 @@ methodmap Perk < StringMap
 		return hFwd;
 	}
 
-	public void SetCall(RTDCall func, Handle hPlugin)
+	public void SetCall(Function func, Handle hPlugin)
 	{
 		RemovePerkFromClients(this);
 		delete this.GetCall();
@@ -545,10 +645,16 @@ methodmap Perk < StringMap
 
 	public bool IsAptForClassOf(int client)
 	{
+		if (this.Class == 511)
+			return true;
+
 		// TF2 class enum offsets numbered accoring to their order in-game
 		static int iClassConverter[10] = {0, 1, 8, 2, 4, 7, 5, 3, 9, 6};
+		int iPlayerClass = view_as<int>(TF2_GetPlayerClass(client));
+		if (iPlayerClass < 1 || iPlayerClass > 9)
+			return false;
 
-		int iClass = iClassConverter[TF2_GetPlayerClass(client)];
+		int iClass = iClassConverter[iPlayerClass];
 		return view_as<bool>(this.Class & (1 << --iClass));
 	}
 

@@ -21,12 +21,13 @@ DEFINE_CALL_APPLY_REMOVE(Vital)
 public void Vital_ApplyPerk(const int client, const Perk perk)
 {
 	int iAddedHealth = perk.GetPrefCell("health", 300);
-
-	TF2Attrib_SetByDefIndex(client, Attribs.MaxHealth, float(iAddedHealth));
+	TFEntity player = TFEntity(client);
+	player.AddAttribute(Attribs.MaxHealth, float(iAddedHealth));
 	SetEntityHealth(client, GetClientHealth(client) + iAddedHealth);
 }
 
 public void Vital_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
 {
-	TF2Attrib_RemoveByDefIndex(client, Attribs.MaxHealth);
+	TFEntity player = TFEntity(client);
+	player.RemoveAttribute(Attribs.MaxHealth);
 }

@@ -23,7 +23,7 @@ public void EyeForAnEye_Init(const Perk perk)
 	Events.OnPlayerAttacked(perk, EyeForAnEye_OnPlayerAttacked);
 }
 
-public void EyeForAnEye_OnPlayerAttacked(const int client, const int iVictim, const int iDamage, const int iRemainingHealth)
+public void EyeForAnEye_OnPlayerAttacked(const int client, const int victim, const int damage, const int health)
 {
-	TakeDamage(client, 0, 0, float(iDamage));
+	TakeDamage(client, 0, 0, float(damage));
 }

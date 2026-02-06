@@ -85,7 +85,17 @@ methodmap BatSwarmFlags
 	}
 }
 
-DEFINE_CALL_APPLY_REMOVE(BatSwarm)
+public void BatSwarm_Call(const int client, const Perk perk, const bool apply, const RTDRemoveReason reason)
+{
+	if (apply)
+	{
+		BatSwarm_ApplyPerk(client, perk);
+	}
+	else
+	{
+		BatSwarm_RemovePerk(client, reason);
+	}
+}
 
 public void BatSwarm_Init(const Perk perk)
 {

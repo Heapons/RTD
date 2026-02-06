@@ -80,9 +80,9 @@ void Vampire_Hurt(const int client)
 	ViewPunchRand(client, 5.0);
 }
 
-void Vampire_OnPlayerAttacked(const int client, const int iVictim, const int iDamage, const int iRemainingHealth)
+void Vampire_OnPlayerAttacked(const int client, const int victim, const int damage, const int health)
 {
-	if (client != iVictim)
+	if (client != victim)
 		Cache[client].NextHurt = GetEngineTime() + Cache[client].Resistance;
 }
 

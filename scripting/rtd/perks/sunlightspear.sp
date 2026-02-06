@@ -137,30 +137,30 @@ void SunlightSpear_OnVoice(const int client)
 	SDKHook(iCarrier, SDKHook_StartTouch, SunlightSpear_OnTouch);
 }
 
-public Action SunlightSpear_OnTouch(const int iProjectile, const int iVictim)
+public Action SunlightSpear_OnTouch(const int iProjectile, const int victim)
 {
-	int iAttacker = GetEntPropEnt(iProjectile, Prop_Send, "m_hOwnerEntity");
-	if (!iAttacker)
+	int attacker = GetEntPropEnt(iProjectile, Prop_Send, "m_hOwnerEntity");
+	if (!attacker)
 		return Plugin_Handled; // left the game
 
-	int iVictimUserId = -1;
-	if (1 <= iVictim <= MaxClients)
+	int victimUserId = -1;
+	if (1 <= victim <= MaxClients)
 	{
-		iVictimUserId = GetClientUserId(iVictim);
+		victimUserId = GetClientUserId(victim);
 
-		int iParticle = Cache[iAttacker].ElectrocuteEffect;
-		SendTEParticleAttached(view_as<TEParticleId>(iParticle), iVictim);
+		int iParticle = Cache[attacker].ElectrocuteEffect;
+		SendTEParticleAttached(view_as<TEParticleId>(iParticle), victim);
 
-		if (TF2_GetClientTeam(iAttacker) == TF2_GetClientTeam(iVictim))
+		if (TF2_GetClientTeam(attacker) == TF2_GetClientTeam(victim))
 		{
-			TF2_AddCondition(iVictim, TFCond_SpeedBuffAlly, float(Cache[iAttacker].AllySpeed) / 100.0);
+			TF2_AddCondition(victim, TFCond_SpeedBuffAlly, float(Cache[attacker].AllySpeed) / 100.0);
 			return Plugin_Handled;
 		}
 
-		SunlightSpear_DamageTick(iVictim, iAttacker, true);
+		SunlightSpear_DamageTick(victim, attacker, true);
 
-		float fSlowdown = 1.0 - float(Cache[iAttacker].Slowdown) / 100.0;
-		TF2_StunPlayer(iVictim, Cache[iAttacker].Ticks * TICK_INTERVAL, fSlowdown, TF_STUNFLAG_SLOWDOWN, iAttacker);
+		float fSlowdown = 1.0 - float(Cache[attacker].Slowdown) / 100.0;
+		TF2_StunPlayer(victim, Cache[attacker].Ticks * TICK_INTERVAL, fSlowdown, TF_STUNFLAG_SLOWDOWN, attacker);
 	}
 
 	float fOrigin[3];
@@ -169,12 +169,12 @@ public Action SunlightSpear_OnTouch(const int iProjectile, const int iVictim)
 	SunlightSpear_ParticlesTick(fOrigin);
 
 	DataPack hData = new DataPack();
-	hData.WriteCell(Cache[iAttacker].Ticks);
+	hData.WriteCell(Cache[attacker].Ticks);
 	hData.WriteFloat(fOrigin[0]);
 	hData.WriteFloat(fOrigin[1]);
 	hData.WriteFloat(fOrigin[2]);
-	hData.WriteCell(iVictimUserId);
-	hData.WriteCell(GetClientUserId(iAttacker));
+	hData.WriteCell(victimUserId);
+	hData.WriteCell(GetClientUserId(attacker));
 	CreateTimer(TICK_INTERVAL, Timer_SunlightSpear_Tick, hData, TIMER_REPEAT | TIMER_DATA_HNDL_CLOSE);
 
 	AcceptEntityInput(iProjectile, "KillHierarchy");
@@ -197,13 +197,13 @@ public Action Timer_SunlightSpear_Tick(Handle hTimer, DataPack hData)
 
 	SunlightSpear_ParticlesTick(fOrigin);
 
-	int iVictim = GetClientOfUserId(hData.ReadCell());
-	int iAttacker = GetClientOfUserId(hData.ReadCell());
+	int victim = GetClientOfUserId(hData.ReadCell());
+	int attacker = GetClientOfUserId(hData.ReadCell());
 
-	if (!iVictim || !iAttacker)
+	if (!victim || !attacker)
 		return Plugin_Stop;
 
-	SunlightSpear_DamageTick(iVictim, iAttacker);
+	SunlightSpear_DamageTick(victim, attacker);
 
 	hData.Reset();
 	hData.WriteCell(iTicks);
@@ -211,16 +211,16 @@ public Action Timer_SunlightSpear_Tick(Handle hTimer, DataPack hData)
 	return Plugin_Continue;
 }
 
-void SunlightSpear_DamageTick(const int iVictim, const int iAttacker, const bool bInitial=false)
+void SunlightSpear_DamageTick(const int victim, const int attacker, const bool bInitial=false)
 {
-	if (!CanPlayerBeHurt(iVictim, iAttacker))
+	if (!CanPlayerBeHurt(victim, attacker))
 		return;
 
-	float fDamage = Cache[iAttacker].Damage;
+	float fDamage = Cache[attacker].Damage;
 	fDamage += fDamage * view_as<int>(bInitial);
 
-	TakeDamage(iVictim, iAttacker, iAttacker, fDamage, DMG_SHOCK);
-	EmitSoundToAll(g_sSoundZap[GetRandomInt(0, 2)], iVictim, _, _, _, _, GetRandomInt(90, 110));
+	TakeDamage(victim, attacker, attacker, fDamage, DMG_SHOCK);
+	EmitSoundToAll(g_sSoundZap[GetRandomInt(0, 2)], victim, _, _, _, _, GetRandomInt(90, 110));
 }
 
 void SunlightSpear_ParticlesTick(const float fOrigin[3])

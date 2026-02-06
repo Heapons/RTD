@@ -27,14 +27,16 @@ public void SpringShoes_Init(const Perk perk)
 
 public void SpringShoes_ApplyPerk(const int client, const Perk perk)
 {
-	TF2Attrib_SetByDefIndex(client, Attribs.PreventJump, 1.0);
+	TFEntity player = TFEntity(client);
+	player.AddAttribute(Attribs.PreventJump, 1.0);
 
 	Cache[client].Repeat(0.25, SpringShoes_ForceJump);
 }
 
 public void SpringShoes_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
 {
-	TF2Attrib_RemoveByDefIndex(client, Attribs.PreventJump);
+	TFEntity player = TFEntity(client);
+	player.RemoveAttribute(Attribs.PreventJump);
 }
 
 

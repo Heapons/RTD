@@ -2,7 +2,7 @@ typedef EREntitySpawned = function void(const int client, const int iEntity);
 typedef EREntityClassnameFilter = function bool(const char[] sClassname);
 typedef EREntityOwnerRetriever = function int(const int iEntity);
 typedef ERConditionChange = function void(const int client, const TFCond eCondition);
-typedef ERPlayerAttacked = function void(const int client, const int iVictim, const int iDamage, const int iRemainingHealth);
+typedef ERPlayerAttacked = function void(const int client, const int victim, const int damage, const int health);
 typedef ERPlayer = function void(const int client);
 typedef ERAttackCritCheck = function bool(const int client, const int iWeapon);
 typedef ERPlayerRunCmd = function bool(const int client, int& iButtons, float fVel[3], float fAng[3]);
@@ -259,7 +259,7 @@ enum struct EventRegistrar
 		this._OnPlayerAttacked.Push(hData);
 	}
 
-	void PlayerAttacked(const int client, const int iVictim, const int iDamage, const int iRemainingHealth)
+	void PlayerAttacked(const int client, const int victim, const int damage, const int health)
 	{
 		Perk perk = g_hRollers.GetPerk(client);
 		if (perk == null)
@@ -275,9 +275,9 @@ enum struct EventRegistrar
 
 			Call_StartFunction(INVALID_HANDLE, hData.ReadFunction());
 			Call_PushCell(client);
-			Call_PushCell(iVictim);
-			Call_PushCell(iDamage);
-			Call_PushCell(iRemainingHealth);
+			Call_PushCell(victim);
+			Call_PushCell(damage);
+			Call_PushCell(health);
 			Call_Finish();
 		}
 	}

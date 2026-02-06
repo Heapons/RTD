@@ -92,7 +92,7 @@ enum EntCleanup
 
 typedef PerkRepeater = function Action(const int client);
 typedef PerkDelay = function void(const int client);
-typedef PlayerHurt = function void(const int client, const int iAttacker);
+typedef PlayerHurt = function void(const int client, const int attacker);
 
 enum struct PlayerCache
 {

@@ -131,7 +131,17 @@ methodmap GodmodeFlags
 	}
 }
 
-DEFINE_CALL_APPLY_REMOVE(Godmode)
+public void Godmode_Call(const int client, const Perk perk, const bool apply, const RTDRemoveReason reason)
+{
+	if (apply)
+	{
+		Godmode_ApplyPerk(client, perk);
+	}
+	else
+	{
+		Godmode_RemovePerk(client, reason);
+	}
+}
 
 public void Godmode_Init(const Perk perk)
 {
@@ -239,10 +249,10 @@ void Godmode_SpawnDeflectEffect(const int client, const int iType, const float f
 	}
 }
 
-Action Godmode_OnTakeDamage_Common(const int client, const int iAttacker, float &fDamage, const int iType, const float fPos[3])
+Action Godmode_OnTakeDamage_Common(const int client, const int attacker, float &fDamage, const int iType, const float fPos[3])
 {
 	// Attacker could be world or some various hurt entities
-	if (1 <= iAttacker <= MaxClients && GodmodeFlags(client).Contains(iAttacker))
+	if (1 <= attacker <= MaxClients && GodmodeFlags(client).Contains(attacker))
 	{
 		fDamage *= Cache[client].Resistance;
 		EmitSoundToAll(g_sResistanceHeavy[GetRandomInt(0, sizeof(g_sResistanceHeavy) - 1)], client);
@@ -254,25 +264,25 @@ Action Godmode_OnTakeDamage_Common(const int client, const int iAttacker, float 
 	return Plugin_Handled;
 }
 
-public Action Godmode_OnTakeDamage_NoSelf(int client, int &iAttacker, int &iInflictor, float &fDamage, int &iType, int &iWeapon, float fForce[3], float fPos[3], int iCustom)
+public Action Godmode_OnTakeDamage_NoSelf(int client, int &attacker, int &iInflictor, float &fDamage, int &iType, int &iWeapon, float fForce[3], float fPos[3], int iCustom)
 {
-	return client == iAttacker ? Plugin_Handled : Godmode_OnTakeDamage_Common(client, iAttacker, fDamage, iType, fPos);
+	return client == attacker ? Plugin_Handled : Godmode_OnTakeDamage_Common(client, attacker, fDamage, iType, fPos);
 }
 
-public Action Godmode_OnTakeDamage_Pushback(int client, int &iAttacker, int &iInflictor, float &fDamage, int &iType, int &iWeapon, float fForce[3], float fPos[3], int iCustom)
+public Action Godmode_OnTakeDamage_Pushback(int client, int &attacker, int &iInflictor, float &fDamage, int &iType, int &iWeapon, float fForce[3], float fPos[3], int iCustom)
 {
-	if (client == iAttacker)
+	if (client == attacker)
 	{
 		TF2_AddCondition(client, TFCond_Bonked, 0.01);
 		return Plugin_Continue;
 	}
 
-	return Godmode_OnTakeDamage_Common(client, iAttacker, fDamage, iType, fPos);
+	return Godmode_OnTakeDamage_Common(client, attacker, fDamage, iType, fPos);
 }
 
-public Action Godmode_OnTakeDamage_Self(int client, int &iAttacker, int &iInflictor, float &fDamage, int &iType, int &iWeapon, float fForce[3], float fPos[3], int iCustom)
+public Action Godmode_OnTakeDamage_Self(int client, int &attacker, int &iInflictor, float &fDamage, int &iType, int &iWeapon, float fForce[3], float fPos[3], int iCustom)
 {
-	return client == iAttacker ? Plugin_Continue : Godmode_OnTakeDamage_Common(client, iAttacker, fDamage, iType, fPos);
+	return client == attacker ? Plugin_Continue : Godmode_OnTakeDamage_Common(client, attacker, fDamage, iType, fPos);
 }
 
 public void Godmode_OnConditionAdded_Any(const int client, const TFCond eCondition)
@@ -293,10 +303,10 @@ public void Godmode_OnConditionRemoved_Any(const int client, const TFCond eCondi
 	}
 }
 
-public void Godmode_OnPlayerAttacked(const int client, const int iVictim, const int iDamage, const int iRemainingHealth)
+public void Godmode_OnPlayerAttacked(const int client, const int victim, const int damage, const int health)
 {
 	if (Cache[client].FightBack)
-		GodmodeFlags(client).Add(iVictim);
+		GodmodeFlags(client).Add(victim);
 }
 
 public void Godmode_OnPlayerDiedOrDisconnected_Any(const int client)

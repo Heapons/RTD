@@ -30,13 +30,14 @@ public void BigHead_ApplyPerk(const int client, const Perk perk)
 	float fScale = perk.GetPrefFloat("scale", 2.5);
 
 	Cache[client].Scale = fScale;
-
-	TF2Attrib_SetByDefIndex(client, Attribs.VoicePitch, 1.0 / Min(fScale, 3.0));
+	TFEntity player = TFEntity(client);
+	player.AddAttribute(Attribs.VoicePitch, 1.0 / Min(fScale, 3.0));
 }
 
 public void BigHead_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
 {
-	TF2Attrib_RemoveByDefIndex(client, Attribs.VoicePitch);
+	TFEntity player = TFEntity(client);
+	player.RemoveAttribute(Attribs.VoicePitch);
 }
 
 bool BigHead_OnPlayerRunCmd(const int client, int& iButtons, float fVel[3], float fAng[3])

@@ -29,40 +29,77 @@ methodmap Rollers < ArrayList
 		return view_as<Rollers>(data);
 	}
 
-#define GET_PROP(%1,%2,%3) \
-	public %1 Get%2(int client){ \
-		return view_as<%1>(this.Get(client, %3));}
+		public bool GetInRoll(const int client)
+		{
+			return view_as<bool>(this.Get(client, 0));
+		}
+		public void SetInRoll(const int client, const bool val)
+		{
+			this.Set(client, val, 0);
+		}
 
-#define SET_PROP(%1,%2,%3) \
-	public %1 Set%2(int client, %1 val){ \
-		this.Set(client, val, %3);}
+		public int GetLastRollTime(const int client)
+		{
+			return view_as<int>(this.Get(client, 1));
+		}
+		public void SetLastRollTime(const int client, const int val)
+		{
+			this.Set(client, val, 1);
+		}
 
-	GET_PROP(bool,InRoll,0)
-	SET_PROP(bool,InRoll,0)
+		public int GetEndRollTime(const int client)
+		{
+			return view_as<int>(this.Get(client, 2));
+		}
+		public void SetEndRollTime(const int client, const int val)
+		{
+			this.Set(client, val, 2);
+		}
 
-	GET_PROP(int,LastRollTime,1)
-	SET_PROP(int,LastRollTime,1)
+		public PerkList GetPerkHistory(const int client)
+		{
+			return view_as<PerkList>(this.Get(client, 3));
+		}
+		public void SetPerkHistory(const int client, PerkList val)
+		{
+			this.Set(client, val, 3);
+		}
 
-	GET_PROP(int,EndRollTime,2)
-	SET_PROP(int,EndRollTime,2)
+		public Perk GetPerk(const int client)
+		{
+			return view_as<Perk>(this.Get(client, 4));
+		}
+		public void SetPerk(const int client, Perk val)
+		{
+			this.Set(client, val, 4);
+		}
 
-	GET_PROP(PerkList,PerkHistory,3)
-	SET_PROP(PerkList,PerkHistory,3)
+		public Handle GetTimer(const int client)
+		{
+			return view_as<Handle>(this.Get(client, 5));
+		}
+		public void SetTimer(const int client, Handle val)
+		{
+			this.Set(client, val, 5);
+		}
 
-	GET_PROP(Perk,Perk,4)
-	SET_PROP(Perk,Perk,4)
+		public Handle GetHud(const int client)
+		{
+			return view_as<Handle>(this.Get(client, 6));
+		}
+		public void SetHud(const int client, Handle val)
+		{
+			this.Set(client, val, 6);
+		}
 
-	GET_PROP(Handle,Timer,5)
-	SET_PROP(Handle,Timer,5)
-
-	GET_PROP(Handle,Hud,6)
-	SET_PROP(Handle,Hud,6)
-
-	GET_PROP(int,UnconsumedAddedTime,7)
-	SET_PROP(int,UnconsumedAddedTime,7)
-
-#undef SET_PROP
-#undef GET_PROP
+		public int GetUnconsumedAddedTime(const int client)
+		{
+			return view_as<int>(this.Get(client, 7));
+		}
+		public void SetUnconsumedAddedTime(const int client, const int val)
+		{
+			this.Set(client, val, 7);
+		}
 
 	public void AddRollTime(const int client, const int iTime)
 	{

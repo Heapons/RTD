@@ -37,7 +37,10 @@ public void OverhealBonus_RemovePerk(const int client, const RTDRemoveReason eRe
 {
 	int iMediGun = GetPlayerWeaponSlot(client, 1);
 	if (iMediGun > MaxClients && IsValidEntity(iMediGun))
-		TF2Attrib_RemoveByDefIndex(iMediGun, Attribs.OverhealBonus);
+	{
+		TFEntity weapon = TFEntity(iMediGun);
+		weapon.RemoveAttribute(Attribs.OverhealBonus);
+	}
 }
 
 void OverhealBonus_Apply(const int client)
@@ -45,8 +48,8 @@ void OverhealBonus_Apply(const int client)
 	int iMediGun = GetPlayerWeaponSlot(client, 1);
 	if (iMediGun <= MaxClients || !IsValidEntity(iMediGun))
 		return;
-
-	TF2Attrib_SetByDefIndex(iMediGun, Attribs.OverhealBonus, Cache[client].Scale);
+	TFEntity weapon = TFEntity(iMediGun);
+	weapon.AddAttribute(Attribs.OverhealBonus, Cache[client].Scale);
 }
 
 public void OverhealBonus_OnDroppedWeaponSpawn(const int client, const int iEnt)

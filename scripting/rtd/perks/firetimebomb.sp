@@ -120,7 +120,7 @@ public void FireTimebomb_RemovePerk(const int client, const RTDRemoveReason eRem
 	TF2_IgnitePlayer(client, client);
 }
 
-public Action FireTimebomb_OnTakeDamage(int client, int& iAttacker, int& iInflictor, float& fDamage, int& iType, int& iWeapon, float fForce[3], float fPos[3], int iCustomType)
+public Action FireTimebomb_OnTakeDamage(int client, int& attacker, int& iInflictor, float& fDamage, int& iType, int& iWeapon, float fForce[3], float fPos[3], int iCustomType)
 {
 	fDamage *= iCustomType == TF_CUSTOM_HEADSHOT ? float(Cache[client].Headshot) / 100.0 : Cache[client].Resistance;
 	EmitSoundToAll(g_sResistanceMedium[GetRandomInt(0, sizeof(g_sResistanceMedium) - 1)], client);

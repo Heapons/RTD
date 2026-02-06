@@ -68,21 +68,21 @@ void MercsDieTwice_OnVoice(const int client)
 	MercsDieTwice_Resurrect(client);
 }
 
-public Action MercsDieTwice_OnTakeDamage(int client, int& iAttacker, int& iInflictor, float& fDamage, int& iType, int& iWeapon, float fForce[3], float fPos[3])
+public Action MercsDieTwice_OnTakeDamage(int client, int& attacker, int& iInflictor, float& fDamage, int& iType, int& iWeapon, float fForce[3], float fPos[3])
 {
 	if (Cache[client].InFakeDeath)
 		return Plugin_Handled;
 
-	if (fDamage >= GetClientHealth(client) && CanPlayerBeHurt(client, iAttacker))
+	if (fDamage >= GetClientHealth(client) && CanPlayerBeHurt(client, attacker))
 	{
 		SetEntityHealth(client, RoundToCeil(fDamage + 2.0));
-		MercsDieTwice_FakeDeath(client, iAttacker, iInflictor, iWeapon);
+		MercsDieTwice_FakeDeath(client, attacker, iInflictor, iWeapon);
 	}
 
 	return Plugin_Continue;
 }
 
-void MercsDieTwice_FakeDeath(const int client, const int iAttacker, const int iInflictor, const int iWeapon)
+void MercsDieTwice_FakeDeath(const int client, const int attacker, const int iInflictor, const int iWeapon)
 {
 	Cache[client].InFakeDeath = true;
 	Cache[client].NextResurrection = GetTime() + 3;
@@ -116,7 +116,7 @@ void MercsDieTwice_FakeDeath(const int client, const int iAttacker, const int iI
 
 	PrintCenterText(client, "%t", "RTD2_Perk_Resurrect", 0x03, 0x01);
 
-	MercsDieTwice_SendDeathEvent(client, iAttacker, iInflictor, iWeapon);
+	MercsDieTwice_SendDeatevent(client, attacker, iInflictor, iWeapon);
 }
 
 void MercsDieTwice_Resurrect(const int client)
@@ -166,9 +166,9 @@ void MercsDieTwice_SpawnEffect(const int client)
 	SendTEParticleLingeringAttachedProxy(TEParticlesLingering.LightningSwirl, iProxy);
 }
 
-void MercsDieTwice_SendDeathEvent(const int client, const int iAttacker, const int iInflictor, const int iWeapon)
+void MercsDieTwice_SendDeatevent(const int client, const int attacker, const int iInflictor, const int iWeapon)
 {
-	Event hEvent = CreateEvent("player_death");
+	Event event = CreateEvent("player_death");
 
 	int iWeaponIndex = 0;
 	if (IsValidEntity(iWeapon))
@@ -176,15 +176,15 @@ void MercsDieTwice_SendDeathEvent(const int client, const int iAttacker, const i
 		iWeaponIndex = GetEntProp(iWeapon, Prop_Send, "m_iItemDefinitionIndex");
 	}
 
-	hEvent.SetInt("userid", GetClientUserId(client));
-	hEvent.SetInt("victim_entindex", client);
-	hEvent.SetInt("inflictor_entindex", iInflictor);
-	hEvent.SetInt("attacker", iAttacker == 0 ? 0 : GetClientUserId(iAttacker));
-	hEvent.SetInt("weaponid", iWeapon);
-	hEvent.SetInt("weapon_def_index", iWeaponIndex);
-	hEvent.SetInt("death_flags", TF_DEATHFLAG_DEADRINGER);
+	event.SetInt("userid", GetClientUserId(client));
+	event.SetInt("victim_entindex", client);
+	event.SetInt("inflictor_entindex", iInflictor);
+	event.SetInt("attacker", attacker == 0 ? 0 : GetClientUserId(attacker));
+	event.SetInt("weaponid", iWeapon);
+	event.SetInt("weapon_def_index", iWeaponIndex);
+	event.SetInt("death_flags", TF_DEATHFLAG_DEADRINGER);
 
-	hEvent.Fire();
+	event.Fire();
 }
 
 #undef SOUND_RESURRECT

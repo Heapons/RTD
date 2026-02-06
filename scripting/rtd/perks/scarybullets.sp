@@ -36,19 +36,19 @@ void ScaryBullets_ApplyPerk(const int client, const Perk perk)
 	Cache[client].SetEnt(Particle, CreateParticle(client, SCARYBULLETS_PARTICLE));
 }
 
-public void ScaryBullets_OnPlayerAttacked(const int client, const int iVictim, const int iDamage, const int iRemainingHealth)
+public void ScaryBullets_OnPlayerAttacked(const int client, const int victim, const int damage, const int health)
 {
-	if (client == iVictim)
+	if (client == victim)
 		return;
 
-	if (iRemainingHealth <= 0)
+	if (health <= 0)
 		return;
 
-	if (iDamage < Cache[client].MinDamage)
+	if (damage < Cache[client].MinDamage)
 		return;
 
-	if (!TF2_IsPlayerInCondition(iVictim, TFCond_Dazed))
-		TF2_StunPlayer(iVictim, Cache[client].Duration, _, TF_STUNFLAGS_GHOSTSCARE, client);
+	if (!TF2_IsPlayerInCondition(victim, TFCond_Dazed))
+		TF2_StunPlayer(victim, Cache[client].Duration, _, TF_STUNFLAGS_GHOSTSCARE, client);
 }
 
 #undef SCARYBULLETS_PARTICLE

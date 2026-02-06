@@ -95,7 +95,7 @@ public void Invisibility_OnStartTouchAny(int client, int iOther)
 	Invisibility_Blink(client);
 }
 
-public void Invisibility_OnTakeDamage(int client, int iAttacker)
+public void Invisibility_OnTakeDamage(int client, int attacker)
 {
 	Invisibility_Blink(client);
 }

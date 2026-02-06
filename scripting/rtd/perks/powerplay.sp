@@ -122,7 +122,8 @@ void PowerPlay_Apply(const int client)
 	int iMelee = GetPlayerWeaponSlot(client, 2);
 	if (iMelee > MaxClients && IsValidEntity(iMelee))
 	{
-		TF2Attrib_SetByDefIndex(iMelee, Attribs.MeleeRange, 1.1);
+		TFEntity weapon = TFEntity(iMelee);
+		weapon.AddAttribute(Attribs.MeleeRange, 1.1);
 
 		char sClassname[32];
 		GetEntityClassname(iMelee, sClassname, sizeof(sClassname));
@@ -132,7 +133,7 @@ void PowerPlay_Apply(const int client)
 			Cache[client].MeleeFlags |= view_as<int>(PowerPlay_MeleeFlags_Knife);
 
 			if (GetEntProp(iMelee, Prop_Send, "m_iItemDefinitionIndex") == 649
-			|| TF2Attrib_GetByDefIndex(iMelee, Attribs.MeltsInFire) != Address_Null)
+			|| weapon.GetAttribute(Attribs.MeltsInFire, -1.0) > -0.5)
 				Cache[client].MeleeFlags |= view_as<int>(PowerPlay_MeleeFlags_SpyCicle);
 		}
 	}
@@ -144,7 +145,8 @@ void PowerPlay_Apply(const int client)
 		Shared[client].AddCritBoost(client, CritBoost_Full);
 
 	TF2_AddCondition(client, TFCond_SpeedBuffAlly);
-	TF2Attrib_SetByDefIndex(client, Attribs.AirblastVulnerability, 0.2);
+	TFEntity player = TFEntity(client);
+	player.AddAttribute(Attribs.AirblastVulnerability, 0.2);
 	ApplyPreventCapture(client);
 	SetOverlay(client, ClientOverlay_Burning);
 
@@ -214,13 +216,17 @@ public void PowerPlay_RemovePerk(const int client, const RTDRemoveReason eRemove
 		Shared[client].RemoveCritBoost(client, CritBoost_Full);
 
 	TF2_RemoveCondition(client, TFCond_SpeedBuffAlly);
-	TF2Attrib_RemoveByDefIndex(client, Attribs.AirblastVulnerability);
+	TFEntity player = TFEntity(client);
+	player.RemoveAttribute(Attribs.AirblastVulnerability);
 	RemovePreventCapture(client);
 	SetOverlay(client, ClientOverlay_None);
 
 	int iMelee = GetPlayerWeaponSlot(client, 2);
 	if (iMelee > MaxClients && IsValidEntity(iMelee))
-		TF2Attrib_RemoveByDefIndex(iMelee, Attribs.MeleeRange);
+	{
+		TFEntity weapon = TFEntity(iMelee);
+		weapon.RemoveAttribute(Attribs.MeleeRange);
+	}
 }
 
 public void PowerPlay_OnGlowUpdate(const int client)
@@ -255,13 +261,13 @@ bool PowerPlay_OnAttack(const int client, const int iWeapon)
 	return false;
 }
 
-public void PowerPlay_OnPlayerAttacked(const int client, const int iVictim, const int iDamage, const int iRemainingHealth)
+public void PowerPlay_OnPlayerAttacked(const int client, const int victim, const int damage, const int health)
 {
 	if (Cache[client].IsLegacy)
 		return;
 
-	if (Cache[client].MeleeFlags & view_as<int>(PowerPlay_MeleeFlags_Knife) && (1 <= iVictim <= MaxClients))
-		TF2_StunPlayer(iVictim, 1.0, _, TF_STUNFLAG_BONKSTUCK | TF_STUNFLAG_NOSOUNDOREFFECT | TF_STUNFLAG_THIRDPERSON, client);
+	if (Cache[client].MeleeFlags & view_as<int>(PowerPlay_MeleeFlags_Knife) && (1 <= victim <= MaxClients))
+		TF2_StunPlayer(victim, 1.0, _, TF_STUNFLAG_BONKSTUCK | TF_STUNFLAG_NOSOUNDOREFFECT | TF_STUNFLAG_THIRDPERSON, client);
 
 	TF2_RemoveCondition(client, TFCond_LostFooting);
 }

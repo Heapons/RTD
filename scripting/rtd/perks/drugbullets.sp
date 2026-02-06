@@ -32,23 +32,23 @@ public void DrugBullets_ApplyPerk(const int client, const Perk perk)
 	Cache[client].NextStun = GetEngineTime() + 1.0;
 }
 
-public void DrugBullets_OnPlayerAttacked(const int client, const int iVictim, const int iDamage, const int iRemainingHealth)
+public void DrugBullets_OnPlayerAttacked(const int client, const int victim, const int damage, const int health)
 {
-	if (iRemainingHealth <= 0)
+	if (health <= 0)
 		return;
 
-	if (iDamage < Cache[client].MinDamage)
+	if (damage < Cache[client].MinDamage)
 		return;
 
 	float fTime = GetEngineTime();
 	if (Cache[client].NextStun > fTime)
 	{
-		ViewPunchRand(iVictim, 15.0);
+		ViewPunchRand(victim, 15.0);
 		return;
 	}
 
-	Drugged_Tick(iVictim); // from Drugged perk
-	TF2_StunPlayer(iVictim, 0.1, _, TF_STUNFLAG_THIRDPERSON, client);
+	Drugged_Tick(victim); // from Drugged perk
+	TF2_StunPlayer(victim, 0.1, _, TF_STUNFLAG_THIRDPERSON, client);
 
 	Cache[client].NextStun = fTime + 1.0;
 }
