@@ -6,10 +6,13 @@ scripting/spcomp
 !scripting/include
 scripting/include/*
 !scripting/include/rtd2.inc
+!scripting/include/heapons*
 
-compile.sh
-
+*.sh
+*.bat
+*.exe
+*.log
+*.smx
 *.zip
-.exrc
-.vscode
+.*
 venv
