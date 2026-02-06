@@ -137,45 +137,45 @@ ConVar g_hCvarDeathcamPerk;
 
 void SetupConVars()
 {
-	g_hCvarPluginEnabled		= CreateConVar("sm_rtd2_enabled",		"1",		DESC_PLUGIN_ENABLED,		FLAGS_CVARS);
+	g_hCvarPluginEnabled		= CreateConVar("sm_rtd2_enabled",		"1",		DESC_PLUGIN_ENABLED,		FCVAR_NOTIFY);
 #if defined _updater_included
-	g_hCvarAutoUpdate			= CreateConVar("sm_rtd2_autoupdate",	"1",		DESC_AUTO_UPDATE,			FLAGS_CVARS);
-	g_hCvarReloadUpdate			= CreateConVar("sm_rtd2_reloadupdate",	"1",		DESC_RELOAD_UPDATE,			FLAGS_CVARS);
+	g_hCvarAutoUpdate			= CreateConVar("sm_rtd2_autoupdate",	"1",		DESC_AUTO_UPDATE,			FCVAR_NOTIFY);
+	g_hCvarReloadUpdate			= CreateConVar("sm_rtd2_reloadupdate",	"1",		DESC_RELOAD_UPDATE,			FCVAR_NOTIFY);
 #endif
-	g_hCvarCustomConfig			= CreateConVar("sm_rtd2_custom_config",	"rtd2_perks.custom.cfg",DESC_CUSTOM_CONFIG,FLAGS_CVARS);
-	g_hCvarLog					= CreateConVar("sm_rtd2_log",			"0",		DESC_LOG,					FLAGS_CVARS|FCVAR_DONTRECORD);
-	g_hCvarLogging				= CreateConVar("sm_rtd2_logging",		"3",		DESC_LOGGING,				FLAGS_CVARS);
-	g_hCvarChat					= CreateConVar("sm_rtd2_chat",			"63",		DESC_CHAT,					FLAGS_CVARS);
+	g_hCvarCustomConfig			= CreateConVar("sm_rtd2_custom_config",	"rtd2_perks.custom.cfg",DESC_CUSTOM_CONFIG,FCVAR_NOTIFY);
+	g_hCvarLog					= CreateConVar("sm_rtd2_log",			"0",		DESC_LOG,					FCVAR_NOTIFY|FCVAR_DONTRECORD);
+	g_hCvarLogging				= CreateConVar("sm_rtd2_logging",		"3",		DESC_LOGGING,				FCVAR_NOTIFY);
+	g_hCvarChat					= CreateConVar("sm_rtd2_chat",			"63",		DESC_CHAT,					FCVAR_NOTIFY);
 
-	g_hCvarPerkDuration			= CreateConVar("sm_rtd2_duration",		"25",		DESC_PERK_DURATION,			FLAGS_CVARS);
-	g_hCvarRollInterval			= CreateConVar("sm_rtd2_interval",		"60",		DESC_ROLL_INTERVAL,			FLAGS_CVARS);
-	g_hCvarDisabledPerks		= CreateConVar("sm_rtd2_disabled",		"",			DESC_DISABLED_PERKS,		FLAGS_CVARS);
-	g_hCvarEmitSound			= CreateConVar("sm_rtd2_emit_sound",	"1",		DESC_EMIT_SOUND,			FLAGS_CVARS);
+	g_hCvarPerkDuration			= CreateConVar("sm_rtd2_duration",		"25",		DESC_PERK_DURATION,			FCVAR_NOTIFY);
+	g_hCvarRollInterval			= CreateConVar("sm_rtd2_interval",		"60",		DESC_ROLL_INTERVAL,			FCVAR_NOTIFY);
+	g_hCvarDisabledPerks		= CreateConVar("sm_rtd2_disabled",		"",			DESC_DISABLED_PERKS,		FCVAR_NOTIFY);
+	g_hCvarEmitSound			= CreateConVar("sm_rtd2_emit_sound",	"1",		DESC_EMIT_SOUND,			FCVAR_NOTIFY);
 
-	g_hCvarAllowed				= CreateConVar("sm_rtd2_accessflags",	"",			DESC_ALLOWED,				FLAGS_CVARS);
-	g_hCvarInSetup				= CreateConVar("sm_rtd2_insetup",		"0",		DESC_IN_SETUP,				FLAGS_CVARS, true, 0.0, true, 1.0);
-	g_hCvarTriggers				= CreateConVar("sm_rtd2_triggers",		"rtd,roll",	DESC_TRIGGERS,				FLAGS_CVARS);
-	g_hCvarShowTriggers			= CreateConVar("sm_rtd2_showtriggers",	"0",		DESC_SHOW_TRIGGERS,			FLAGS_CVARS, true, 0.0, true, 1.0);
-	g_hCvarShowTime				= CreateConVar("sm_rtd2_showtime",		"0",		DESC_SHOW_TIME,				FLAGS_CVARS, true, 0.0, true, 1.0);
+	g_hCvarAllowed				= CreateConVar("sm_rtd2_accessflags",	"",			DESC_ALLOWED,				FCVAR_NOTIFY);
+	g_hCvarInSetup				= CreateConVar("sm_rtd2_insetup",		"0",		DESC_IN_SETUP,				FCVAR_NOTIFY, true, 0.0, true, 1.0);
+	g_hCvarTriggers				= CreateConVar("sm_rtd2_triggers",		"rtd,roll",	DESC_TRIGGERS,				FCVAR_NOTIFY);
+	g_hCvarShowTriggers			= CreateConVar("sm_rtd2_showtriggers",	"0",		DESC_SHOW_TRIGGERS,			FCVAR_NOTIFY, true, 0.0, true, 1.0);
+	g_hCvarShowTime				= CreateConVar("sm_rtd2_showtime",		"0",		DESC_SHOW_TIME,				FCVAR_NOTIFY, true, 0.0, true, 1.0);
 
-	g_hCvarRtdTeam				= CreateConVar("sm_rtd2_team",			"0",		DESC_RTD_TEAM,				FLAGS_CVARS, true, 0.0, true, 2.0);
-	g_hCvarRtdMode				= CreateConVar("sm_rtd2_mode",			"0",		DESC_RTD_MODE,				FLAGS_CVARS, true, 0.0, true, 2.0);
-	g_hCvarClientLimit			= CreateConVar("sm_rtd2_playerlimit",	"2",		DESC_CLIENT_LIMIT,			FLAGS_CVARS, true, 0.0);
-	g_hCvarTeamLimit			= CreateConVar("sm_rtd2_teamlimit",		"2",		DESC_TEAM_LIMIT,			FLAGS_CVARS, true, 0.0);
-	g_hCvarRespawnStuck			= CreateConVar("sm_rtd2_respawnstuck",	"1",		DESC_RESPAWN_STUCK,			FLAGS_CVARS, true, 0.0, true, 1.0);
+	g_hCvarRtdTeam				= CreateConVar("sm_rtd2_team",			"0",		DESC_RTD_TEAM,				FCVAR_NOTIFY, true, 0.0, true, 2.0);
+	g_hCvarRtdMode				= CreateConVar("sm_rtd2_mode",			"0",		DESC_RTD_MODE,				FCVAR_NOTIFY, true, 0.0, true, 2.0);
+	g_hCvarClientLimit			= CreateConVar("sm_rtd2_playerlimit",	"2",		DESC_CLIENT_LIMIT,			FCVAR_NOTIFY, true, 0.0);
+	g_hCvarTeamLimit			= CreateConVar("sm_rtd2_teamlimit",		"2",		DESC_TEAM_LIMIT,			FCVAR_NOTIFY, true, 0.0);
+	g_hCvarRespawnStuck			= CreateConVar("sm_rtd2_respawnstuck",	"1",		DESC_RESPAWN_STUCK,			FCVAR_NOTIFY, true, 0.0, true, 1.0);
 
-	g_hCvarRepeatPlayer			= CreateConVar("sm_rtd2_repeat_player", "2",		DESC_REPEAT_PLAYER,			FLAGS_CVARS, true, 0.0, true, 6.0);
-	g_hCvarRepeatPerk			= CreateConVar("sm_rtd2_repeat_perk",	"2",		DESC_REPEAT_PERK,			FLAGS_CVARS, true, 0.0, true, 6.0);
+	g_hCvarRepeatPlayer			= CreateConVar("sm_rtd2_repeat_player", "2",		DESC_REPEAT_PLAYER,			FCVAR_NOTIFY, true, 0.0, true, 6.0);
+	g_hCvarRepeatPerk			= CreateConVar("sm_rtd2_repeat_perk",	"2",		DESC_REPEAT_PERK,			FCVAR_NOTIFY, true, 0.0, true, 6.0);
 
-	g_hCvarGoodChance			= CreateConVar("sm_rtd2_chance",		"0.5",		DESC_GOOD_CHANCE,			FLAGS_CVARS, true, 0.0, true, 1.0);
-	g_hCvarGoodDonatorChance	= CreateConVar("sm_rtd2_dchance",		"0.75",		DESC_GOOD_DONATOR_CHANCE,	FLAGS_CVARS, true, 0.0, true, 1.0);
-	g_hCvarDonatorFlag			= CreateConVar("sm_rtd2_donatorflag",	"",			DESC_DONATOR_FLAG,			FLAGS_CVARS);
+	g_hCvarGoodChance			= CreateConVar("sm_rtd2_chance",		"0.5",		DESC_GOOD_CHANCE,			FCVAR_NOTIFY, true, 0.0, true, 1.0);
+	g_hCvarGoodDonatorChance	= CreateConVar("sm_rtd2_dchance",		"0.75",		DESC_GOOD_DONATOR_CHANCE,	FCVAR_NOTIFY, true, 0.0, true, 1.0);
+	g_hCvarDonatorFlag			= CreateConVar("sm_rtd2_donatorflag",	"",			DESC_DONATOR_FLAG,			FCVAR_NOTIFY);
 
-	g_hCvarTimerPosX			= CreateConVar("sm_rtd2_timerpos_x",	"-1.0",		DESC_TIMER_POS_X,			FLAGS_CVARS);
-	g_hCvarTimerPosY			= CreateConVar("sm_rtd2_timerpos_y",	"0.55",		DESC_TIMER_POS_Y,			FLAGS_CVARS);
+	g_hCvarTimerPosX			= CreateConVar("sm_rtd2_timerpos_x",	"-1.0",		DESC_TIMER_POS_X,			FCVAR_NOTIFY);
+	g_hCvarTimerPosY			= CreateConVar("sm_rtd2_timerpos_y",	"0.55",		DESC_TIMER_POS_Y,			FCVAR_NOTIFY);
 
-	g_hCvarShowDesc 			= CreateConVar("sm_rtd2_show_description", "0",		DESC_SHOW_DESC,				FLAGS_CVARS, true, 0.0, true, 1.0);
-	g_hCvarDeathcamPerk 		= CreateConVar("sm_rtd2_deathcam_perk",	"0",		DESC_DEATHCAM_PERK,			FLAGS_CVARS, true, 0.0, true, 1.0);
+	g_hCvarShowDesc 			= CreateConVar("sm_rtd2_show_description", "0",		DESC_SHOW_DESC,				FCVAR_NOTIFY, true, 0.0, true, 1.0);
+	g_hCvarDeathcamPerk 		= CreateConVar("sm_rtd2_deathcam_perk",	"0",		DESC_DEATHCAM_PERK,			FCVAR_NOTIFY, true, 0.0, true, 1.0);
 
 
 		//-----[ ConVars Hooking & Setting ]-----//

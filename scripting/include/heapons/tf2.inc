@@ -1,8 +1,4 @@
-#include <heapons/stocks>
-
-#undef REQUIRE_EXTENSIONS
 #include <tf2_stocks>
-#define REQUIRE_EXTENSIONS
 
 // https://developer.valvesoftware.com/wiki/Team_Fortress_2/Scripting/Script_Functions/Constants#TF_DEATH
 #define TF_DEATH_DOMINATION          (1<<0)

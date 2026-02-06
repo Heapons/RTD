@@ -20,7 +20,13 @@
 #include <rtd2>
 #include <sdktools>
 #include <sdkhooks>
+#include <multicolors>
+
+#include <heapons/chat>
+#include <heapons/steam>
+#undef REQUIRE_EXTENSIONS
 #include <heapons/tf2>
+#define REQUIRE_EXTENSIONS
 
 #undef REQUIRE_PLUGIN
 #tryinclude <friendly>
@@ -33,8 +39,6 @@
 
 #define PERK_COLOR_GOOD	"\x0732CD32"
 #define PERK_COLOR_BAD	"\x078650AC"
-
-#define FLAGS_CVARS		FCVAR_NOTIFY
 
 #define FREEZECAM_DELAY		2.0
 #define FREEZECAM_DURATION	5.0
@@ -133,7 +137,7 @@ public void OnPluginStart()
 	LoadTranslations("common.phrases.txt");
 
 	// ConVars
-	CreateConVar("sm_rtd2_version", PLUGIN_VERSION, "Current RTD version, do not change.", FLAGS_CVARS|FCVAR_DONTRECORD|FCVAR_SPONLY);
+	CreateConVar("sm_rtd2_version", PLUGIN_VERSION, "Current RTD version, do not change.", FCVAR_NOTIFY|FCVAR_DONTRECORD|FCVAR_SPONLY);
 	SetupConVars();
 
 	AutoExecConfig(true);
