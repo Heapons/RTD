@@ -331,32 +331,57 @@ methodmap Perk < StringMap
 		}
 	}
 
-	public void IncrementActiveCount(const int client)
+	public void IncrementActiveCount(int client)
 	{
-		int iTeam = view_as<int>(TF2_GetClientTeam(client));
-		this.ActiveCount.Set(iTeam, this.ActiveCount.Get(iTeam) + 1);
+		int iTeam = GetClientTeam(client);
+		if (iTeam < 0)
+			return;
+
+		ArrayList counts = this.ActiveCount;
+		while (counts.Length <= iTeam)
+			counts.Push(0);
+
+		counts.Set(iTeam, counts.Get(iTeam) + 1);
 	}
 
-	public void DecrementActiveCount(const int client)
+	public void DecrementActiveCount(int client)
 	{
-		int iTeam = view_as<int>(TF2_GetClientTeam(client));
-		this.ActiveCount.Set(iTeam, this.ActiveCount.Get(iTeam) - 1);
+		int iTeam = GetClientTeam(client);
+		if (iTeam < 0)
+			return;
+
+		ArrayList counts = this.ActiveCount;
+		while (counts.Length <= iTeam)
+			counts.Push(0);
+
+		counts.Set(iTeam, counts.Get(iTeam) - 1);
 	}
 
 	public int GetActiveCountGlobal()
 	{
-		return this.ActiveCount.Get(0)
-			+ this.ActiveCount.Get(1)
-			+ this.ActiveCount.Get(2)
-			+ this.ActiveCount.Get(3);
+		ArrayList counts = this.ActiveCount;
+		int total = 0;
+		int iLen = counts.Length;
+		for (int i = 0; i < iLen; ++i)
+			total += counts.Get(i);
+
+		return total;
 	}
 
 	public int GetActiveCountTeam(const TFTeam eTeam)
 	{
-		return this.ActiveCount.Get(view_as<int>(eTeam));
+		int iTeam = view_as<int>(eTeam);
+		if (iTeam < 0)
+			return 0;
+
+		ArrayList counts = this.ActiveCount;
+		if (iTeam >= counts.Length)
+			return 0;
+
+		return counts.Get(iTeam);
 	}
 
-	public void CallInternal(const int client, const bool bEnable, const RTDRemoveReason eRemoveReason)
+	public void CallInternal(int client, const bool bEnable, const RTDRemoveReason eRemoveReason)
 	{
 		char sFuncName[64];
 		this.GetInternalCall(sFuncName, sizeof(sFuncName));
@@ -723,7 +748,7 @@ methodmap Perk < StringMap
 					return false;
 
 			if (!(iRollFlags & ROLLFLAG_IGNORE_TEAM_LIMIT))
-				if (this.GetActiveCountTeam(TF2_GetClientTeam(client)) >= this.LimitTeam)
+				if (this.GetActiveCountTeam(view_as<TFTeam>(GetClientTeam(client))) >= this.LimitTeam)
 					return false;
 		}
 
@@ -734,7 +759,7 @@ methodmap Perk < StringMap
 		return this.IsAptForSetupOf(client, iRollFlags);
 	}
 
-	public void EmitSound(const int client)
+	public void EmitSound(int client)
 	{
 		char sSound[64];
 		this.GetSound(sSound, sizeof(sSound));

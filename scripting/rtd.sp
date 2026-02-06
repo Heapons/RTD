@@ -32,7 +32,7 @@
 #tryinclude <friendly>
 #tryinclude <friendlysimple>
 
-#define PLUGIN_VERSION	"2.5.5"
+#define PLUGIN_VERSION	"26w06a"
 
 #define CHAT_PREFIX 	"\x07FFD700[RTD]\x01"
 #define CONS_PREFIX 	"[RTD]"
@@ -59,8 +59,6 @@ public Plugin myinfo = {
 	version	= PLUGIN_VERSION,
 	url = "https://github.com/Heapons/RTD/"
 };
-
-static char g_sTeamColors[][] = {"\x07B2B2B2", "\x07B2B2B2", "\x07FF4040", "\x0799CCFF"};
 
 #if defined _updater_included
 bool g_bPluginUpdater = false;
@@ -386,7 +384,7 @@ public int Updater_OnPluginUpdated()
 }
 #endif
 
-public Action Command_RTD(const int client, const int args)
+public Action Command_RTD(int client, const int args)
 {
 	if (client != 0)
 		RollPerkForClient(client);
@@ -394,7 +392,7 @@ public Action Command_RTD(const int client, const int args)
 	return Plugin_Handled;
 }
 
-public Action Command_DescMenu(const int client, const int args)
+public Action Command_DescMenu(int client, const int args)
 {
 	if (client != 0)
 		ShowDescriptionMenu(client);
@@ -402,7 +400,7 @@ public Action Command_DescMenu(const int client, const int args)
 	return Plugin_Handled;
 }
 
-public Action Command_ForceRTD(const int client, const int args)
+public Action Command_ForceRTD(int client, const int args)
 {
 	if (args < 1)
 	{
@@ -442,7 +440,7 @@ public Action Command_ForceRTD(const int client, const int args)
 	return Plugin_Handled;
 }
 
-public Action Command_TimeRTD(const int client, const int args)
+public Action Command_TimeRTD(int client, const int args)
 {
 	if (args < 1)
 	{
@@ -1154,7 +1152,7 @@ void RollPerkForClient(int client)
 	}
 }
 
-RTDForceResult ForcePerk(const int client, const char[] sQuery, const int iPerkTime=-1, const int iInitiator=0)
+RTDForceResult ForcePerk(int client, const char[] sQuery, const int iPerkTime=-1, const int iInitiator=0)
 {
 	if (!IsValidClient(client))
 		return RTDForce_ClientInvalid;
@@ -1223,7 +1221,7 @@ RTDForceResult ForcePerk(const int client, const char[] sQuery, const int iPerkT
 	return RTDForce_Success;
 }
 
-bool GoodRoll(const int client)
+bool GoodRoll(int client)
 {
 	float fGoodChance = g_fCvarGoodChance;
 
@@ -1233,7 +1231,7 @@ bool GoodRoll(const int client)
 	return fGoodChance > GetURandomFloat();
 }
 
-Perk RollPerk(const int client=0, const int iRollFlags=ROLLFLAG_NONE, const char[] sFilter="")
+Perk RollPerk(int client=0, const int iRollFlags=ROLLFLAG_NONE, const char[] sFilter="")
 {
 	bool bFilter = strlen(sFilter) > 0;
 	Perk perk = null;
@@ -1285,7 +1283,7 @@ Perk RollPerk(const int client=0, const int iRollFlags=ROLLFLAG_NONE, const char
 	return perk;
 }
 
-void ApplyPerk(const int client, Perk perk, const int iPerkTime=-1)
+void ApplyPerk(int client, Perk perk, const int iPerkTime=-1)
 {
 	if (!IsValidClient(client))
 		return;
@@ -1328,7 +1326,7 @@ void ApplyPerk(const int client, Perk perk, const int iPerkTime=-1)
 	PrintToNonRollers(client, perk, iDuration);
 }
 
-void ManagePerk(const int client, const Perk perk, const bool bEnable, const RTDRemoveReason reason=RTDRemove_WearOff, const char[] sReason="")
+void ManagePerk(int client, const Perk perk, const bool bEnable, const RTDRemoveReason reason=RTDRemove_WearOff, const char[] sReason="")
 {
 	if (perk.External)
 	{
@@ -1358,7 +1356,7 @@ void ManagePerk(const int client, const Perk perk, const bool bEnable, const RTD
 	}
 }
 
-Menu BuildDescriptionMenu(const int client)
+Menu BuildDescriptionMenu(int client)
 {
 	Menu hMenu = new Menu(ManagerDescriptionMenu);
 	hMenu.SetTitle("%T", "RTD2_Menu_Title", client);
@@ -1382,7 +1380,7 @@ Menu BuildDescriptionMenu(const int client)
 	return hMenu;
 }
 
-void ShowDescriptionMenu(const int client, const int iPos=0)
+void ShowDescriptionMenu(int client, const int iPos=0)
 {
 	if (iPos == 0)
 	{
@@ -1394,7 +1392,7 @@ void ShowDescriptionMenu(const int client, const int iPos=0)
 	}
 }
 
-public int ManagerDescriptionMenu(Menu hMenu, MenuAction maState, const int client, const int iPos)
+public int ManagerDescriptionMenu(Menu hMenu, MenuAction maState, int client, const int iPos)
 {
 	switch (maState)
 	{
@@ -1484,7 +1482,7 @@ void FormatRemoveReasonLog(char[] sBuffer, const int iBufferLen, const RTDRemove
 	Format(sBuffer[iWritten - 1], iBufferLen, ": %s)", sReason);
 }
 
-Perk RemovePerk(const int client, const RTDRemoveReason reason=RTDRemove_WearOff, const char[] sReason="")
+Perk RemovePerk(int client, const RTDRemoveReason reason=RTDRemove_WearOff, const char[] sReason="")
 {
 	Perk perk = g_hRollers.GetPerk(client);
 
@@ -1494,7 +1492,7 @@ Perk RemovePerk(const int client, const RTDRemoveReason reason=RTDRemove_WearOff
 	return perk;
 }
 
-Perk ForceRemovePerk(const int client, const RTDRemoveReason reason=RTDRemove_WearOff, const char[] sReason="", const int iInitiator=0)
+Perk ForceRemovePerk(int client, const RTDRemoveReason reason=RTDRemove_WearOff, const char[] sReason="", const int iInitiator=0)
 {
 	if (!IsValidClient(client))
 		return null;
@@ -1625,15 +1623,55 @@ void PrintToNonRollers(int client, Perk perk, int iDuration)
 	if (!(g_iCvarChat & view_as<int>(ChatFlag_AppOther)))
 		return;
 
-	char sRollerName[MAX_NAME_LENGTH], sPerkName[RTD2_MAX_PERK_NAME_LENGTH];
-	GetClientName(client, sRollerName, sizeof(sRollerName));
+	char sRollerColored[MAX_NAME_LENGTH + 16];
+	char sRollerColor[8];
+	char sRollerName[MAX_NAME_LENGTH];
+	int iNameStart = 0;
+	GetPlayerName(client, sRollerColored, sizeof(sRollerColored));
+	if (sRollerColored[0] == '\x07')
+	{
+		strcopy(sRollerColor, sizeof(sRollerColor), sRollerColored);
+		sRollerColor[7] = '\0';
+		iNameStart = 7;
+	}
+	else if (sRollerColored[0] == '\x03')
+	{
+		sRollerColor[0] = '\x03';
+		sRollerColor[1] = '\0';
+		iNameStart = 1;
+	}
+	else
+	{
+		sRollerColor[0] = '\0';
+		iNameStart = 0;
+	}
+	if (sRollerColored[iNameStart] == '\0')
+	{
+		sRollerName[0] = '\0';
+	}
+	else
+	{
+		int i = 0;
+		int iMax = sizeof(sRollerName) - 1;
+		while (sRollerColored[iNameStart + i] != '\0' && i < iMax)
+		{
+			sRollerName[i] = sRollerColored[iNameStart + i];
+			++i;
+		}
+		sRollerName[i] = '\0';
+	}
+	int iNameLen = strlen(sRollerName);
+	if (iNameLen > 0 && sRollerName[iNameLen - 1] == '\x01')
+		sRollerName[iNameLen - 1] = '\0';
+
+	char sPerkName[RTD2_MAX_PERK_NAME_LENGTH];
 	perk.GetName(sPerkName, sizeof(sPerkName));
 
 	if (!g_bCvarShowTime || perk.Time == -1)
 	{
 		RTDPrintAllExcept(client, "%t",
 			"RTD2_Rolled_Perk_Others",
-			g_sTeamColors[GetClientTeam(client)],
+			sRollerColor,
 			sRollerName,
 			0x01,
 			perk.Good ? PERK_COLOR_GOOD : PERK_COLOR_BAD,
@@ -1643,7 +1681,7 @@ void PrintToNonRollers(int client, Perk perk, int iDuration)
 	{
 		RTDPrintAllExcept(client, "%t",
 			"RTD2_Rolled_Perk_Others_Time",
-			g_sTeamColors[GetClientTeam(client)],
+			sRollerColor,
 			sRollerName,
 			0x01,
 			perk.Good ? PERK_COLOR_GOOD : PERK_COLOR_BAD,
@@ -1697,7 +1735,27 @@ void PrintPerkEndReason(int client, RTDRemoveReason reason=RTDRemove_WearOff, co
 		RTDPrint(client, "%t", sReasonSelf, reason == RTDRemove_Custom ? sCustomReason : "");
 
 	if (g_iCvarChat & view_as<int>(ChatFlag_RemOther))
-		RTDPrintAllExcept(client, "%t", sReasonOthers, g_sTeamColors[GetClientTeam(client)], client, 0x01, reason == RTDRemove_Custom ? sCustomReason : "");
+	{
+		char sRollerColored[MAX_NAME_LENGTH + 16];
+		char sRollerColor[8];
+		GetPlayerName(client, sRollerColored, sizeof(sRollerColored));
+		if (sRollerColored[0] == '\x07')
+		{
+			strcopy(sRollerColor, sizeof(sRollerColor), sRollerColored);
+			sRollerColor[7] = '\0';
+		}
+		else if (sRollerColored[0] == '\x03')
+		{
+			sRollerColor[0] = '\x03';
+			sRollerColor[1] = '\0';
+		}
+		else
+		{
+			sRollerColor[0] = '\0';
+		}
+
+		RTDPrintAllExcept(client, "%t", sReasonOthers, sRollerColor, client, 0x01, reason == RTDRemove_Custom ? sCustomReason : "");
+	}
 }
 
 void Forward_PerkApplied(int client, Perk perk, int iDuration)
@@ -1743,7 +1801,7 @@ bool IsInClientHistory(int client, Perk perk)
 	return g_hRollers.IsInPerkHistory(client, perk, g_iCvarRepeatPlayer);
 }
 
-void RTDPrint(const int client, const char[] sFormat, any ...)
+void RTDPrint(int client, const char[] sFormat, any ...)
 {
 	char sBuffer[254];
 
@@ -1752,7 +1810,7 @@ void RTDPrint(const int client, const char[] sFormat, any ...)
 
 	if (IsValidClient(client))
 	{
-		PrintToChat(client, CHAT_PREFIX ... " %s", sBuffer);
+		CPrintToChatEx(client, client, CHAT_PREFIX ... " %s", sBuffer);
 	}
 	else
 	{
@@ -1772,11 +1830,11 @@ void RTDPrintAll(const char[] sFormat, any ...)
 		SetGlobalTransTarget(i);
 		VFormat(sBuffer, sizeof(sBuffer), sFormat, 2);
 
-		PrintToChat(i, CHAT_PREFIX ... " %s", sBuffer);
+		CPrintToChatEx(i, 0, CHAT_PREFIX ... " %s", sBuffer);
 	}
 }
 
-void RTDPrintAllExcept(const int client, const char[] sFormat, any ...)
+void RTDPrintAllExcept(int client, const char[] sFormat, any ...)
 {
 	char sBuffer[254];
 	int i = 0;
@@ -1789,7 +1847,7 @@ void RTDPrintAllExcept(const int client, const char[] sFormat, any ...)
 		SetGlobalTransTarget(i);
 		VFormat(sBuffer, sizeof(sBuffer), sFormat, 3);
 
-		PrintToChat(i, CHAT_PREFIX ... " %s", sBuffer);
+		CPrintToChatEx(i, client, CHAT_PREFIX ... " %s", sBuffer);
 	}
 
 	while (++i <= MaxClients)
@@ -1800,15 +1858,64 @@ void RTDPrintAllExcept(const int client, const char[] sFormat, any ...)
 		SetGlobalTransTarget(i);
 		VFormat(sBuffer, sizeof(sBuffer), sFormat, 3);
 
-		PrintToChat(i, CHAT_PREFIX ... " %s", sBuffer);
+		CPrintToChatEx(i, client, CHAT_PREFIX ... " %s", sBuffer);
 	}
 }
 
-void DisplayPerkTimeFrame(const int client)
+void DisplayPerkTimeFrame(int client)
 {
-	int iTeam = GetClientTeam(client);
-	int iRed = (iTeam == 2) ? 255 : 32;
-	int iBlue = (iTeam == 3) ? 255 : 32;
+	char sTeamName[32];
+	GetTeamName(GetClientTeam(client), sTeamName, sizeof(sTeamName));
+
+	int red, green, blue, alpha;
+	GetEntityRenderColor(client, red, green, blue, alpha);
+	int color = (red << 16) | (green << 8) | blue;
+
+	if (color == 0xFFFFFF)
+	{
+		if (StrEqual(sTeamName, "Spectator"))
+		{
+			red = 204;
+			green = 204;
+			blue = 204;
+		}
+		else if (StrEqual(sTeamName, "Red"))
+		{
+			red = 255;
+			green = 0;
+			blue = 0;
+		}
+		else if (StrEqual(sTeamName, "Blue"))
+		{
+			red = 0;
+			green = 0;
+			blue = 255;
+		}
+		else if (StrEqual(sTeamName, "Green"))
+		{
+			red = 0;
+			green = 255;
+			blue = 0;
+		}
+		else if (StrEqual(sTeamName, "Yellow"))
+		{
+			red = 255;
+			green = 255;
+			blue = 0;
+		}
+		else if (StrEqual(sTeamName, "Orange"))
+		{
+			red = 255;
+			green = 164;
+			blue = 0;
+		}
+		else if (StrEqual(sTeamName, "Purple"))
+		{
+			red = 128;
+			green = 64;
+			blue = 128;
+		}
+	}
 
 	int iRemainingTime = g_hRollers.GetEndRollTime(client) - GetTime();
 	int iAddedTime = g_hRollers.GetUnconsumedAddedTime(client);
@@ -1817,7 +1924,7 @@ void DisplayPerkTimeFrame(const int client)
 	char sPerkName[RTD2_MAX_PERK_NAME_LENGTH];
 	g_hRollers.GetPerk(client).GetName(sPerkName, sizeof(sPerkName));
 
-	SetHudTextParams(g_fCvarTimerPosX, g_fCvarTimerPosY, 1.0, iRed, 32, iBlue, 255);
+	SetHudTextParams(g_fCvarTimerPosX, g_fCvarTimerPosY, 1.0, red, green, blue, 255);
 
 	if (iAddedTime == 0)
 	{
@@ -1852,7 +1959,7 @@ float GetPerkTimeFloat(Perk perk)
 	return float(GetPerkTime(perk));
 }
 
-bool IsRecentPerk(const int client, const Perk perk, const int iTimeDelta=2)
+bool IsRecentPerk(int client, const Perk perk, const int iTimeDelta=2)
 {
 	Perk current = g_hRollers.GetPerk(client);
 	if (current == perk) // current counts as recent
@@ -1962,7 +2069,7 @@ bool IsRollerDonator(int client)
 }
 
 // `stock` to suppress unused parameter when neither Friendly or FriendlySimple are present.
-stock bool IsPlayerFriendly(const int client)
+stock bool IsPlayerFriendly(int client)
 {
 #if defined _friendly_included
 	if (g_bPluginFriendly)
