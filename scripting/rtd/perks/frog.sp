@@ -41,7 +41,7 @@ public void Frog_Init(const Perk perk)
 	Events.OnPlayerRunCmd(perk, Frog_OnPlayerRunCmd);
 }
 
-public void Frog_ApplyPerk(const int client, const Perk perk)
+public void Frog_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].InJump = !IsGrounded(client);
 	Cache[client].NextJump = GetEngineTime();
@@ -55,13 +55,13 @@ public void Frog_ApplyPerk(const int client, const Perk perk)
 	Cache[client].Repeat(0.1, Frog_JumpCheck);
 }
 
-public void Frog_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Frog_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	int iFlags = GetEntityFlags(client);
 	SetEntityFlags(client, iFlags & ~FL_ATCONTROLS);
 }
 
-Action Frog_JumpCheck(const int client)
+Action Frog_JumpCheck(int client)
 {
 	if (Cache[client].InJump && IsGrounded(client))
 	{
@@ -75,7 +75,7 @@ Action Frog_JumpCheck(const int client)
 	return Plugin_Continue;
 }
 
-bool Frog_OnPlayerRunCmd(const int client, int& iButtons, float fVel[3], float fAng[3])
+bool Frog_OnPlayerRunCmd(int client, int& iButtons, float fVel[3], float fAng[3])
 {
 	if (Cache[client].InJump)
 		return false;

@@ -29,14 +29,14 @@ public void ScaryBullets_Init(const Perk perk)
 	Events.OnPlayerAttacked(perk, ScaryBullets_OnPlayerAttacked);
 }
 
-void ScaryBullets_ApplyPerk(const int client, const Perk perk)
+void ScaryBullets_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].MinDamage = perk.GetPrefCell("min_damage", 5);
 	Cache[client].Duration = perk.GetPrefFloat("duration", 3.0);
 	Cache[client].SetEnt(Particle, CreateParticle(client, SCARYBULLETS_PARTICLE));
 }
 
-public void ScaryBullets_OnPlayerAttacked(const int client, const int victim, const int damage, const int health)
+public void ScaryBullets_OnPlayerAttacked(int client, const int victim, const int damage, const int health)
 {
 	if (client == victim)
 		return;

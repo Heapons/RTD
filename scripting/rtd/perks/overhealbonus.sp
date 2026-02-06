@@ -26,14 +26,14 @@ public void OverhealBonus_Init(const Perk perk)
 	Events.OnEntitySpawned(perk, OverhealBonus_OnDroppedWeaponSpawn, Classname_DroppedWeapon, Retriever_AccountId);
 }
 
-void OverhealBonus_ApplyPerk(const int client, const Perk perk)
+void OverhealBonus_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Scale = perk.GetPrefFloat("scale", 5.0);
 
 	OverhealBonus_Apply(client);
 }
 
-public void OverhealBonus_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void OverhealBonus_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	int iMediGun = GetPlayerWeaponSlot(client, 1);
 	if (iMediGun > MaxClients && IsValidEntity(iMediGun))
@@ -43,7 +43,7 @@ public void OverhealBonus_RemovePerk(const int client, const RTDRemoveReason eRe
 	}
 }
 
-void OverhealBonus_Apply(const int client)
+void OverhealBonus_Apply(int client)
 {
 	int iMediGun = GetPlayerWeaponSlot(client, 1);
 	if (iMediGun <= MaxClients || !IsValidEntity(iMediGun))
@@ -52,7 +52,7 @@ void OverhealBonus_Apply(const int client)
 	weapon.AddAttribute(Attribs.OverhealBonus, Cache[client].Scale);
 }
 
-public void OverhealBonus_OnDroppedWeaponSpawn(const int client, const int iEnt)
+public void OverhealBonus_OnDroppedWeaponSpawn(int client, const int iEnt)
 {
 	AcceptEntityInput(iEnt, "Kill");
 }

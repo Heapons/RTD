@@ -18,12 +18,12 @@
 
 DEFINE_CALL_APPLY_REMOVE(Snail)
 
-public void Snail_ApplyPerk(const int client, const Perk perk)
+public void Snail_ApplyPerk(int client, const Perk perk)
 {
 	SetSpeedEx(client, perk.GetPrefFloat("multiplier", 0.4));
 }
 
-public void Snail_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Snail_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	SetSpeedEx(client);
 }

@@ -47,7 +47,7 @@ public void Smite_Init(const Perk perk)
 	PrecacheSound(g_sSoundZap[2]);
 }
 
-void Smite_ApplyPerk(const int client, const Perk perk)
+void Smite_ApplyPerk(int client, const Perk perk)
 {
 	float fDamage = 999.0;
 
@@ -136,7 +136,7 @@ void Smite_ApplyPerk(const int client, const Perk perk)
 	KILL_ENT_IN(iBeam,0.1);
 }
 
-public void Smite_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Smite_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	SDKUnhook(client, SDKHook_OnTakeDamagePost, Smite_OnTakeDamage);
 
@@ -144,8 +144,9 @@ public void Smite_RemovePerk(const int client, const RTDRemoveReason eRemoveReas
 	StopSound(client, SNDCHAN_AUTO, SOUND_ELECTRIC_MIST);
 }
 
-public Action Smite_Tick(const int client)
+public Action Smite_Tick(int client)
 {
+	TFEntity player = TFEntity(client);
 	int iTicksLeft = Cache[client].TicksLeft - 1;
 	if (iTicksLeft > 0)
 	{
@@ -169,7 +170,7 @@ public Action Smite_Tick(const int client)
 		Cache[client].IsElectrocuted = true;
 		Cache[client].TicksLeft = Cache[client].ElectrocutionTicks;
 
-		TF2_AddCondition(client, TFCond_CritOnFirstBlood, Cache[client].ElectrocutionTime);
+		player.AddCond(view_as<int>(TFCond_CritOnFirstBlood), Cache[client].ElectrocutionTime);
 		SetSpeed(client, Cache[client].BaseSpeed, Cache[client].Slowdown);
 
 		ViewPunchRand(client, 5.0);
@@ -187,13 +188,13 @@ public void Smite_OnTakeDamage(int client, int attacker, int iInflictor, float f
 		Cache[client].TicksLeft -= 10;
 }
 
-int Smite_GenerateTicksLeft(const int client)
+int Smite_GenerateTicksLeft(int client)
 {
 	int iElectrocutionTicks = Cache[client].ElectrocutionTicks;
 	return GetRandomInt(iElectrocutionTicks + 20, iElectrocutionTicks + 30);
 }
 
-void Smite_SendElectrocuteParticle(const int client)
+void Smite_SendElectrocuteParticle(int client)
 {
 	int iParticle = Cache[client].ElectrocuteEffect;
 	SendTEParticleAttached(view_as<TEParticleId>(iParticle), client);

@@ -20,13 +20,13 @@
 
 DEFINE_CALL_APPLY_REMOVE(NoGravity)
 
-public void NoGravity_ApplyPerk(const int client, const Perk perk)
+public void NoGravity_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Base = GetEntityGravity(client);
 	SetEntityGravity(client, 0.0001);
 }
 
-public void NoGravity_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void NoGravity_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	SetEntityGravity(client, Cache[client].Base);
 }

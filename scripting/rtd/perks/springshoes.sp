@@ -25,7 +25,7 @@ public void SpringShoes_Init(const Perk perk)
 	PrecacheSound(SPRING_JUMP);
 }
 
-public void SpringShoes_ApplyPerk(const int client, const Perk perk)
+public void SpringShoes_ApplyPerk(int client, const Perk perk)
 {
 	TFEntity player = TFEntity(client);
 	player.AddAttribute(Attribs.PreventJump, 1.0);
@@ -33,14 +33,14 @@ public void SpringShoes_ApplyPerk(const int client, const Perk perk)
 	Cache[client].Repeat(0.25, SpringShoes_ForceJump);
 }
 
-public void SpringShoes_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void SpringShoes_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	TFEntity player = TFEntity(client);
 	player.RemoveAttribute(Attribs.PreventJump);
 }
 
 
-public Action SpringShoes_ForceJump(const int client)
+public Action SpringShoes_ForceJump(int client)
 {
 	if (!IsGrounded(client))
 		return Plugin_Continue;

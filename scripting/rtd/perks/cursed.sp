@@ -23,7 +23,7 @@ public void Cursed_Init(const Perk perk)
 	Events.OnPlayerRunCmd(perk, Cursed_OnPlayerRunCmd);
 }
 
-bool Cursed_OnPlayerRunCmd(const int client, int& iButtons, float fVel[3], float fAng[3])
+bool Cursed_OnPlayerRunCmd(int client, int& iButtons, float fVel[3], float fAng[3])
 {
 	fVel[0] = -fVel[0];
 	fVel[1] = -fVel[1];

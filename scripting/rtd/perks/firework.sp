@@ -26,7 +26,7 @@ public void Firework_Init(const Perk perk)
 	PrecacheSound(FIREWORK_EXPLOSION);
 }
 
-void Firework_ApplyPerk(const int client, const Perk perk)
+void Firework_ApplyPerk(int client, const Perk perk)
 {
 	float fPush[3];
 	fPush[2] = perk.GetPrefFloat("force", 4096.0);

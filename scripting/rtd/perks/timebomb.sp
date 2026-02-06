@@ -55,7 +55,7 @@ public void Timebomb_Init(const Perk perk)
 	PrecacheSound(g_sResistanceMedium[3]);
 }
 
-void Timebomb_ApplyPerk(const int client, const Perk perk)
+void Timebomb_ApplyPerk(int client, const Perk perk)
 {
 	float fExplodeTime = GetEngineTime() + GetPerkTime(perk);
 	float fRadius = perk.GetPrefFloat("radius", 512.0);
@@ -76,7 +76,7 @@ void Timebomb_ApplyPerk(const int client, const Perk perk)
 	Cache[client].Repeat(TICKS_SLOW, Timebomb_TickSlow);
 }
 
-public void Timebomb_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Timebomb_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	SetVariantInt(0);
 	AcceptEntityInput(client, "SetForcedTauntCam");
@@ -136,7 +136,7 @@ public Action Timebomb_OnTakeDamage(int client, int& attacker, int& iInflictor, 
 	return Plugin_Changed;
 }
 
-public Action Timebomb_TickSlow(const int client)
+public Action Timebomb_TickSlow(int client)
 {
 	Timebomb_Beep(client);
 
@@ -149,7 +149,7 @@ public Action Timebomb_TickSlow(const int client)
 	return Plugin_Continue;
 }
 
-public Action Timebomb_TickFast(const int client)
+public Action Timebomb_TickFast(int client)
 {
 	Timebomb_Beep(client);
 
@@ -162,13 +162,13 @@ public Action Timebomb_TickFast(const int client)
 	return Plugin_Continue;
 }
 
-void Timebomb_Beep(const int client)
+void Timebomb_Beep(int client)
 {
 	EmitSoundToAll(SOUND_TIMEBOMB_TICK, client);
 	SendTEParticleAttached(TEParticles.ShockwaveAirLight, Cache[client].GetEnt(Bomb).Index);
 }
 
-int Timebomb_SpawnBombHead(const int client)
+int Timebomb_SpawnBombHead(int client)
 {
 	int iBomb = CreateEntityByName("prop_dynamic");
 	if (iBomb <= MaxClients)

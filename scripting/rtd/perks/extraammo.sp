@@ -18,7 +18,7 @@
 
 DEFINE_CALL_APPLY(ExtraAmmo)
 
-public void ExtraAmmo_ApplyPerk(const int client, const Perk perk)
+public void ExtraAmmo_ApplyPerk(int client, const Perk perk)
 {
 	float fMultiplier = perk.GetPrefFloat("multiplier", 5.0);
 
@@ -30,7 +30,7 @@ public void ExtraAmmo_ApplyPerk(const int client, const Perk perk)
 	}
 }
 
-void ExtraAmmo_MultiplyAmmo(const int client, const int iWeapon, const float fMulti)
+void ExtraAmmo_MultiplyAmmo(int client, const int iWeapon, const float fMulti)
 {
 	switch (GetEntProp(iWeapon, Prop_Send, "m_iItemDefinitionIndex"))
 	{

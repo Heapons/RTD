@@ -42,7 +42,7 @@ public void StripToMelee_Init(const Perk perk)
 	Events.OnResupply(perk, StripToMelee_OnResupply);
 }
 
-void StripToMelee_ApplyPerk(const int client, const Perk perk)
+void StripToMelee_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].IsForcedResupply = false;
 	Cache[client].OwnedWeapons = 0;
@@ -63,7 +63,7 @@ void StripToMelee_ApplyPerk(const int client, const Perk perk)
 	}
 }
 
-public void StripToMelee_ApplyPerkPost(const int client)
+public void StripToMelee_ApplyPerkPost(int client)
 {
 	StripToMelee_ForceResupply(client, Cache[client].RefillHealth > 0); // sets LastWeaponsRemoved
 
@@ -80,7 +80,7 @@ public void StripToMelee_ApplyPerkPost(const int client)
 	Cache[client].Repeat(0.5, StripToMelee_Ping);
 }
 
-public Action StripToMelee_Ping(const int client)
+public Action StripToMelee_Ping(int client)
 {
 	TFTeam eTeam = TF2_GetClientTeam(client);
 
@@ -114,7 +114,7 @@ void StripToMelee_PingBox(const int iBox, const int iSlot, const TFTeam eTeam)
 	TE_Send(clients, iTotal);
 }
 
-public void StripToMelee_OnResupply(const int client)
+public void StripToMelee_OnResupply(int client)
 {
 	int iWeaponsRemoved = StripToMelee_StripWeapons(client);
 	Cache[client].LastWeaponsRemoved = iWeaponsRemoved;
@@ -140,7 +140,7 @@ public void StripToMelee_OnResupply(const int client)
 	}
 }
 
-int StripToMelee_StripWeapons(const int client)
+int StripToMelee_StripWeapons(int client)
 {
 	int iOwnedWeapons = Cache[client].OwnedWeapons;
 	int iWeaponsRemoved = 0;
@@ -167,7 +167,7 @@ int StripToMelee_StripWeapons(const int client)
 	return iWeaponsRemoved;
 }
 
-int StripToMelee_RemoveWeaponSlotIfExists(const int client, const int iSlot)
+int StripToMelee_RemoveWeaponSlotIfExists(int client, const int iSlot)
 {
 	int iWeap = GetPlayerWeaponSlot(client, iSlot);
 	if (iWeap <= MaxClients)
@@ -187,14 +187,14 @@ int StripToMelee_RemoveWeaponSlotIfExists(const int client, const int iSlot)
 	return 1;
 }
 
-int StripToMelee_RemoveWeaponSlotsIfExist(const int client, const int iSlot1, const int iSlot2)
+int StripToMelee_RemoveWeaponSlotsIfExist(int client, const int iSlot1, const int iSlot2)
 {
 	int iSlot1Removed = StripToMelee_RemoveWeaponSlotIfExists(client, iSlot1);
 	int iSlot2Removed = StripToMelee_RemoveWeaponSlotIfExists(client, iSlot2);
 	return view_as<int>(iSlot1Removed || iSlot2Removed);
 }
 
-int StripToMelee_SpawnBox(const int client, const int iSlot, const int iHealth, const float fSpeed)
+int StripToMelee_SpawnBox(int client, const int iSlot, const int iHealth, const float fSpeed)
 {
 	int iBox = CreateEntityByName("prop_physics_override");
 	if (iBox <= MaxClients) return -1;
@@ -300,7 +300,7 @@ public Action StripToMelee_OnBoxTakeDamage(int iBox, int& iAtk, int& iInflictor,
 	return Plugin_Continue;
 }
 
-void StripToMelee_Resupply(const int client, const bool bRefillHealth)
+void StripToMelee_Resupply(int client, const bool bRefillHealth)
 {
 	int iHealth = GetClientHealth(client);
 
@@ -310,7 +310,7 @@ void StripToMelee_Resupply(const int client, const bool bRefillHealth)
 		SetEntityHealth(client, iHealth);
 }
 
-void StripToMelee_ForceResupply(const int client, const bool bRefillHealth)
+void StripToMelee_ForceResupply(int client, const bool bRefillHealth)
 {
 	Cache[client].IsForcedResupply = true;
 	StripToMelee_Resupply(client, bRefillHealth);

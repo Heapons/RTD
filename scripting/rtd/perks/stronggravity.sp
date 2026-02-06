@@ -20,13 +20,13 @@
 
 DEFINE_CALL_APPLY_REMOVE(StrongGravity)
 
-public void StrongGravity_ApplyPerk(const int client, const Perk perk)
+public void StrongGravity_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Base = GetEntityGravity(client);
 	SetEntityGravity(client, perk.GetPrefFloat("multiplier", 4.0));
 }
 
-public void StrongGravity_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void StrongGravity_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	SetEntityGravity(client, Cache[client].Base);
 }

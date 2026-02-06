@@ -18,12 +18,12 @@
 
 DEFINE_CALL_APPLY(Drugged)
 
-public void Drugged_ApplyPerk(const int client, const Perk perk)
+public void Drugged_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Repeat(perk.GetPrefFloat("interval", 1.0), Drugged_Tick);
 }
 
-public Action Drugged_Tick(const int client)
+public Action Drugged_Tick(int client)
 {
 	float fPunch[3];
 	fPunch[0] = GetRandomFloat(-45.0, 45.0);

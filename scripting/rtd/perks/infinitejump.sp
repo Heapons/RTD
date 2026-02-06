@@ -23,7 +23,7 @@ public void InfiniteJump_Init(const Perk perk)
 	Events.OnPlayerRunCmd(perk, InfiniteJump_OnPlayerRunCmd);
 }
 
-bool InfiniteJump_OnPlayerRunCmd(const int client, int& iButtons, float fVel[3], float fAng[3])
+bool InfiniteJump_OnPlayerRunCmd(int client, int& iButtons, float fVel[3], float fAng[3])
 {
 	if (iButtons & IN_JUMP)
 		SetEntProp(client, Prop_Send, "m_iAirDash", 0);

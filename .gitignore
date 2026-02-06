@@ -16,3 +16,5 @@ scripting/include/*
 *.zip
 .*
 venv
+
+!rtd.smx

@@ -37,7 +37,7 @@ public void Vampire_Init(const Perk perk)
 	Events.OnPlayerAttacked(perk, Vampire_OnPlayerAttacked);
 }
 
-void Vampire_ApplyPerk(const int client, const Perk perk)
+void Vampire_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].MinDamage = perk.GetPrefFloat("mindamage", 1.0);
 	Cache[client].MaxDamage = perk.GetPrefFloat("maxdamage", 3.0);
@@ -47,7 +47,7 @@ void Vampire_ApplyPerk(const int client, const Perk perk)
 	Cache[client].Repeat(HEARTBEAT_TICK, Vampire_Tick);
 }
 
-public Action Vampire_Tick(const int client)
+public Action Vampire_Tick(int client)
 {
 	if (Cache[client].NextHurt > GetEngineTime())
 		return Plugin_Continue;
@@ -72,7 +72,7 @@ public Action Vampire_Tick_Followup(Handle hTimer, const int iUserId)
 	return Plugin_Stop;
 }
 
-void Vampire_Hurt(const int client)
+void Vampire_Hurt(int client)
 {
 	float fDamage = GetRandomFloat(Cache[client].MinDamage, Cache[client].MaxDamage);
 	TakeDamage(client, client, client, fDamage, DMG_PREVENT_PHYSICS_FORCE);
@@ -80,7 +80,7 @@ void Vampire_Hurt(const int client)
 	ViewPunchRand(client, 5.0);
 }
 
-void Vampire_OnPlayerAttacked(const int client, const int victim, const int damage, const int health)
+void Vampire_OnPlayerAttacked(int client, const int victim, const int damage, const int health)
 {
 	if (client != victim)
 		Cache[client].NextHurt = GetEngineTime() + Cache[client].Resistance;

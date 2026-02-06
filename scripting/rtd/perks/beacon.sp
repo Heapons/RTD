@@ -27,13 +27,13 @@ public void Beacon_Init(const Perk perk)
 	PrecacheSound(SOUND_BEEP);
 }
 
-void Beacon_ApplyPerk(const int client, const Perk perk)
+void Beacon_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Radius = perk.GetPrefFloat("radius", 375.0);
 	Cache[client].Repeat(perk.GetPrefFloat("interval", 0.5), Beacon_Beep);
 }
 
-Action Beacon_Beep(const int client)
+Action Beacon_Beep(int client)
 {
 	float fPos[3];
 	GetClientAbsOrigin(client, fPos);

@@ -26,8 +26,9 @@ public void Noclip_Init(const Perk perk)
 	Events.OnPlayerRunCmd(perk, Noclip_OnPlayerRunCmd);
 }
 
-void Noclip_ApplyPerk(const int client, const Perk perk)
+void Noclip_ApplyPerk(int client, const Perk perk)
 {
+	TFEntity player = TFEntity(client);
 	Cache[client].Mode = perk.GetPrefCell("mode", 0);
 
 	if (Cache[client].Mode)
@@ -38,12 +39,13 @@ void Noclip_ApplyPerk(const int client, const Perk perk)
 	{
 		Cache[client].BaseGravity = GetEntityGravity(client);
 		SetEntityGravity(client, 0.0001);
-		TF2_AddCondition(client, TFCond_SwimmingNoEffects);
+		player.AddCond(view_as<int>(TFCond_SwimmingNoEffects));
 	}
 }
 
-public void Noclip_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Noclip_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
+	TFEntity player = TFEntity(client);
 	if (Cache[client].Mode)
 	{
 		SetEntityMoveType(client, MOVETYPE_WALK);
@@ -52,12 +54,13 @@ public void Noclip_RemovePerk(const int client, const RTDRemoveReason eRemoveRea
 	else
 	{
 		SetEntityGravity(client, Cache[client].BaseGravity);
-		TF2_RemoveCondition(client, TFCond_SwimmingNoEffects);
+		player.RemoveCond(view_as<int>(TFCond_SwimmingNoEffects));
 	}
 }
 
-bool Noclip_OnPlayerRunCmd(const int client, int& iButtons, float fVel[3], float fAng[3])
+bool Noclip_OnPlayerRunCmd(int client, int& iButtons, float fVel[3], float fAng[3])
 {
+	TFEntity player = TFEntity(client);
 	if (Cache[client].Mode)
 		return false;
 
@@ -68,11 +71,11 @@ bool Noclip_OnPlayerRunCmd(const int client, int& iButtons, float fVel[3], float
 	// we float down. Which is super hilarious btw if you get the reference (btw).
 	if (bStationary && bSwimming)
 	{
-		TF2_RemoveCondition(client, TFCond_SwimmingNoEffects);
+		player.RemoveCond(view_as<int>(TFCond_SwimmingNoEffects));
 	}
 	else if (!bStationary && !bSwimming)
 	{
-		TF2_AddCondition(client, TFCond_SwimmingNoEffects);
+		player.AddCond(view_as<int>(TFCond_SwimmingNoEffects));
 	}
 
 	float fForward[3], fRight[3], fFinal[3];

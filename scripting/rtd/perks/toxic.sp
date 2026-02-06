@@ -30,7 +30,7 @@ public void Toxic_Init()
 	PrecacheSound(SOUND_TOXIC);
 }
 
-void Toxic_ApplyPerk(const int client, const Perk perk)
+void Toxic_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Radius = perk.GetPrefFloat("radius", 192.0);
 	Cache[client].Damage = perk.GetPrefFloat("damage", 20.0);
@@ -51,12 +51,12 @@ void Toxic_ApplyPerk(const int client, const Perk perk)
 	Cache[client].Repeat(0.1, Toxic_SpawnParticles);
 }
 
-public void Toxic_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Toxic_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	StopSound(client, SNDCHAN_AUTO, SOUND_TOXIC);
 }
 
-public Action Toxic_ApplyDamage(const int client)
+public Action Toxic_ApplyDamage(int client)
 {
 	float fPos[3];
 	GetClientAbsOrigin(client, fPos);
@@ -66,7 +66,7 @@ public Action Toxic_ApplyDamage(const int client)
 	return Plugin_Continue;
 }
 
-public Action Toxic_SpawnParticles(const int client)
+public Action Toxic_SpawnParticles(int client)
 {
 	float fClientPos[3];
 	GetClientAbsOrigin(client, fClientPos);

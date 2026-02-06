@@ -42,7 +42,7 @@ static char g_sResistanceHeavy[][] = {
 
 methodmap GodmodeFlags
 {
-	public GodmodeFlags(const int client=0)
+	public GodmodeFlags(int client=0)
 	{
 		return view_as<GodmodeFlags>(client);
 	}
@@ -131,7 +131,7 @@ methodmap GodmodeFlags
 	}
 }
 
-public void Godmode_Call(const int client, const Perk perk, const bool apply, const RTDRemoveReason reason)
+public void Godmode_Call(int client, const Perk perk, const bool apply, const RTDRemoveReason reason)
 {
 	if (apply)
 	{
@@ -155,8 +155,9 @@ public void Godmode_Init(const Perk perk)
 	Events.OnPlayerDisconnected(perk, Godmode_OnPlayerDiedOrDisconnected_Any, SubscriptionType_Any);
 }
 
-void Godmode_ApplyPerk(const int client, const Perk perk)
+void Godmode_ApplyPerk(int client, const Perk perk)
 {
+	TFEntity player = TFEntity(client);
 	g_eInGodmode.Set(client);
 
 	Cache[client].UberMode = perk.GetPrefCell("uber", 0);
@@ -187,7 +188,7 @@ void Godmode_ApplyPerk(const int client, const Perk perk)
 
 	if (Cache[client].UberMode)
 	{
-		TF2_AddCondition(client, TFCond_UberchargedCanteen);
+		player.AddCond(view_as<int>(TFCond_UberchargedCanteen));
 	}
 	else
 	{
@@ -198,8 +199,9 @@ void Godmode_ApplyPerk(const int client, const Perk perk)
 	g_eInGodmode.Set(client);
 }
 
-public void Godmode_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Godmode_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
+	TFEntity player = TFEntity(client);
 	g_eInGodmode.Unset(client);
 
 	SetOverlay(client, ClientOverlay_None);
@@ -209,11 +211,11 @@ public void Godmode_RemovePerk(const int client, const RTDRemoveReason eRemoveRe
 	SDKUnhook(client, SDKHook_OnTakeDamage, Godmode_OnTakeDamage_Self);
 
 	if (Cache[client].UberMode)
-		TF2_RemoveCondition(client, TFCond_UberchargedCanteen);
+		player.RemoveCond(view_as<int>(TFCond_UberchargedCanteen));
 
-	TF2_RemoveCondition(client, TFCond_UberBulletResist);
-	TF2_RemoveCondition(client, TFCond_UberBlastResist);
-	TF2_RemoveCondition(client, TFCond_UberFireResist);
+	player.RemoveCond(view_as<int>(TFCond_UberBulletResist));
+	player.RemoveCond(view_as<int>(TFCond_UberBlastResist));
+	player.RemoveCond(view_as<int>(TFCond_UberFireResist));
 
 	RemovePreventCapture(client);
 
@@ -223,7 +225,7 @@ public void Godmode_RemovePerk(const int client, const RTDRemoveReason eRemoveRe
 			mGodmodeFlags.RemoveAnnotation(i);
 }
 
-void Godmode_SpawnDeflectEffect(const int client, const int iType, const float fPos[3])
+void Godmode_SpawnDeflectEffect(int client, const int iType, const float fPos[3])
 {
 	float fTime = GetEngineTime();
 	if (fTime < Cache[client].LastDeflect + 0.1)
@@ -249,7 +251,7 @@ void Godmode_SpawnDeflectEffect(const int client, const int iType, const float f
 	}
 }
 
-Action Godmode_OnTakeDamage_Common(const int client, const int attacker, float &fDamage, const int iType, const float fPos[3])
+Action Godmode_OnTakeDamage_Common(int client, const int attacker, float &fDamage, const int iType, const float fPos[3])
 {
 	// Attacker could be world or some various hurt entities
 	if (1 <= attacker <= MaxClients && GodmodeFlags(client).Contains(attacker))
@@ -271,9 +273,10 @@ public Action Godmode_OnTakeDamage_NoSelf(int client, int &attacker, int &iInfli
 
 public Action Godmode_OnTakeDamage_Pushback(int client, int &attacker, int &iInflictor, float &fDamage, int &iType, int &iWeapon, float fForce[3], float fPos[3], int iCustom)
 {
+	TFEntity player = TFEntity(client);
 	if (client == attacker)
 	{
-		TF2_AddCondition(client, TFCond_Bonked, 0.01);
+		player.AddCond(view_as<int>(TFCond_Bonked), 0.01);
 		return Plugin_Continue;
 	}
 
@@ -285,7 +288,7 @@ public Action Godmode_OnTakeDamage_Self(int client, int &attacker, int &iInflict
 	return client == attacker ? Plugin_Continue : Godmode_OnTakeDamage_Common(client, attacker, fDamage, iType, fPos);
 }
 
-public void Godmode_OnConditionAdded_Any(const int client, const TFCond eCondition)
+public void Godmode_OnConditionAdded_Any(int client, const TFCond eCondition)
 {
 	switch (eCondition)
 	{
@@ -294,7 +297,7 @@ public void Godmode_OnConditionAdded_Any(const int client, const TFCond eConditi
 	}
 }
 
-public void Godmode_OnConditionRemoved_Any(const int client, const TFCond eCondition)
+public void Godmode_OnConditionRemoved_Any(int client, const TFCond eCondition)
 {
 	switch (eCondition)
 	{
@@ -303,13 +306,13 @@ public void Godmode_OnConditionRemoved_Any(const int client, const TFCond eCondi
 	}
 }
 
-public void Godmode_OnPlayerAttacked(const int client, const int victim, const int damage, const int health)
+public void Godmode_OnPlayerAttacked(int client, const int victim, const int damage, const int health)
 {
 	if (Cache[client].FightBack)
 		GodmodeFlags(client).Add(victim);
 }
 
-public void Godmode_OnPlayerDiedOrDisconnected_Any(const int client)
+public void Godmode_OnPlayerDiedOrDisconnected_Any(int client)
 {
 	GodmodeFlags().RemoveForAll(client);
 }

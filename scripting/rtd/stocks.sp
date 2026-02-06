@@ -147,37 +147,37 @@
 
 methodmap NotifyMessages
 {
-	public void Attack(const int client)
+	public void Attack(int client)
 	{
 		RTDPrint(client, "%t", "RTD2_Perk_Attack", 0x03, 0x01);
 	}
 
-	public void PlayerDamage(const int client, const int damage)
+	public void PlayerDamage(int client, const int damage)
 	{
 		RTDPrint(client, "%t", "RTD2_Perk_Timebomb_Damage", 0x03, damage, 0x01);
 	}
 
-	public void PlayersIgnited(const int client, const int iAmount)
+	public void PlayersIgnited(int client, const int iAmount)
 	{
 		RTDPrint(client, "%t", "RTD2_Perk_Timebomb_Ignite", 0x03, iAmount, 0x01);
 	}
 
-	public void Dispenser(const int client)
+	public void Dispenser(int client)
 	{
 		RTDPrint(client, "%t", "RTD2_Perk_Dispenser_Initialization", 0x03, 0x01);
 	}
 
-	public void DispenserSpawned(const int client, const int iSpawned, const int iMax)
+	public void DispenserSpawned(int client, const int iSpawned, const int iMax)
 	{
 		RTDPrint(client, "%t", "RTD2_Perk_Dispenser_Spawned", 0x03, iSpawned, iMax, 0x01);
 	}
 
-	public void Sentry(const int client)
+	public void Sentry(int client)
 	{
 		RTDPrint(client, "%t", "RTD2_Perk_Sentry_Initialization", 0x03, 0x01);
 	}
 
-	public void SentrySpawned(const int client, const int iSpawned, const int iMax)
+	public void SentrySpawned(int client, const int iSpawned, const int iMax)
 	{
 		RTDPrint(client, "%t", "RTD2_Perk_Sentry_Spawned", 0x03, iSpawned, iMax, 0x01);
 	}
@@ -383,23 +383,23 @@ stock int IsolateLastSetBit(int iValue, const int iMask)
 * CLIENT
 */
 
-stock bool IsValidClient(const int client)
+stock bool IsValidClient(int client)
 {
 	return (1 <= client <= MaxClients) && IsClientInGame(client);
 }
 
-stock bool IsGrounded(const int client)
+stock bool IsGrounded(int client)
 {
 	return GetEntPropEnt(client, Prop_Send, "m_hGroundEntity") > -1;
 }
 
-stock int GetOppositeTeamOf(const int client)
+stock int GetOppositeTeamOf(int client)
 {
 	int iTeam = GetClientTeam(client);
 	return GetOppositeTeam(iTeam);
 }
 
-stock float GetCaptureValue(const int client)
+stock float GetCaptureValue(int client)
 {
 	// float instead of int so the return value can be used in a TF2Attrib call
 	float fValue = 1.0;
@@ -421,7 +421,7 @@ stock float GetCaptureValue(const int client)
 	return fValue;
 }
 
-stock void ApplyPreventCapture(const int client)
+stock void ApplyPreventCapture(int client)
 {
 	TFEntity entity = TFEntity(client);
 	entity.AddAttribute(Attribs.CannotPickupIntelligence, 1.0); // cannot pick up intel
@@ -429,14 +429,14 @@ stock void ApplyPreventCapture(const int client)
 	FakeClientCommandEx(client, "dropitem"); // in case intel is already picked up
 }
 
-stock void RemovePreventCapture(const int client)
+stock void RemovePreventCapture(int client)
 {
 	TFEntity entity = TFEntity(client);
 	entity.RemoveAttribute(Attribs.CannotPickupIntelligence);
 	entity.RemoveAttribute(Attribs.CaptureValue);
 }
 
-stock int GetUniqueId(const int client, const int iOther)
+stock int GetUniqueId(int client, const int iOther)
 {
 	// iOther + MAXPLAYERS -- reversing args should yield different IDs
 	// MAXPLAYERS * 2 -- add more than MAXPLAYERS in case iOther is negative
@@ -444,7 +444,7 @@ stock int GetUniqueId(const int client, const int iOther)
 	return client * (iOther + MAXPLAYERS * 2) * 91;
 }
 
-stock void ForceResupplyCrude(const int client, const float fPos[3])
+stock void ForceResupplyCrude(int client, const float fPos[3])
 {
 	int iResupply = CreateEntityByName("func_regenerate");
 	if (iResupply <= MaxClients)
@@ -493,7 +493,7 @@ enum ClientOverlay
 	ClientOverlay_Beams,
 }
 
-stock void SetOverlay(const int client, const ClientOverlay eOverlay)
+stock void SetOverlay(int client, const ClientOverlay eOverlay)
 {
 	switch (eOverlay)
 	{
@@ -772,7 +772,7 @@ stock void DisarmWeapons(int client, bool bDisarm)
 	}
 }
 
-stock void SwitchSlotUnchecked(const int client, const int iSlot)
+stock void SwitchSlotUnchecked(int client, const int iSlot)
 {
 	switch (iSlot)
 	{
@@ -784,7 +784,7 @@ stock void SwitchSlotUnchecked(const int client, const int iSlot)
 	}
 }
 
-stock bool SwitchSlot(const int client, const int iSlot)
+stock bool SwitchSlot(int client, const int iSlot)
 {
 	int iLastWeapon = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
 	if (iLastWeapon == GetPlayerWeaponSlot(client, iSlot))
@@ -794,8 +794,9 @@ stock bool SwitchSlot(const int client, const int iSlot)
 	return GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon") != iLastWeapon;
 }
 
-stock bool ForceSwitchSlot(const int client, const int iSlot)
+stock bool ForceSwitchSlot(int client, const int iSlot)
 {
+	TFEntity player = TFEntity(client);
 	int iWeapon = GetPlayerWeaponSlot(client, iSlot);
 	if (iWeapon <= MaxClients || !IsValidEntity(iWeapon))
 		return false;
@@ -819,13 +820,13 @@ stock bool ForceSwitchSlot(const int client, const int iSlot)
 	if (TF2_IsPlayerInCondition(client, TFCond_Zoomed))
 	{
 		// Switching away while zoomed in crashes clients
-		TF2_RemoveCondition(client, TFCond_Zoomed);
+		player.RemoveCond(view_as<int>(TFCond_Zoomed));
 	}
 
 	if (TF2_IsPlayerInCondition(client, TFCond_Slowed))
 	{
 		// Unset weapon slowdown effect (minigun, sniper rifle)
-		TF2_RemoveCondition(client, TFCond_Slowed);
+		player.RemoveCond(view_as<int>(TFCond_Slowed));
 		TF2_StunPlayer(client, 0.0, 0.0, TF_STUNFLAG_SLOWDOWN);
 	}
 
@@ -833,7 +834,7 @@ stock bool ForceSwitchSlot(const int client, const int iSlot)
 	return true;
 }
 
-stock void SwitchToFirstValidWeapon(const int client)
+stock void SwitchToFirstValidWeapon(int client)
 {
 	if (GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon") > MaxClients)
 		return; // already holding an valid weapon
@@ -843,7 +844,7 @@ stock void SwitchToFirstValidWeapon(const int client)
 			break;
 }
 
-stock int GetAmmo(const int client, const int iWeapon)
+stock int GetAmmo(int client, const int iWeapon)
 {
 	int iAmmoType = GetEntData(iWeapon, PropOffsets.CombatWeaponAmmoType, 1);
 	if (iAmmoType == 4)
@@ -852,7 +853,7 @@ stock int GetAmmo(const int client, const int iWeapon)
 	return GetEntData(client, PropOffsets.PlayerAmmo + iAmmoType * 4);
 }
 
-stock void SetAmmo(const int client, const int iWeapon, const int iAmount)
+stock void SetAmmo(int client, const int iWeapon, const int iAmount)
 {
 	int iOffset = PropOffsets.PlayerAmmo + GetEntData(iWeapon, PropOffsets.CombatWeaponAmmoType, 1) * 4;
 	SetEntData(client, iOffset, iAmount);
@@ -1191,7 +1192,7 @@ stock void SendTEParticleWithPriority(const TEParticleId eParticleId, const floa
 	TE_SendToAll(-1.0); // negative values attempt to send the TE on the same tick
 }
 
-stock void SendTEParticleWithPriorityTo(const int client, const TEParticleId eParticleId, const float fPos[3])
+stock void SendTEParticleWithPriorityTo(int client, const TEParticleId eParticleId, const float fPos[3])
 {
 	_SetupTEParticle(eParticleId, fPos);
 	TE_SendToClient(client, -1.0);
@@ -1230,13 +1231,13 @@ stock void SendTEParticleLingeringAttachedProxy(const TEParticleLingeringId ePar
 	TE_SendToAll(-1.0);
 }
 
-stock void SendTEParticleLingeringAttachedProxyOnly(const TEParticleLingeringId eParticleId, const int iProxy, const int client, const int iAttachPoint=0, const bool bResetPrevious=false)
+stock void SendTEParticleLingeringAttachedProxyOnly(const TEParticleLingeringId eParticleId, const int iProxy, int client, const int iAttachPoint=0, const bool bResetPrevious=false)
 {
 	_SetupParticleAttached(view_as<int>(eParticleId), iProxy, iAttachPoint, bResetPrevious);
 	TE_SendToClient(client, -1.0);
 }
 
-stock void SendTEParticleLingeringAttachedProxyExcept(const TEParticleLingeringId eParticleId, const int iProxy, const int client, const int iAttachPoint=0, const bool bResetPrevious=false)
+stock void SendTEParticleLingeringAttachedProxyExcept(const TEParticleLingeringId eParticleId, const int iProxy, int client, const int iAttachPoint=0, const bool bResetPrevious=false)
 {
 	_SetupParticleAttached(view_as<int>(eParticleId), iProxy, iAttachPoint, bResetPrevious);
 
@@ -1259,7 +1260,7 @@ stock void SendTEParticleLingeringAttachedProxyExcept(const TEParticleLingeringI
 * SPEED MANIPULATION
 */
 
-stock float GetBaseSpeed(const int client)
+stock float GetBaseSpeed(int client)
 {
 	switch (TF2_GetPlayerClass(client))
 	{
@@ -1285,7 +1286,7 @@ stock float GetBaseSpeed(const int client)
 	return 300.0;
 }
 
-stock void ResetSpeed(const int client)
+stock void ResetSpeed(int client)
 {
 	SetSpeed(client, GetBaseSpeed(client));
 }

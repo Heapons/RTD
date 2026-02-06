@@ -18,14 +18,14 @@
 
 DEFINE_CALL_APPLY(ExtraThrowables)
 
-public void ExtraThrowables_ApplyPerk(const int client, const Perk perk)
+public void ExtraThrowables_ApplyPerk(int client, const Perk perk)
 {
 	int iAmount = perk.GetPrefCell("amount", 20);
 	ExtraThrowables_SetOnSlot(client, 1, iAmount);
 	ExtraThrowables_SetOnSlot(client, 2, iAmount);
 }
 
-void ExtraThrowables_SetOnSlot(const int client, const int iSlot, const int iAmount)
+void ExtraThrowables_SetOnSlot(int client, const int iSlot, const int iAmount)
 {
 	int iWeapon = GetPlayerWeaponSlot(client, iSlot);
 	if (!IsValidEntity(iWeapon))
@@ -38,7 +38,7 @@ void ExtraThrowables_SetOnSlot(const int client, const int iSlot, const int iAmo
 	}
 }
 
-void ExtraThrowables_SetOnWeapon(const int client, const int iWeapon, const int iAmount)
+void ExtraThrowables_SetOnWeapon(int client, const int iWeapon, const int iAmount)
 {
 	int iOffset = GetEntProp(iWeapon, Prop_Send, "m_iPrimaryAmmoType", 1) * 4;
 	int iAmmoTable = FindSendPropInfo("CTFPlayer", "m_iAmmo");

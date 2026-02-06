@@ -18,12 +18,12 @@
 
 DEFINE_CALL_APPLY_REMOVE(Monochromia)
 
-public void Monochromia_ApplyPerk(const int client, const Perk perk)
+public void Monochromia_ApplyPerk(int client, const Perk perk)
 {
 	SetOverlay(client, ClientOverlay_Monochrome);
 }
 
-public void Monochromia_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Monochromia_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	SetOverlay(client, ClientOverlay_None);
 }

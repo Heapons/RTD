@@ -25,7 +25,7 @@ public void BigHead_Init(const Perk perk)
 	Events.OnPlayerRunCmd(perk, BigHead_OnPlayerRunCmd);
 }
 
-public void BigHead_ApplyPerk(const int client, const Perk perk)
+public void BigHead_ApplyPerk(int client, const Perk perk)
 {
 	float fScale = perk.GetPrefFloat("scale", 2.5);
 
@@ -34,13 +34,13 @@ public void BigHead_ApplyPerk(const int client, const Perk perk)
 	player.AddAttribute(Attribs.VoicePitch, 1.0 / Min(fScale, 3.0));
 }
 
-public void BigHead_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void BigHead_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	TFEntity player = TFEntity(client);
 	player.RemoveAttribute(Attribs.VoicePitch);
 }
 
-bool BigHead_OnPlayerRunCmd(const int client, int& iButtons, float fVel[3], float fAng[3])
+bool BigHead_OnPlayerRunCmd(int client, int& iButtons, float fVel[3], float fAng[3])
 {
 	SetEntPropFloat(client, Prop_Send, "m_flHeadScale", Cache[client].Scale);
 	return false;

@@ -30,7 +30,7 @@
 
 methodmap BatSwarmFlags
 {
-	public BatSwarmFlags(const int client)
+	public BatSwarmFlags(int client)
 	{
 		return view_as<BatSwarmFlags>(client);
 	}
@@ -85,7 +85,7 @@ methodmap BatSwarmFlags
 	}
 }
 
-public void BatSwarm_Call(const int client, const Perk perk, const bool apply, const RTDRemoveReason reason)
+public void BatSwarm_Call(int client, const Perk perk, const bool apply, const RTDRemoveReason reason)
 {
 	if (apply)
 	{
@@ -104,7 +104,7 @@ public void BatSwarm_Init(const Perk perk)
 	Events.OnVoice(perk, BatSwarm_OnVoice);
 }
 
-void BatSwarm_ApplyPerk(const int client, const Perk perk)
+void BatSwarm_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Count = perk.GetPrefCell("amount", 2);
 	BatSwarmFlags(client).Reset();
@@ -125,7 +125,7 @@ void BatSwarm_ApplyPerk(const int client, const Perk perk)
 	Cache[client].Repeat(perk.GetPrefFloat("rate", 0.35), BatSwarm_Tick);
 }
 
-public void BatSwarm_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void BatSwarm_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	if (Cache[client].Legacy)
 		return;
@@ -143,7 +143,7 @@ public void BatSwarm_RemovePerk(const int client, const RTDRemoveReason eRemoveR
 		BatSwarm_End(client);
 }
 
-void BatSwarm_OnVoice(const int client)
+void BatSwarm_OnVoice(int client)
 {
 	if (Cache[client].Legacy)
 		return;
@@ -193,27 +193,29 @@ public Action Timer_BatSwarm_ChargeEffect(Handle hTimer, const int iUserId)
 	return Plugin_Stop;
 }
 
-void BatSwarm_Begin(const int client)
+void BatSwarm_Begin(int client)
 {
+	TFEntity player = TFEntity(client);
 	SetSpeedEx(client, Cache[client].Speed);
-	TF2_AddCondition(client, TFCond_UberchargedCanteen);
-	TF2_AddCondition(client, TFCond_MegaHeal);
+	player.AddCond(view_as<int>(TFCond_UberchargedCanteen));
+	player.AddCond(view_as<int>(TFCond_MegaHeal));
 
 	BatSwarmFlags(client).Activated = true;
 }
 
-void BatSwarm_End(const int client)
+void BatSwarm_End(int client)
 {
+	TFEntity player = TFEntity(client);
 	BatSwarmFlags(client).Activated = false;
 
 	SetSpeedEx(client);
-	TF2_RemoveCondition(client, TFCond_UberchargedCanteen);
-	TF2_RemoveCondition(client, TFCond_MegaHeal);
+	player.RemoveCond(view_as<int>(TFCond_UberchargedCanteen));
+	player.RemoveCond(view_as<int>(TFCond_MegaHeal));
 
-	TF2_AddCondition(client, TFCond_SpeedBuffAlly, 3.0);
+	player.AddCond(view_as<int>(TFCond_SpeedBuffAlly), 3.0);
 }
 
-public Action BatSwarm_Tick(const int client)
+public Action BatSwarm_Tick(int client)
 {
 	if (!BatSwarmFlags(client).Activated)
 		return Plugin_Continue;
@@ -230,7 +232,7 @@ public Action BatSwarm_Tick(const int client)
 	return Plugin_Continue;
 }
 
-void BatSwarm_SpawnBats(const int client, float fLifetime, float fPos[3], float fAng[3], float fVel[3])
+void BatSwarm_SpawnBats(int client, float fLifetime, float fPos[3], float fAng[3], float fVel[3])
 {
 	int iBats = CreateEntityByName("tf_projectile_spellbats");
 	if (iBats <= MaxClients)

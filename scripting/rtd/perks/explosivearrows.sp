@@ -27,14 +27,14 @@ public void ExplosiveArrows_Init(const Perk perk)
 	Events.OnEntitySpawned(perk, ExplosiveArrows_OnArrowSpawn, ExplosiveArrows_ValidClassname, Retriever_OwnerEntity);
 }
 
-public void ExplosiveArrows_ApplyPerk(const int client, const Perk perk)
+public void ExplosiveArrows_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Damage = perk.GetPrefFloat("damage", 100.0);
 	Cache[client].Force = perk.GetPrefFloat("force", 80.0);
 	Cache[client].Radius = perk.GetPrefFloat("radius", 100.0);
 }
 
-public void ExplosiveArrows_OnArrowSpawn(const int client, const int iArrow)
+public void ExplosiveArrows_OnArrowSpawn(int client, const int iArrow)
 {
 	SDKHook(iArrow, SDKHook_StartTouchPost, ExplosiveArrows_ArrowTouch);
 }

@@ -26,7 +26,7 @@ public void FunnyFeeling_Init(const Perk perk)
 	Events.OnConditionRemoved(perk, FunnyFeeling_OnConditionRemoved);
 }
 
-public void FunnyFeeling_ApplyPerk(const int client, const Perk perk)
+public void FunnyFeeling_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].FunnyFov = perk.GetPrefCell("fov", 160);
 	Cache[client].BaseFov = GetEntProp(client, Prop_Send, "m_iFOV");
@@ -34,12 +34,12 @@ public void FunnyFeeling_ApplyPerk(const int client, const Perk perk)
 	FunnyFeeling_SetFov(client, Cache[client].FunnyFov);
 }
 
-public void FunnyFeeling_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void FunnyFeeling_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	FunnyFeeling_SetFov(client, Cache[client].BaseFov);
 }
 
-public void FunnyFeeling_OnConditionRemoved(const int client, const TFCond eCond)
+public void FunnyFeeling_OnConditionRemoved(int client, const TFCond eCond)
 {
 	switch (eCond)
 	{
@@ -48,11 +48,12 @@ public void FunnyFeeling_OnConditionRemoved(const int client, const TFCond eCond
 	}
 }
 
-void FunnyFeeling_SetFov(const int client, const int iFov)
+void FunnyFeeling_SetFov(int client, const int iFov)
 {
+	TFEntity player = TFEntity(client);
 	// Taunting seems to save Fov value and reset it once the taunt ends. We can remove it manually
 	// to prevent effect not applying on perk's start, or staying on perk's end.
-	TF2_RemoveCondition(client, TFCond_Taunting);
+	player.RemoveCond(view_as<int>(TFCond_Taunting));
 
 	SetEntProp(client, Prop_Send, "m_iFOV", iFov);
 }

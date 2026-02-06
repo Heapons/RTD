@@ -50,7 +50,7 @@ public void HatThrow_Init(const Perk perk)
 	Events.OnVoice(perk, HatThrow_OnVoice);
 }
 
-void HatThrow_ApplyPerk(const int client, const Perk perk)
+void HatThrow_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].LastAttack = 0.0;
 	Cache[client].Rate = perk.GetPrefFloat("rate", 2.0);
@@ -60,7 +60,7 @@ void HatThrow_ApplyPerk(const int client, const Perk perk)
 	Notify.Attack(client);
 }
 
-void HatThrow_OnVoice(const int client)
+void HatThrow_OnVoice(int client)
 {
 	float fTime = GetEngineTime();
 	if (fTime < Cache[client].LastAttack + Cache[client].Rate)
@@ -115,7 +115,7 @@ public Action Timer_HatThrow_Woosh(Handle hTimer, const int iRef)
 	return Plugin_Continue;
 }
 
-void HatThrow_Launch(const int client, const int iHat)
+void HatThrow_Launch(int client, const int iHat)
 {
 	float fAng[3], fPos[3];
 	GetClientEyeAngles(client, fAng);

@@ -38,7 +38,7 @@ public void PumpkinTrail_Init(const Perk perk)
 	Events.OnVoice(perk, PumpkinTrail_OnVoice);
 }
 
-void PumpkinTrail_ApplyPerk(const int client, const Perk perk)
+void PumpkinTrail_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].SpawnAmount = perk.GetPrefCell("amount", 5);
 	Cache[client].Rate = perk.GetPrefFloat("rate", 3.0);
@@ -49,7 +49,7 @@ void PumpkinTrail_ApplyPerk(const int client, const Perk perk)
 	Notify.Attack(client);
 }
 
-void PumpkinTrail_OnVoice(const int client)
+void PumpkinTrail_OnVoice(int client)
 {
 	float fTime = GetEngineTime();
 	if (fTime < Cache[client].LastAttack + Cache[client].Rate)
@@ -87,7 +87,7 @@ public Action Timer_PumpkinTrail_Spawn(Handle hTimer, DataPack hData)
 	return Plugin_Continue;
 }
 
-void PumpkinTrail_SpawnOffset(const int client, const int iSpawnIndex, const float fRange, const float fDamage)
+void PumpkinTrail_SpawnOffset(int client, const int iSpawnIndex, const float fRange, const float fDamage)
 {
 	float fPos[3], fAng[3], fFwd[3];
 	GetClientAbsOrigin(client, fPos);
@@ -100,7 +100,7 @@ void PumpkinTrail_SpawnOffset(const int client, const int iSpawnIndex, const flo
 	PumpkinTrail_Spawn(client, fPos, fRange, fDamage);
 }
 
-void PumpkinTrail_Spawn(const int client, float fPos[3], const float fRange, const float fDamage)
+void PumpkinTrail_Spawn(int client, float fPos[3], const float fRange, const float fDamage)
 {
 	int iPumpkin = CreateEntityByName("prop_dynamic");
 	if (iPumpkin <= MaxClients)

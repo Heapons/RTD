@@ -50,7 +50,7 @@ public void Explode_Init(const Perk perk)
 	PrecacheSound(SOUND_EXPLODE);
 }
 
-void Explode_ApplyPerk(const int client, const Perk perk)
+void Explode_ApplyPerk(int client, const Perk perk)
 {
 	if (perk.Time == -1)
 	{
@@ -97,7 +97,7 @@ void Explode_ApplyPerk(const int client, const Perk perk)
 	Cache[client].Repeat(0.1, Explode_BindToBomb);
 }
 
-public void Explode_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Explode_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	StopSound(client, SNDCHAN_AUTO, BOMB_BEAM_DRAG);
 
@@ -114,7 +114,7 @@ public void Explode_RemovePerk(const int client, const RTDRemoveReason eRemoveRe
 	StopSound(iBomb, SNDCHAN_AUTO, BOMB_FUSE_SOUND);
 }
 
-public Action Explode_BindToBomb(const int client)
+public Action Explode_BindToBomb(int client)
 {
 	int iBomb = Cache[client].GetEnt(Bomb).Index;
 	if (iBomb <= MaxClients)
@@ -200,7 +200,7 @@ public void Explode_OnBombTakeDamagePost(int iBomb, int iAtk, int iInflictor, fl
 	TeleportEntity(iBomb, NULL_VECTOR, fAng, NULL_VECTOR);
 }
 
-void Explode_Boom(const int client, const int iEnt)
+void Explode_Boom(int client, const int iEnt)
 {
 	float fPos[3];
 	GetEntPropVector(iEnt, Prop_Send, "m_vecOrigin", fPos);

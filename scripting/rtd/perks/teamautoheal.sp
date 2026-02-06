@@ -36,7 +36,7 @@ public void TeamAutoheal_Init(const Perk perk)
 	PrecacheSound(SOUND_ENDHEAL);
 }
 
-public void TeamAutoheal_ApplyPerk(const int client, const Perk perk)
+public void TeamAutoheal_ApplyPerk(int client, const Perk perk)
 {
 	float fRange = perk.GetPrefFloat("range", 270.0);
 
@@ -75,14 +75,14 @@ public void TeamAutoheal_ApplyPerk(const int client, const Perk perk)
 	Cache[client].Repeat(perk.GetPrefFloat("rate", 0.1), TeamAutoheal_TeamTick);
 }
 
-public void TeamAutoheal_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void TeamAutoheal_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	for (int i = 1; i <= MaxClients; ++i)
 		if (IsClientInGame(i) && Cache[client].Healing.Test(i))
 			StopSound(i, SNDCHAN_AUTO, SOUND_HEALING);
 }
 
-Action TeamAutoheal_TeamTick(const int client)
+Action TeamAutoheal_TeamTick(int client)
 {
 	TFTeam eTeam = view_as<TFTeam>(Cache[client].Team);
 	float fRangeSquared = Cache[client].RangeSquared;
@@ -121,7 +121,7 @@ Action TeamAutoheal_TeamTick(const int client)
 	return Plugin_Continue;
 }
 
-void TeamAutoheal_Tick(const int client, const int iTarget)
+void TeamAutoheal_Tick(int client, const int iTarget)
 {
 	int iCurHealth = GetClientHealth(iTarget);
 	bool bShouldHeal = iCurHealth < Shared[iTarget].MaxHealth;

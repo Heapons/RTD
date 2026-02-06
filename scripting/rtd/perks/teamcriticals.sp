@@ -36,8 +36,9 @@ public void TeamCriticals_Init(const Perk perk)
 	Events.OnConditionRemoved(perk, TeamCriticals_OnConditionRemoved);
 }
 
-public void TeamCriticals_ApplyPerk(const int client, const Perk perk)
+public void TeamCriticals_ApplyPerk(int client, const Perk perk)
 {
+	TFEntity player = TFEntity(client);
 	CritBoost eCritBoost = perk.GetPrefCell("crits", 1) ? CritBoost_Full : CritBoost_Mini;
 	float fRange = perk.GetPrefFloat("range", 270.0);
 
@@ -66,24 +67,25 @@ public void TeamCriticals_ApplyPerk(const int client, const Perk perk)
 	Shared[client].AddCritBoost(client, eCritBoost);
 
 	if (Cache[client].MarkForDeath)
-		TF2_AddCondition(client, TFCond_MarkedForDeath);
+		player.AddCond(view_as<int>(TFCond_MarkedForDeath));
 
 	Cache[client].Repeat(TICK_INTERVAL, TeamCriticals_SetTargets);
 }
 
-public void TeamCriticals_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void TeamCriticals_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
+	TFEntity player = TFEntity(client);
 	Shared[client].RemoveCritBoost(client, view_as<CritBoost>(Cache[client].Boost));
 
 	if (Cache[client].MarkForDeath)
-		TF2_RemoveCondition(client, TFCond_MarkedForDeath);
+		player.RemoveCond(view_as<int>(TFCond_MarkedForDeath));
 
 	for (int i = 1; i <= MaxClients; ++i)
 		if (IsClientInGame(i))
 			TeamCriticals_UnsetCritBoost(client, i);
 }
 
-public Action TeamCriticals_SetTargets(const int client)
+public Action TeamCriticals_SetTargets(int client)
 {
 	TFTeam eTeam = TF2_GetClientTeam(client);
 	float fRangeSquared = Cache[client].RangeSquared;
@@ -177,10 +179,11 @@ bool TeamCriticals_IsValidTarget(int client, int iTarget, TFTeam eClientTeam, fl
 	return CanEntitySeeTarget(client, iTarget);
 }
 
-void TeamCriticals_OnConditionRemoved(const int client, const TFCond eCondition)
+void TeamCriticals_OnConditionRemoved(int client, const TFCond eCondition)
 {
+	TFEntity player = TFEntity(client);
 	if (eCondition == TFCond_MarkedForDeath && Cache[client].MarkForDeath)
-		TF2_AddCondition(client, TFCond_MarkedForDeath);
+		player.AddCond(view_as<int>(TFCond_MarkedForDeath));
 }
 
 #undef SOUND_BUFF

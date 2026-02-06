@@ -40,7 +40,7 @@ public void EldenStars_Init(const Perk perk)
 	Events.OnVoice(perk, EldenStars_OnVoice);
 }
 
-void EldenStars_ApplyPerk(const int client, const Perk perk)
+void EldenStars_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Team = GetClientTeam(client);
 	Cache[client].LastOrb = INVALID_ENT_REFERENCE;
@@ -54,7 +54,7 @@ void EldenStars_ApplyPerk(const int client, const Perk perk)
 	Notify.Attack(client);
 }
 
-public void EldenStars_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void EldenStars_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	int iLastOrb = EntRefToEntIndex(Cache[client].LastOrb);
 	if (iLastOrb > MaxClients)
@@ -64,7 +64,7 @@ public void EldenStars_RemovePerk(const int client, const RTDRemoveReason eRemov
 	}
 }
 
-void EldenStars_OnVoice(const int client)
+void EldenStars_OnVoice(int client)
 {
 	float fTime = GetEngineTime();
 	if (fTime < Cache[client].NextAttack)

@@ -21,7 +21,7 @@
 #define Clip Int[2]
 #define Ammo Int[3]
 
-public void InfiniteAmmo_Call(const int client, const Perk perk, const bool apply)
+public void InfiniteAmmo_Call(int client, const Perk perk, const bool apply)
 {
 	if (apply)
 	{
@@ -29,13 +29,13 @@ public void InfiniteAmmo_Call(const int client, const Perk perk, const bool appl
 	}
 }
 
-public void InfiniteAmmo_ApplyPerk(const int client, const Perk perk)
+public void InfiniteAmmo_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].NoReload = perk.GetPrefCell("reload", 0) < 1;
 	Cache[client].Repeat(0.25, InfiniteAmmo_ResupplyAmmo);
 }
 
-public Action InfiniteAmmo_ResupplyAmmo(const int client)
+public Action InfiniteAmmo_ResupplyAmmo(int client)
 {
 	switch (Shared[client].ClassForPerk)
 	{

@@ -36,7 +36,7 @@ public void HellsReach_Init(const Perk perk)
 	PrecacheSound(SOUND_HELL_DAMAGE);
 }
 
-void HellsReach_ApplyPerk(const int client, const Perk perk)
+void HellsReach_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].BaseSpeed = GetBaseSpeed(client);
 	Cache[client].CurrentSpeed = 2.0;
@@ -50,12 +50,12 @@ void HellsReach_ApplyPerk(const int client, const Perk perk)
 	Cache[client].Repeat(1.0, HellsReach_Slowdown);
 }
 
-public void HellsReach_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void HellsReach_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	ResetSpeed(client);
 }
 
-Action HellsReach_Slowdown(const int client)
+Action HellsReach_Slowdown(int client)
 {
 	Cache[client].CurrentSpeed *= 0.8;
 
@@ -75,7 +75,7 @@ Action HellsReach_Slowdown(const int client)
 	return Plugin_Continue;
 }
 
-void HellsReach_Hurt(const int client)
+void HellsReach_Hurt(int client)
 {
 	int iEnt = CreateParticle(client, HELL_HURT);
 	KILL_ENT_IN(iEnt,1.0);

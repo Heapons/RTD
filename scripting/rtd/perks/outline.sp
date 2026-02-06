@@ -20,13 +20,13 @@
 
 DEFINE_CALL_APPLY_REMOVE(Outline)
 
-public void Outline_ApplyPerk(const int client, const Perk perk)
+public void Outline_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].InitialGlow = GetEntProp(client, Prop_Send, "m_bGlowEnabled");
 	SetEntProp(client, Prop_Send, "m_bGlowEnabled", 1);
 }
 
-public void Outline_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Outline_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	SetEntProp(client, Prop_Send, "m_bGlowEnabled", Cache[client].InitialGlow);
 }

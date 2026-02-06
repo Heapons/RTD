@@ -32,7 +32,7 @@ public void FullUbercharge_Init(const Perk perk)
 	Events.OnUberchargeDeployed(perk, FullUbercharge_OnUberchargeDeployed);
 }
 
-public void FullUbercharge_ApplyPerk(const int client, const Perk perk)
+public void FullUbercharge_ApplyPerk(int client, const Perk perk)
 {
 	int iMedigun = GetPlayerWeaponSlot(client, 1);
 	if (iMedigun <= MaxClients || !IsValidEntity(iMedigun))
@@ -67,7 +67,7 @@ public void FullUbercharge_ApplyPerk(const int client, const Perk perk)
 	Cache[client].Repeat(0.1, FullUbercharge_RefillCharge);
 }
 
-public void FullUbercharge_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void FullUbercharge_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	if (!Cache[client].UberchargeDeployed)
 		return;
@@ -83,7 +83,7 @@ public void FullUbercharge_RemovePerk(const int client, const RTDRemoveReason eR
 	CreateTimer(0.2, Timer_FullUbercharge_ExtendCharge, hData, TIMER_REPEAT | TIMER_DATA_HNDL_CLOSE);
 }
 
-public Action FullUbercharge_RefillCharge(const int client)
+public Action FullUbercharge_RefillCharge(int client)
 {
 	int iMedigun = Cache[client].GetEnt(CarriedMedigun).Index;
 	if (iMedigun <= MaxClients)
@@ -94,7 +94,7 @@ public Action FullUbercharge_RefillCharge(const int client)
 	return Plugin_Continue;
 }
 
-public void FullUbercharge_OnUberchargeDeployed(const int client, const int iTarget)
+public void FullUbercharge_OnUberchargeDeployed(int client, const int iTarget)
 {
 	switch (view_as<TFCond>(Cache[client].MedigunEffect))
 	{
@@ -138,21 +138,22 @@ public Action Timer_FullUbercharge_ExtendCharge(Handle hTimer, DataPack hData)
 	return Plugin_Stop;
 }
 
-public void FullUbercharge_OnConditionRemoved(const int client, const TFCond eCondition)
+public void FullUbercharge_OnConditionRemoved(int client, const TFCond eCondition)
 {
+	TFEntity player = TFEntity(client);
 	switch (eCondition)
 	{
 		case TFCond_Ubercharged:
 			if (g_eFullUberchargeExtendUbercharge.Test(client))
-				TF2_AddCondition(client, eCondition, 2.0);
+				player.AddCond(view_as<int>(eCondition), 2.0);
 
 		case TFCond_Kritzkrieged:
 			if (g_eFullUberchargeExtendKritzkrieg.Test(client))
-				TF2_AddCondition(client, eCondition, 2.0);
+				player.AddCond(view_as<int>(eCondition), 2.0);
 
 		case TFCond_MegaHeal:
 			if (g_eFullUberchargeExtendMegaHeal.Test(client))
-				TF2_AddCondition(client, eCondition, 2.0);
+				player.AddCond(view_as<int>(eCondition), 2.0);
 	}
 }
 

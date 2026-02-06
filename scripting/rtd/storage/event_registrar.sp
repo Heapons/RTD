@@ -1,13 +1,13 @@
-typedef EREntitySpawned = function void(const int client, const int iEntity);
+typedef EREntitySpawned = function void(int client, const int iEntity);
 typedef EREntityClassnameFilter = function bool(const char[] sClassname);
 typedef EREntityOwnerRetriever = function int(const int iEntity);
-typedef ERConditionChange = function void(const int client, const TFCond eCondition);
-typedef ERPlayerAttacked = function void(const int client, const int victim, const int damage, const int health);
-typedef ERPlayer = function void(const int client);
-typedef ERAttackCritCheck = function bool(const int client, const int iWeapon);
-typedef ERPlayerRunCmd = function bool(const int client, int& iButtons, float fVel[3], float fAng[3]);
-typedef ERUberchargeDeployed = function void(const int client, const int iTarget);
-typedef ERSound = function bool(const int client, const char[] sSound);
+typedef ERConditionChange = function void(int client, const TFCond eCondition);
+typedef ERPlayerAttacked = function void(int client, const int victim, const int damage, const int health);
+typedef ERPlayer = function void(int client);
+typedef ERAttackCritCheck = function bool(int client, const int iWeapon);
+typedef ERPlayerRunCmd = function bool(int client, int& iButtons, float fVel[3], float fAng[3]);
+typedef ERUberchargeDeployed = function void(int client, const int iTarget);
+typedef ERSound = function bool(int client, const char[] sSound);
 
 public int Retriever_OwnerEntity(const int iEnt)
 {
@@ -188,7 +188,7 @@ enum struct EventRegistrar
 		this._OnConditionAdded.Push(hData);
 	}
 
-	void ConditionAdded(const int client, const TFCond eCondition)
+	void ConditionAdded(int client, const TFCond eCondition)
 	{
 		Perk clientPerk = g_hRollers.GetPerk(client);
 		
@@ -224,7 +224,7 @@ enum struct EventRegistrar
 		this._OnConditionRemoved.Push(hData);
 	}
 
-	void ConditionRemoved(const int client, const TFCond eCondition)
+	void ConditionRemoved(int client, const TFCond eCondition)
 	{
 		Perk clientPerk = g_hRollers.GetPerk(client);
 		
@@ -259,7 +259,7 @@ enum struct EventRegistrar
 		this._OnPlayerAttacked.Push(hData);
 	}
 
-	void PlayerAttacked(const int client, const int victim, const int damage, const int health)
+	void PlayerAttacked(int client, const int victim, const int damage, const int health)
 	{
 		Perk perk = g_hRollers.GetPerk(client);
 		if (perk == null)
@@ -292,7 +292,7 @@ enum struct EventRegistrar
 		this._OnPlayerDied.Push(hData);
 	}
 
-	void PlayerDied(const int client)
+	void PlayerDied(int client)
 	{
 		Perk clientPerk = g_hRollers.GetPerk(client);
 		
@@ -327,7 +327,7 @@ enum struct EventRegistrar
 		this._OnPlayerDisconnected.Push(hData);
 	}
 
-	void PlayerDisconnected(const int client)
+	void PlayerDisconnected(int client)
 	{
 		Perk clientPerk = g_hRollers.GetPerk(client);
 		
@@ -362,7 +362,7 @@ enum struct EventRegistrar
 		this._OnAttackCritCheck.Push(hData);
 	}
 
-	bool AttackCritCheck(const int client, const int iWeapon)
+	bool AttackCritCheck(int client, const int iWeapon)
 	{
 		Perk clientPerk = g_hRollers.GetPerk(client);
 
@@ -405,7 +405,7 @@ enum struct EventRegistrar
 		this._OnPlayerRunCmd.Push(hData);
 	}
 
-	bool PlayerRunCmd(const int client, int& iButtons, float fVel[3], float fAng[3])
+	bool PlayerRunCmd(int client, int& iButtons, float fVel[3], float fAng[3])
 	{
 		Perk perk = g_hRollers.GetPerk(client);
 		if (perk == null)
@@ -447,7 +447,7 @@ enum struct EventRegistrar
 		this._OnUberchargeDeployed.Push(hData);
 	}
 
-	void UberchargeDeployed(const int client, const int iTarget)
+	void UberchargeDeployed(int client, const int iTarget)
 	{
 		Perk perk = g_hRollers.GetPerk(client);
 		if (perk == null)
@@ -478,7 +478,7 @@ enum struct EventRegistrar
 		this._OnResupply.Push(hData);
 	}
 
-	void Resupply(const int client)
+	void Resupply(int client)
 	{
 		Perk clientPerk = g_hRollers.GetPerk(client);
 
@@ -512,7 +512,7 @@ enum struct EventRegistrar
 		this._OnVoice.Push(hData);
 	}
 
-	void Voice(const int client)
+	void Voice(int client)
 	{
 		Perk perk = g_hRollers.GetPerk(client);
 		if (perk == null)
@@ -541,7 +541,7 @@ enum struct EventRegistrar
 		this._OnSound.Push(hData);
 	}
 
-	bool Sound(const int client, const char[] sClassname)
+	bool Sound(int client, const char[] sClassname)
 	{
 		Perk perk = g_hRollers.GetPerk(client);
 		if (perk == null)

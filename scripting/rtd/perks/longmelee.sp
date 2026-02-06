@@ -26,14 +26,14 @@ public void LongMelee_Init(const Perk perk)
 	Events.OnEntitySpawned(perk, LongMelee_OnDroppedWeaponSpawn, Classname_DroppedWeapon, Retriever_AccountId);
 }
 
-public void LongMelee_ApplyPerk(const int client, const Perk perk)
+public void LongMelee_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Multiplier = perk.GetPrefFloat("multiplier", 10.0);
 
 	LongMelee_Apply(client);
 }
 
-public void LongMelee_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void LongMelee_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	int iWeapon = GetPlayerWeaponSlot(client, 2);
 	if (iWeapon > MaxClients && IsValidEntity(iWeapon))
@@ -43,7 +43,7 @@ public void LongMelee_RemovePerk(const int client, const RTDRemoveReason eRemove
 	}
 }
 
-void LongMelee_Apply(const int client)
+void LongMelee_Apply(int client)
 {
 	int iWeapon = GetPlayerWeaponSlot(client, 2);
 	if (iWeapon > MaxClients && IsValidEntity(iWeapon))
@@ -53,7 +53,7 @@ void LongMelee_Apply(const int client)
 	}
 }
 
-public void LongMelee_OnDroppedWeaponSpawn(const int client, const int iEnt)
+public void LongMelee_OnDroppedWeaponSpawn(int client, const int iEnt)
 {
 	AcceptEntityInput(iEnt, "Kill");
 }

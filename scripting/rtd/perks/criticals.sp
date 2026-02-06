@@ -20,7 +20,7 @@
 
 DEFINE_CALL_APPLY_REMOVE(Criticals)
 
-public void Criticals_ApplyPerk(const int client, const Perk perk)
+public void Criticals_ApplyPerk(int client, const Perk perk)
 {
 	CritBoost eCritBoost = perk.GetPrefCell("full", 1) > 0 ? CritBoost_Full : CritBoost_Mini;
 
@@ -28,7 +28,7 @@ public void Criticals_ApplyPerk(const int client, const Perk perk)
 	Shared[client].AddCritBoost(client, eCritBoost);
 }
 
-public void Criticals_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Criticals_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	Shared[client].RemoveCritBoost(client, view_as<CritBoost>(Cache[client].Boost));
 }

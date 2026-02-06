@@ -27,7 +27,7 @@ public void FastHands_Init(const Perk perk)
 	Events.OnEntitySpawned(perk, FastHands_OnDroppedWeaponSpawn, Classname_DroppedWeapon, Retriever_AccountId);
 }
 
-public void FastHands_ApplyPerk(const int client, const Perk perk)
+public void FastHands_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Attack = 1.0 / perk.GetPrefFloat("attack", 2.0);
 	Cache[client].Reload = 1.0 / perk.GetPrefFloat("reload", 2.0);
@@ -35,7 +35,7 @@ public void FastHands_ApplyPerk(const int client, const Perk perk)
 	FastHands_Apply(client);
 }
 
-public void FastHands_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void FastHands_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	for (int i = 0; i < 3; ++i)
 	{
@@ -48,7 +48,7 @@ public void FastHands_RemovePerk(const int client, const RTDRemoveReason eRemove
 	}
 }
 
-public void FastHands_Apply(const int client)
+public void FastHands_Apply(int client)
 {
 	for (int i = 0; i < 3; ++i)
 	{
@@ -62,7 +62,7 @@ public void FastHands_Apply(const int client)
 
 }
 
-public void FastHands_OnDroppedWeaponSpawn(const int client, const int iEnt)
+public void FastHands_OnDroppedWeaponSpawn(int client, const int iEnt)
 {
 	AcceptEntityInput(iEnt, "Kill");
 }

@@ -42,7 +42,7 @@ public void ACallBeyond_Init(const Perk perk)
 	Events.OnVoice(perk, ACallBeyond_OnVoice);
 }
 
-public void ACallBeyond_ApplyPerk(const int client, const Perk perk)
+public void ACallBeyond_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Amount = perk.GetPrefCell("amount", 6);
 	Cache[client].Rate = perk.GetPrefFloat("rate", 3.0);
@@ -52,7 +52,7 @@ public void ACallBeyond_ApplyPerk(const int client, const Perk perk)
 	Notify.Attack(client);
 }
 
-void ACallBeyond_OnVoice(const int client)
+void ACallBeyond_OnVoice(int client)
 {
 	float fTime = GetEngineTime();
 	if (fTime < Cache[client].LastAttack + Cache[client].Rate)
@@ -62,7 +62,7 @@ void ACallBeyond_OnVoice(const int client)
 	ACallBeyond_SpawnMultiple(client);
 }
 
-void ACallBeyond_SpawnMultiple(const int client)
+void ACallBeyond_SpawnMultiple(int client)
 {
 	float fPos[3];
 	GetClientEyePosition(client, fPos);

@@ -26,13 +26,13 @@ public void DrugBullets_Init(const Perk perk)
 	Events.OnPlayerAttacked(perk, DrugBullets_OnPlayerAttacked);
 }
 
-public void DrugBullets_ApplyPerk(const int client, const Perk perk)
+public void DrugBullets_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].MinDamage = perk.GetPrefCell("min_damage", 5);
 	Cache[client].NextStun = GetEngineTime() + 1.0;
 }
 
-public void DrugBullets_OnPlayerAttacked(const int client, const int victim, const int damage, const int health)
+public void DrugBullets_OnPlayerAttacked(int client, const int victim, const int damage, const int health)
 {
 	if (health <= 0)
 		return;

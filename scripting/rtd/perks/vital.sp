@@ -18,7 +18,7 @@
 
 DEFINE_CALL_APPLY_REMOVE(Vital)
 
-public void Vital_ApplyPerk(const int client, const Perk perk)
+public void Vital_ApplyPerk(int client, const Perk perk)
 {
 	int iAddedHealth = perk.GetPrefCell("health", 300);
 	TFEntity player = TFEntity(client);
@@ -26,7 +26,7 @@ public void Vital_ApplyPerk(const int client, const Perk perk)
 	SetEntityHealth(client, GetClientHealth(client) + iAddedHealth);
 }
 
-public void Vital_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Vital_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	TFEntity player = TFEntity(client);
 	player.RemoveAttribute(Attribs.MaxHealth);

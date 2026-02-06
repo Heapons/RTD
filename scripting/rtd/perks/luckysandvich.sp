@@ -25,7 +25,7 @@ public void LuckySandvich_Init(const Perk perk)
 	Events.OnAttackCritCheck(perk, LuckySandvich_AttackCritCheck_Any, SubscriptionType_Any);
 }
 
-void LuckySandvich_ApplyPerk(const int client, const Perk perk)
+void LuckySandvich_ApplyPerk(int client, const Perk perk)
 {
 	g_bLuckySandvichCrit.Set(client);
 
@@ -33,7 +33,7 @@ void LuckySandvich_ApplyPerk(const int client, const Perk perk)
 	SetEntityHealth(client, GetEntProp(client, Prop_Data, "m_iHealth") + iHealth);
 }
 
-public bool LuckySandvich_AttackCritCheck_Any(const int client, const int iWeapon)
+public bool LuckySandvich_AttackCritCheck_Any(int client, const int iWeapon)
 {
 	if (!g_bLuckySandvichCrit.Test(client))
 		return false;

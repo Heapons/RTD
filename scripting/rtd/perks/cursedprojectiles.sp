@@ -30,12 +30,12 @@ public void CursedProjectiles_Init(const Perk perk)
 	Events.OnEntitySpawned(perk, CursedProjectiles_OnProjectileSpawn, Homing_AptClass, Retriever_OwnerEntity);
 }
 
-void CursedProjectiles_ApplyPerk(const int client, const Perk perk)
+void CursedProjectiles_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Delay = perk.GetPrefFloat("delay", 1.0);
 }
 
-public void CursedProjectiles_OnProjectileSpawn(const int client, const int iProjectile)
+public void CursedProjectiles_OnProjectileSpawn(int client, const int iProjectile)
 {
 	CreateTimer(Cache[client].Delay, Timer_CursedProjectiles_Turn, EntIndexToEntRef(iProjectile));
 }
@@ -54,7 +54,7 @@ public Action Timer_CursedProjectiles_Turn(Handle hTimer, int iRef)
 	return Plugin_Stop;
 }
 
-void CursedProjectiles_Turn(const int iOriginalProjectile, const int client)
+void CursedProjectiles_Turn(const int iOriginalProjectile, int client)
 {
 	float fPos[3], fVel[3];
 	GetEntPropVector(iOriginalProjectile, Prop_Send, "m_vecOrigin", fPos);

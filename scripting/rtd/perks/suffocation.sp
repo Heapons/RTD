@@ -21,7 +21,7 @@
 
 DEFINE_CALL_APPLY(Suffocation)
 
-public void Suffocation_ApplyPerk(const int client, const Perk perk)
+public void Suffocation_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Rate = perk.GetPrefFloat("rate", 1.0);
 	Cache[client].Damage = perk.GetPrefFloat("damage", 5.0);
@@ -29,13 +29,13 @@ public void Suffocation_ApplyPerk(const int client, const Perk perk)
 	Cache[client].Delay(perk.GetPrefFloat("delay", 12.0), Suffocation_Begin);
 }
 
-public void Suffocation_Begin(const int client)
+public void Suffocation_Begin(int client)
 {
 	TakeDamage(client, 0, 0, Cache[client].Damage, DMG_DROWN);
 	Cache[client].Repeat(Cache[client].Rate, Suffocation_Tick);
 }
 
-public Action Suffocation_Tick(const int client)
+public Action Suffocation_Tick(int client)
 {
 	TakeDamage(client, 0, 0, Cache[client].Damage, DMG_DROWN);
 	return Plugin_Continue;

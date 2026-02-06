@@ -31,7 +31,7 @@ public void Autoheal_Init(const Perk perk)
 	PrecacheSound(SOUND_ENDHEAL);
 }
 
-public void Autoheal_ApplyPerk(const int client, const Perk perk)
+public void Autoheal_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Health = perk.GetPrefCell("health", 4);
 	Cache[client].Healing = false;
@@ -48,12 +48,12 @@ public void Autoheal_ApplyPerk(const int client, const Perk perk)
 	Cache[client].Repeat(perk.GetPrefFloat("rate", 0.1), Autoheal_Tick);
 }
 
-public void Autoheal_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Autoheal_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	StopSound(client, SNDCHAN_AUTO, SOUND_HEALING);
 }
 
-Action Autoheal_Tick(const int client)
+Action Autoheal_Tick(int client)
 {
 	int iCurHealth = GetClientHealth(client);
 	bool bShouldHeal = iCurHealth < Shared[client].MaxHealth;

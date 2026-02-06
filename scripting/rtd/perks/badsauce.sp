@@ -23,24 +23,25 @@ public void BadSauce_Init(const Perk perk)
 	Events.OnResupply(perk, BadSauce_OnResupply);
 }
 
-public void BadSauce_ApplyPerk(const int client, const Perk perk)
+public void BadSauce_ApplyPerk(int client, const Perk perk)
 {
+	TFEntity player = TFEntity(client);
 	float fMilkDuration = perk.GetPrefFloat("milk");
 	float fJarateDuration = perk.GetPrefFloat("jarate");
 	float fBleedDuration = perk.GetPrefFloat("bleed");
 	float fPerkDuration = GetPerkTimeFloat(perk);
 
 	if (fMilkDuration >= 0.0)
-		TF2_AddCondition(client, TFCond_Milked, fMilkDuration > 0.0 ? fMilkDuration : fPerkDuration);
+		player.AddCond(view_as<int>(TFCond_Milked), fMilkDuration > 0.0 ? fMilkDuration : fPerkDuration);
 
 	if (fJarateDuration >= 0.0)
-		TF2_AddCondition(client, TFCond_Jarated, fJarateDuration > 0.0 ? fJarateDuration : fPerkDuration);
+		player.AddCond(view_as<int>(TFCond_Jarated), fJarateDuration > 0.0 ? fJarateDuration : fPerkDuration);
 
 	if (fBleedDuration >= 0.0)
 		TF2_MakeBleed(client, client, fBleedDuration > 0.0 ? fBleedDuration : fPerkDuration);
 }
 
-public void BadSauce_OnResupply(const int client)
+public void BadSauce_OnResupply(int client)
 {
 	RemovePerk(client);
 }

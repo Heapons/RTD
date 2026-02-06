@@ -90,9 +90,9 @@ enum EntCleanup
 	EntCleanup_None,
 }
 
-typedef PerkRepeater = function Action(const int client);
-typedef PerkDelay = function void(const int client);
-typedef PlayerHurt = function void(const int client, const int attacker);
+typedef PerkRepeater = function Action(int client);
+typedef PerkDelay = function void(int client);
+typedef PlayerHurt = function void(int client, const int attacker);
 
 enum struct PlayerCache
 {
@@ -105,7 +105,7 @@ enum struct PlayerCache
 
 	DataPack _TimerData[2];
 
-	void Init(const int client)
+	void Init(int client)
 	{
 		this._ClientIndex = client;
 	}
@@ -244,29 +244,31 @@ enum struct SharedCache
 		return float(this.MaxHealth);
 	}
 
-	bool IsCritBoosted(const int client)
+	bool IsCritBoosted(int client)
 	{
 		return this._CritBoosted > 0;
 	}
 
-	void AddCritBoost(const int client, const CritBoost eCritBoost)
+	void AddCritBoost(int client, const CritBoost eCritBoost)
 	{
+		TFEntity player = TFEntity(client);
 		this._CritBoosted += view_as<int>(eCritBoost);
 
 		if (this._CritBoosted == 1)
 		{
-			TF2_AddCondition(client, TFCond_Buffed);
+			player.AddCond(view_as<int>(TFCond_Buffed));
 			return;
 		}
 
 		if (eCritBoost == CritBoost_Mini)
-			TF2_RemoveCondition(client, TFCond_Buffed);
+			player.RemoveCond(view_as<int>(TFCond_Buffed));
 
-		TF2_AddCondition(client, TFCond_CritOnFirstBlood);
+		player.AddCond(view_as<int>(TFCond_CritOnFirstBlood));
 	}
 
-	void RemoveCritBoost(const int client, const CritBoost eCritBoost)
+	void RemoveCritBoost(int client, const CritBoost eCritBoost)
 	{
+		TFEntity player = TFEntity(client);
 		this._CritBoosted -= view_as<int>(eCritBoost);
 
 		if (this._CritBoosted < 0)
@@ -279,14 +281,14 @@ enum struct SharedCache
 		{
 			case 0:
 			{
-				TF2_RemoveCondition(client, TFCond_CritOnFirstBlood);
-				TF2_RemoveCondition(client, TFCond_Buffed);
+				player.RemoveCond(view_as<int>(TFCond_CritOnFirstBlood));
+				player.RemoveCond(view_as<int>(TFCond_Buffed));
 			}
 
 			case 1:
 			{
-				TF2_RemoveCondition(client, TFCond_CritOnFirstBlood);
-				TF2_AddCondition(client, TFCond_Buffed);
+				player.RemoveCond(view_as<int>(TFCond_CritOnFirstBlood));
+				player.AddCond(view_as<int>(TFCond_Buffed));
 			}
 		}
 	}
@@ -296,7 +298,7 @@ PlayerCache Cache[MAXPLAYERS + 1];
 SharedCache Shared[MAXPLAYERS + 1];
 
 // should not be necessary but acts as extra failsafe in case an error happens elsewhere
-bool ValidatePerkTimerClient(const int client)
+bool ValidatePerkTimerClient(int client)
 {
 	if (IsClientInGame(client) && IsPlayerAlive(client))
 		return true;

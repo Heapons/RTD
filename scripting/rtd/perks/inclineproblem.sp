@@ -20,13 +20,13 @@
 
 DEFINE_CALL_APPLY_REMOVE(InclineProblem)
 
-public void InclineProblem_ApplyPerk(const int client, const Perk perk)
+public void InclineProblem_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].BaseStepSize = GetEntPropFloat(client, Prop_Send, "m_flStepSize");
 	SetEntPropFloat(client, Prop_Send, "m_flStepSize", 1.0);
 }
 
-public void InclineProblem_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void InclineProblem_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	SetEntPropFloat(client, Prop_Send, "m_flStepSize", Cache[client].BaseStepSize);
 }

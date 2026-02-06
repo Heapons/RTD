@@ -37,7 +37,7 @@ public void Sickness_Init(const Perk perk)
 		PrecacheSound(g_sSoundCough[i]);
 }
 
-void Sickness_ApplyPerk(const int client, const Perk perk)
+void Sickness_ApplyPerk(int client, const Perk perk)
 {
 	float fInfectRange = perk.GetPrefFloat("range", 100.0);
 
@@ -50,7 +50,7 @@ void Sickness_ApplyPerk(const int client, const Perk perk)
 	Cache[client].Repeat(0.25, Sickness_Tick);
 }
 
-public Action Sickness_Tick(const int client)
+public Action Sickness_Tick(int client)
 {
 	switch (--Cache[client].HealthyTicks)
 	{
@@ -73,7 +73,7 @@ public Action Sickness_Tick(const int client)
 	return Plugin_Continue;
 }
 
-void Sickness_Cough(const int client, const float fMinDamage, const float fMaxDamage, const int attacker=0)
+void Sickness_Cough(int client, const float fMinDamage, const float fMaxDamage, const int attacker=0)
 {
 	SendTEParticleAttached(TEParticles.GreenGoop, client, .fOffset={0.0, 0.0, 36.0});
 
@@ -85,7 +85,7 @@ void Sickness_Cough(const int client, const float fMinDamage, const float fMaxDa
 	SetEntPropVector(client, Prop_Send, "m_vecPunchAngle", fShake);
 }
 
-void Sickness_Spread(const int client)
+void Sickness_Spread(int client)
 {
 	float fPos[3];
 	GetClientAbsOrigin(client, fPos);

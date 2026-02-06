@@ -18,12 +18,12 @@
 
 DEFINE_CALL_APPLY(InfiniteCloak)
 
-public void InfiniteCloak_ApplyPerk(const int client, const Perk perk)
+public void InfiniteCloak_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Repeat(0.25, InfiniteCloak_RefillMeter);
 }
 
-public Action InfiniteCloak_RefillMeter(const int client)
+public Action InfiniteCloak_RefillMeter(int client)
 {
 	SetEntPropFloat(client, Prop_Send, "m_flCloakMeter", 105.0);
 	return Plugin_Continue;

@@ -29,7 +29,7 @@ public void DrunkWalk_Init(const Perk perk)
 	Events.OnSound(perk, DrunkWalk_OnSound);
 }
 
-public void DrunkWalk_ApplyPerk(const int client, const Perk perk)
+public void DrunkWalk_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].IsDemoman = Shared[client].ClassForPerk == TFClass_DemoMan;
 	Cache[client].BaseSpeed = GetBaseSpeed(client);
@@ -41,17 +41,17 @@ public void DrunkWalk_ApplyPerk(const int client, const Perk perk)
 		Cache[client].Delay(3.5, DrunkWalk_DemomanDeny);
 }
 
-public void DrunkWalk_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void DrunkWalk_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	ResetSpeed(client);
 }
 
-public void DrunkWalk_DemomanDeny(const int client)
+public void DrunkWalk_DemomanDeny(int client)
 {
 	EmitSoundToAll("vo/demoman_no02.mp3", client, SNDCHAN_VOICE);
 }
 
-bool DrunkWalk_OnSound(const int client, const char[] sSound)
+bool DrunkWalk_OnSound(int client, const char[] sSound)
 {
 	if (Cache[client].IsDemoman)
 		return true;
@@ -62,7 +62,7 @@ bool DrunkWalk_OnSound(const int client, const char[] sSound)
 	return true;
 }
 
-void DrunkWalk_Tick(const int client)
+void DrunkWalk_Tick(int client)
 {
 	RotateClientSmooth(client, Cache[client].TurnAngle * GetRandomSign());
 

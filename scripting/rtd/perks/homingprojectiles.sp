@@ -25,23 +25,25 @@ public void HomingProjectiles_Init(const Perk perk)
 	Events.OnEntitySpawned(perk, HomingProjectiles_OnEntitySpawned, Homing_AptClass, Retriever_OwnerEntity);
 }
 
-void HomingProjectiles_ApplyPerk(const int client, const Perk perk)
+void HomingProjectiles_ApplyPerk(int client, const Perk perk)
 {
+	TFEntity player = TFEntity(client);
 	int iCrits = perk.GetPrefCell("crits");
 	Cache[client].Crits = iCrits;
 
 	if (iCrits > 0)
-		TF2_AddCondition(client, iCrits < 2 ? TFCond_Buffed : TFCond_CritOnFirstBlood);
+		player.AddCond(iCrits < 2 ? view_as<int>(TFCond_Buffed) : view_as<int>(TFCond_CritOnFirstBlood));
 }
 
-public void HomingProjectiles_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void HomingProjectiles_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
+	TFEntity player = TFEntity(client);
 	int iCrits = Cache[client].Crits;
 	if (iCrits > 0)
-		TF2_RemoveCondition(client, iCrits < 2 ? TFCond_Buffed : TFCond_CritOnFirstBlood);
+		player.RemoveCond(iCrits < 2 ? view_as<int>(TFCond_Buffed) : view_as<int>(TFCond_CritOnFirstBlood));
 }
 
-void HomingProjectiles_OnEntitySpawned(const int client, const int iEntity)
+void HomingProjectiles_OnEntitySpawned(int client, const int iEntity)
 {
 	CreateTimer(0.2, Timer_HomingProjectiles_HomeEntity, EntIndexToEntRef(iEntity));
 }

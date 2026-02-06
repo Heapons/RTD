@@ -18,7 +18,7 @@
 
 DEFINE_CALL_APPLY(LowHealth)
 
-public void LowHealth_ApplyPerk(const int client, const Perk perk)
+public void LowHealth_ApplyPerk(int client, const Perk perk)
 {
 	SetEntityHealth(client, perk.GetPrefCell("health", 7));
 }

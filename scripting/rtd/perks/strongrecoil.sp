@@ -23,7 +23,7 @@ public void StrongRecoil_Init(const Perk perk)
 	Events.OnAttackCritCheck(perk, StrongRecoil_OnAttackCritCheck);
 }
 
-bool StrongRecoil_OnAttackCritCheck(const int client, const int iWeapon)
+bool StrongRecoil_OnAttackCritCheck(int client, const int iWeapon)
 {
 	if (GetPlayerWeaponSlot(client, 2) == iWeapon)
 		return false;

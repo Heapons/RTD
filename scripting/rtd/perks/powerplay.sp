@@ -68,18 +68,19 @@ public void PowerPlay_Init(const Perk perk)
 	Events.OnConditionAdded(perk, PowerPlay_OnConditionAdded);
 }
 
-public void PowerPlay_ApplyPerk(const int client, const Perk perk)
+public void PowerPlay_ApplyPerk(int client, const Perk perk)
 {
+	TFEntity player = TFEntity(client);
 	if (perk.GetPrefCell("legacy", 0))
 	{
 		Cache[client].EnableLegacy;
 
 		// yuck
-		TF2_AddCondition(client, TFCond_UberchargedCanteen);
-		TF2_AddCondition(client, TFCond_UberBulletResist);
-		TF2_AddCondition(client, TFCond_UberBlastResist);
-		TF2_AddCondition(client, TFCond_UberFireResist);
-		TF2_AddCondition(client, TFCond_MegaHeal);
+		player.AddCond(view_as<int>(TFCond_UberchargedCanteen));
+		player.AddCond(view_as<int>(TFCond_UberBulletResist));
+		player.AddCond(view_as<int>(TFCond_UberBlastResist));
+		player.AddCond(view_as<int>(TFCond_UberFireResist));
+		player.AddCond(view_as<int>(TFCond_MegaHeal));
 		TF2_SetPlayerPowerPlay(client, true);
 
 		Shared[client].AddCritBoost(client, CritBoost_Full);
@@ -105,7 +106,7 @@ public void PowerPlay_ApplyPerk(const int client, const Perk perk)
 	}
 }
 
-Action PowerPlay_ApplyCheck(const int client)
+Action PowerPlay_ApplyCheck(int client)
 {
 	if (TF2_IsPlayerInCondition(client, TFCond_Slowed))
 		return Plugin_Continue;
@@ -114,7 +115,7 @@ Action PowerPlay_ApplyCheck(const int client)
 	return Plugin_Stop;
 }
 
-void PowerPlay_Apply(const int client)
+void PowerPlay_Apply(int client)
 {
 	ForceSwitchSlot(client, 2);
 	SDKHook(client, SDKHook_WeaponCanSwitchTo, PowerPlay_BlockWeaponSwitch);
@@ -144,8 +145,8 @@ void PowerPlay_Apply(const int client)
 	if (!(Cache[client].MeleeFlags & view_as<int>(PowerPlay_MeleeFlags_Knife)))
 		Shared[client].AddCritBoost(client, CritBoost_Full);
 
-	TF2_AddCondition(client, TFCond_SpeedBuffAlly);
 	TFEntity player = TFEntity(client);
+	player.AddCond(view_as<int>(TFCond_SpeedBuffAlly));
 	player.AddAttribute(Attribs.AirblastVulnerability, 0.2);
 	ApplyPreventCapture(client);
 	SetOverlay(client, ClientOverlay_Burning);
@@ -184,15 +185,16 @@ void PowerPlay_Apply(const int client)
 	g_eInGodmode.Set(client);
 }
 
-public void PowerPlay_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void PowerPlay_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
+	TFEntity player = TFEntity(client);
 	if (Cache[client].IsLegacy)
 	{
-		TF2_RemoveCondition(client, TFCond_UberchargedCanteen);
-		TF2_RemoveCondition(client, TFCond_UberBulletResist);
-		TF2_RemoveCondition(client, TFCond_UberBlastResist);
-		TF2_RemoveCondition(client, TFCond_UberFireResist);
-		TF2_RemoveCondition(client, TFCond_MegaHeal);
+		player.RemoveCond(view_as<int>(TFCond_UberchargedCanteen));
+		player.RemoveCond(view_as<int>(TFCond_UberBulletResist));
+		player.RemoveCond(view_as<int>(TFCond_UberBlastResist));
+		player.RemoveCond(view_as<int>(TFCond_UberFireResist));
+		player.RemoveCond(view_as<int>(TFCond_MegaHeal));
 		TF2_SetPlayerPowerPlay(client, false);
 
 		Shared[client].RemoveCritBoost(client, CritBoost_Full);
@@ -215,8 +217,7 @@ public void PowerPlay_RemovePerk(const int client, const RTDRemoveReason eRemove
 	if (!(Cache[client].MeleeFlags & view_as<int>(PowerPlay_MeleeFlags_Knife)))
 		Shared[client].RemoveCritBoost(client, CritBoost_Full);
 
-	TF2_RemoveCondition(client, TFCond_SpeedBuffAlly);
-	TFEntity player = TFEntity(client);
+	player.RemoveCond(view_as<int>(TFCond_SpeedBuffAlly));
 	player.RemoveAttribute(Attribs.AirblastVulnerability);
 	RemovePreventCapture(client);
 	SetOverlay(client, ClientOverlay_None);
@@ -229,7 +230,7 @@ public void PowerPlay_RemovePerk(const int client, const RTDRemoveReason eRemove
 	}
 }
 
-public void PowerPlay_OnGlowUpdate(const int client)
+public void PowerPlay_OnGlowUpdate(int client)
 {
 	int iGlow = Cache[client].GetEnt(Glow).Index;
 	if (iGlow <= MaxClients)
@@ -245,8 +246,9 @@ public void PowerPlay_OnGlowUpdate(const int client)
 	AcceptEntityInput(iGlow, "SetGlowColor");
 }
 
-bool PowerPlay_OnAttack(const int client, const int iWeapon)
+bool PowerPlay_OnAttack(int client, const int iWeapon)
 {
+	TFEntity player = TFEntity(client);
 	if (Cache[client].IsLegacy)
 		return false;
 
@@ -254,26 +256,28 @@ bool PowerPlay_OnAttack(const int client, const int iWeapon)
 		return false; // should never happen -- PowerPlay is melee only
 
 	if (Shared[client].ClassForPerk != TFClass_Scout)
-		TF2_AddCondition(client, TFCond_LostFooting, 1.0);
+		player.AddCond(view_as<int>(TFCond_LostFooting), 1.0);
 
 	UserMessages.Shake(client, 10.0, 3.0, 0.4);
 
 	return false;
 }
 
-public void PowerPlay_OnPlayerAttacked(const int client, const int victim, const int damage, const int health)
+public void PowerPlay_OnPlayerAttacked(int client, const int victim, const int damage, const int health)
 {
+	TFEntity player = TFEntity(client);
 	if (Cache[client].IsLegacy)
 		return;
 
 	if (Cache[client].MeleeFlags & view_as<int>(PowerPlay_MeleeFlags_Knife) && (1 <= victim <= MaxClients))
 		TF2_StunPlayer(victim, 1.0, _, TF_STUNFLAG_BONKSTUCK | TF_STUNFLAG_NOSOUNDOREFFECT | TF_STUNFLAG_THIRDPERSON, client);
 
-	TF2_RemoveCondition(client, TFCond_LostFooting);
+	player.RemoveCond(view_as<int>(TFCond_LostFooting));
 }
 
-public void PowerPlay_OnConditionAdded(const int client, const TFCond eCond)
+public void PowerPlay_OnConditionAdded(int client, const TFCond eCond)
 {
+	TFEntity player = TFEntity(client);
 	if (Cache[client].IsLegacy)
 		return;
 
@@ -281,21 +285,21 @@ public void PowerPlay_OnConditionAdded(const int client, const TFCond eCond)
 	{
 		case TFCond_Jarated:
 		{
-			TF2_RemoveCondition(client, TFCond_Jarated);
-			TF2_AddCondition(client, TFCond_Jarated, STATUS_EFFECT_DURATION);
+			player.RemoveCond(view_as<int>(TFCond_Jarated));
+			player.AddCond(view_as<int>(TFCond_Jarated), STATUS_EFFECT_DURATION);
 			PowerPlay_Slowdown(client, 0.75, STATUS_EFFECT_DURATION);
 		}
 
 		case TFCond_Milked:
 		{
-			TF2_RemoveCondition(client, TFCond_Milked);
-			TF2_AddCondition(client, TFCond_Milked, STATUS_EFFECT_DURATION);
+			player.RemoveCond(view_as<int>(TFCond_Milked));
+			player.AddCond(view_as<int>(TFCond_Milked), STATUS_EFFECT_DURATION);
 			PowerPlay_Slowdown(client, 0.75, STATUS_EFFECT_DURATION);
 		}
 	}
 }
 
-public Action PowerPlay_BlockWeaponSwitch(const int client, const int iWeapon)
+public Action PowerPlay_BlockWeaponSwitch(int client, const int iWeapon)
 {
 	return GetPlayerWeaponSlot(client, 2) == iWeapon ? Plugin_Continue : Plugin_Handled;
 }
@@ -357,10 +361,10 @@ public Action PowerPlay_OnTakeDamage(int client, int& iAtk, int& iInflictor, flo
 
 		case PowerPlay_AttackType_Flame:
 		{
+			TFEntity player = TFEntity(client);
 			if (Cache[client].MeleeFlags & view_as<int>(PowerPlay_MeleeFlags_SpyCicle))
 			{
-				TF2_AddCondition(client, TFCond_FireImmune, 0.5);
-				PowerPlay_Slowdown(client, 0.7, 0.5);
+				player.AddCond(view_as<int>(TFCond_FireImmune), 0.5);
 			}
 			else
 			{
@@ -370,10 +374,10 @@ public Action PowerPlay_OnTakeDamage(int client, int& iAtk, int& iInflictor, flo
 
 		case PowerPlay_AttackType_FlameCrit:
 		{
+			TFEntity player = TFEntity(client);
 			if (Cache[client].MeleeFlags & view_as<int>(PowerPlay_MeleeFlags_SpyCicle))
 			{
-				TF2_AddCondition(client, TFCond_FireImmune, 0.5);
-				PowerPlay_Slowdown(client, 0.55, 0.5);
+				player.AddCond(view_as<int>(TFCond_FireImmune), 0.5);
 			}
 			else
 			{
@@ -432,12 +436,13 @@ public Action PowerPlay_OnTakeDamage(int client, int& iAtk, int& iInflictor, flo
 	return Plugin_Changed;
 }
 
-void PowerPlay_EnableTemporary(const int client, const float fPos[3])
+void PowerPlay_EnableTemporary(int client, const float fPos[3])
 {
+	TFEntity player = TFEntity(client);
 	if (!Shared[client].IsCritBoosted(client))
-		TF2_AddCondition(client, TFCond_CritOnFirstBlood, TEMPORARY_DURATION);
+		player.AddCond(view_as<int>(TFCond_CritOnFirstBlood), TEMPORARY_DURATION);
 
-	TF2_AddCondition(client, TFCond_SpeedBuffAlly, TEMPORARY_DURATION);
+	player.AddCond(view_as<int>(TFCond_SpeedBuffAlly), TEMPORARY_DURATION);
 
 	SDKHook(client, SDKHook_WeaponSwitchPost, PowerPlay_WeaponSwitchWithTemporary);
 	SDKHook(client, SDKHook_OnTakeDamage, PowerPlay_CritResistanceWithTemporary);
@@ -449,12 +454,13 @@ void PowerPlay_EnableTemporary(const int client, const float fPos[3])
 	SendTEParticle(TEParticles.ImpactStars, fPos);
 }
 
-void PowerPlay_DisableTemporary(const int client)
+void PowerPlay_DisableTemporary(int client)
 {
+	TFEntity player = TFEntity(client);
 	if (!Shared[client].IsCritBoosted(client))
-		TF2_RemoveCondition(client, TFCond_CritOnFirstBlood);
+		player.RemoveCond(view_as<int>(TFCond_CritOnFirstBlood));
 
-	TF2_RemoveCondition(client, TFCond_SpeedBuffAlly);
+	player.RemoveCond(view_as<int>(TFCond_SpeedBuffAlly));
 
 	SDKUnhook(client, SDKHook_WeaponSwitchPost, PowerPlay_WeaponSwitchWithTemporary);
 	SDKUnhook(client, SDKHook_OnTakeDamage, PowerPlay_CritResistanceWithTemporary);
@@ -469,7 +475,7 @@ public Action Timer_PowerPlay_DisableTemporary(Handle hTimer, const int iUserId)
 	return Plugin_Stop;
 }
 
-public void PowerPlay_WeaponSwitchWithTemporary(const int client, const int iWeapon)
+public void PowerPlay_WeaponSwitchWithTemporary(int client, const int iWeapon)
 {
 	PowerPlay_DisableTemporary(client);
 }
@@ -485,7 +491,7 @@ public Action PowerPlay_CritResistanceWithTemporary(int client, int& iAtk, int& 
 	return Plugin_Continue;
 }
 
-int PowerPlay_GetBounceMultiplier(const int client)
+int PowerPlay_GetBounceMultiplier(int client)
 {
 	if (Cache[client].NextBounce > GetEngineTime())
 		return 0;
@@ -494,7 +500,7 @@ int PowerPlay_GetBounceMultiplier(const int client)
 	return IsGrounded(client);
 }
 
-float PowerPlay_GetKnockbackResistance(const int client)
+float PowerPlay_GetKnockbackResistance(int client)
 {
 	// NOTE: Some effects apply flat 300.0 upward knockback causing a jump. A 10% resistance makes
 	// it 270 which still results in a jump but barely. Anything above that will likely nullify it.
@@ -531,7 +537,7 @@ PowerPlay_AttackType PowerPlay_GetAttackType(const int iType)
 	return PowerPlay_AttackType_Unknown;
 }
 
-void PowerPlay_Slowdown(const int client, const float fValue, const float fDuration)
+void PowerPlay_Slowdown(int client, const float fValue, const float fDuration)
 {
 	if (fValue >= Cache[client].CurrentSpeed)
 		return;
@@ -541,7 +547,7 @@ void PowerPlay_Slowdown(const int client, const float fValue, const float fDurat
 	SetSpeed(client, float(Cache[client].BaseSpeed), fValue);
 }
 
-public Action PowerPlay_SlowDownCheck(const int client)
+public Action PowerPlay_SlowDownCheck(int client)
 {
 	if (Cache[client].CurrentSpeed == 1.0 || GetEngineTime() < Cache[client].SpeedRegainTime)
 		return Plugin_Continue;

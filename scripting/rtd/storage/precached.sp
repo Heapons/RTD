@@ -9,7 +9,7 @@ enum struct UserMessageCache
 		this.ShakeId = GetUserMessageId("Shake");
 	}
 
-	void Shake(const int client, const float fAmplitude, const float fFrequency, const float fDuration, const int iCommand=0)
+	void Shake(int client, const float fAmplitude, const float fFrequency, const float fDuration, const int iCommand=0)
 	{
 		int iClients[2];
 		iClients[0] = client;
@@ -25,7 +25,7 @@ enum struct UserMessageCache
 		}
 	}
 
-	void StopShake(const int client)
+	void StopShake(int client)
 	{
 		this.Shake(client, 0.0, 0.0, 0.0, 1);
 	}

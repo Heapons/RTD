@@ -29,85 +29,85 @@ methodmap Rollers < ArrayList
 		return view_as<Rollers>(data);
 	}
 
-		public bool GetInRoll(const int client)
+		public bool GetInRoll(int client)
 		{
 			return view_as<bool>(this.Get(client, 0));
 		}
-		public void SetInRoll(const int client, const bool val)
+		public void SetInRoll(int client, const bool val)
 		{
 			this.Set(client, val, 0);
 		}
 
-		public int GetLastRollTime(const int client)
+		public int GetLastRollTime(int client)
 		{
 			return view_as<int>(this.Get(client, 1));
 		}
-		public void SetLastRollTime(const int client, const int val)
+		public void SetLastRollTime(int client, const int val)
 		{
 			this.Set(client, val, 1);
 		}
 
-		public int GetEndRollTime(const int client)
+		public int GetEndRollTime(int client)
 		{
 			return view_as<int>(this.Get(client, 2));
 		}
-		public void SetEndRollTime(const int client, const int val)
+		public void SetEndRollTime(int client, const int val)
 		{
 			this.Set(client, val, 2);
 		}
 
-		public PerkList GetPerkHistory(const int client)
+		public PerkList GetPerkHistory(int client)
 		{
 			return view_as<PerkList>(this.Get(client, 3));
 		}
-		public void SetPerkHistory(const int client, PerkList val)
+		public void SetPerkHistory(int client, PerkList val)
 		{
 			this.Set(client, val, 3);
 		}
 
-		public Perk GetPerk(const int client)
+		public Perk GetPerk(int client)
 		{
 			return view_as<Perk>(this.Get(client, 4));
 		}
-		public void SetPerk(const int client, Perk val)
+		public void SetPerk(int client, Perk val)
 		{
 			this.Set(client, val, 4);
 		}
 
-		public Handle GetTimer(const int client)
+		public Handle GetTimer(int client)
 		{
 			return view_as<Handle>(this.Get(client, 5));
 		}
-		public void SetTimer(const int client, Handle val)
+		public void SetTimer(int client, Handle val)
 		{
 			this.Set(client, val, 5);
 		}
 
-		public Handle GetHud(const int client)
+		public Handle GetHud(int client)
 		{
 			return view_as<Handle>(this.Get(client, 6));
 		}
-		public void SetHud(const int client, Handle val)
+		public void SetHud(int client, Handle val)
 		{
 			this.Set(client, val, 6);
 		}
 
-		public int GetUnconsumedAddedTime(const int client)
+		public int GetUnconsumedAddedTime(int client)
 		{
 			return view_as<int>(this.Get(client, 7));
 		}
-		public void SetUnconsumedAddedTime(const int client, const int val)
+		public void SetUnconsumedAddedTime(int client, const int val)
 		{
 			this.Set(client, val, 7);
 		}
 
-	public void AddRollTime(const int client, const int iTime)
+	public void AddRollTime(int client, const int iTime)
 	{
 		this.SetEndRollTime(client, this.GetEndRollTime(client) + iTime);
 		this.SetUnconsumedAddedTime(client, this.GetUnconsumedAddedTime(client) + iTime);
 	}
 
-	public int PushToPerkHistory(const int client, Perk perk)
+	public int PushToPerkHistory(int client, Perk perk)
 	{
 		PerkList list = this.GetPerkHistory(client);
 		if (!list)
@@ -119,7 +119,7 @@ methodmap Rollers < ArrayList
 		return list.Push(perk);
 	}
 
-	public bool IsInPerkHistory(const int client, Perk perk, int iLimit)
+	public bool IsInPerkHistory(int client, Perk perk, int iLimit)
 	{
 		PerkList list = this.GetPerkHistory(client);
 		if (!list)
@@ -137,14 +137,14 @@ methodmap Rollers < ArrayList
 		return false;
 	}
 
-	public void ResetPerkHistory(const int client)
+	public void ResetPerkHistory(int client)
 	{
 		PerkList list = this.GetPerkHistory(client);
 		if (list)
 			list.Clear();
 	}
 
-	public void Reset(const int client)
+	public void Reset(int client)
 	{
 		this.SetInRoll(client, false);
 		this.SetLastRollTime(client, 0);

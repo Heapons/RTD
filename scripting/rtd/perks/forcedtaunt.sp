@@ -37,7 +37,7 @@ public void ForcedTaunt_Init(const Perk perk)
 	Events.OnConditionRemoved(perk, ForcedTaunt_OnConditionRemoved);
 }
 
-void ForcedTaunt_ApplyPerk(const int client, const Perk perk)
+void ForcedTaunt_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Interval = perk.GetPrefFloat("interval", 1.0);
 
@@ -45,7 +45,7 @@ void ForcedTaunt_ApplyPerk(const int client, const Perk perk)
 	Cache[client].Repeat(0.1, ForcedTaunt_Perform);
 }
 
-public Action ForcedTaunt_Perform(const int client)
+public Action ForcedTaunt_Perform(int client)
 {
 	if (GetEngineTime() < Cache[client].NextTaunt)
 		return Plugin_Continue;
@@ -57,13 +57,13 @@ public Action ForcedTaunt_Perform(const int client)
 	return Plugin_Continue;
 }
 
-public void ForcedTaunt_OnConditionAdded(const int client, const TFCond eCondition)
+public void ForcedTaunt_OnConditionAdded(int client, const TFCond eCondition)
 {
 	if (eCondition == TFCond_Taunting)
 		EmitSoundToAll(g_sSoundScoutBB[GetRandomInt(0, sizeof(g_sSoundScoutBB) - 1)], client);
 }
 
-public void ForcedTaunt_OnConditionRemoved(const int client, const TFCond eCondition)
+public void ForcedTaunt_OnConditionRemoved(int client, const TFCond eCondition)
 {
 	if (eCondition == TFCond_Taunting)
 		Cache[client].NextTaunt = GetEngineTime() + Cache[client].Interval;

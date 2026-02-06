@@ -37,7 +37,7 @@ public void MercsDieTwice_Init(const Perk perk)
 	Events.OnVoice(perk, MercsDieTwice_OnVoice);
 }
 
-void MercsDieTwice_ApplyPerk(const int client, const Perk perk)
+void MercsDieTwice_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].InFakeDeath = false;
 	Cache[client].HealthPercentage = perk.GetPrefCell("health", 80);
@@ -46,7 +46,7 @@ void MercsDieTwice_ApplyPerk(const int client, const Perk perk)
 	SDKHook(client, SDKHook_OnTakeDamageAlive, MercsDieTwice_OnTakeDamage);
 }
 
-public void MercsDieTwice_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void MercsDieTwice_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	if (Cache[client].InFakeDeath)
 		MercsDieTwice_Resurrect(client);
@@ -54,7 +54,7 @@ public void MercsDieTwice_RemovePerk(const int client, const RTDRemoveReason eRe
 	SDKUnhook(client, SDKHook_OnTakeDamageAlive, MercsDieTwice_OnTakeDamage);
 }
 
-void MercsDieTwice_OnVoice(const int client)
+void MercsDieTwice_OnVoice(int client)
 {
 	if (!Cache[client].InFakeDeath)
 		return;
@@ -82,8 +82,9 @@ public Action MercsDieTwice_OnTakeDamage(int client, int& attacker, int& iInflic
 	return Plugin_Continue;
 }
 
-void MercsDieTwice_FakeDeath(const int client, const int attacker, const int iInflictor, const int iWeapon)
+void MercsDieTwice_FakeDeath(int client, const int attacker, const int iInflictor, const int iWeapon)
 {
+	TFEntity player = TFEntity(client);
 	Cache[client].InFakeDeath = true;
 	Cache[client].NextResurrection = GetTime() + 3;
 	g_eInGodmode.Set(client);
@@ -106,7 +107,7 @@ void MercsDieTwice_FakeDeath(const int client, const int attacker, const int iIn
 
 	DisarmWeapons(client, true);
 	SetEntityMoveType(client, MOVETYPE_NONE);
-	TF2_AddCondition(client, TFCond_DisguisedAsDispenser);
+	player.AddCond(view_as<int>(TFCond_DisguisedAsDispenser));
 	ApplyPreventCapture(client);
 
 	SetOverlay(client, ClientOverlay_Stealth);
@@ -119,8 +120,9 @@ void MercsDieTwice_FakeDeath(const int client, const int attacker, const int iIn
 	MercsDieTwice_SendDeatevent(client, attacker, iInflictor, iWeapon);
 }
 
-void MercsDieTwice_Resurrect(const int client)
+void MercsDieTwice_Resurrect(int client)
 {
+	TFEntity player = TFEntity(client);
 	Cache[client].InFakeDeath = false;
 	g_eInGodmode.Unset(client);
 
@@ -134,7 +136,7 @@ void MercsDieTwice_Resurrect(const int client)
 
 	DisarmWeapons(client, false);
 	SetEntityMoveType(client, MOVETYPE_WALK);
-	TF2_RemoveCondition(client, TFCond_DisguisedAsDispenser);
+	player.RemoveCond(view_as<int>(TFCond_DisguisedAsDispenser));
 	RemovePreventCapture(client);
 
 	SetOverlay(client, ClientOverlay_None);
@@ -145,7 +147,7 @@ void MercsDieTwice_Resurrect(const int client)
 	SetClientViewEntity(client, client);
 	Cache[client].GetEnt(Ragdoll).Kill();
 
-	TF2_AddCondition(client, TFCond_UberchargedCanteen, Cache[client].ProtectionTime);
+	player.AddCond(view_as<int>(TFCond_UberchargedCanteen), Cache[client].ProtectionTime);
 	EmitSoundToAll(SOUND_RESURRECT, client);
 
 	float fMulti = float(Cache[client].HealthPercentage) / 100.0;
@@ -156,7 +158,7 @@ void MercsDieTwice_Resurrect(const int client)
 	MercsDieTwice_SpawnEffect(client);
 }
 
-void MercsDieTwice_SpawnEffect(const int client)
+void MercsDieTwice_SpawnEffect(int client)
 {
 	int iProxy = CreateProxy(client);
 	if (iProxy <= MaxClients)
@@ -166,7 +168,7 @@ void MercsDieTwice_SpawnEffect(const int client)
 	SendTEParticleLingeringAttachedProxy(TEParticlesLingering.LightningSwirl, iProxy);
 }
 
-void MercsDieTwice_SendDeatevent(const int client, const int attacker, const int iInflictor, const int iWeapon)
+void MercsDieTwice_SendDeatevent(int client, const int attacker, const int iInflictor, const int iWeapon)
 {
 	Event event = CreateEvent("player_death");
 

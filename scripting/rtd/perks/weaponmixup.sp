@@ -27,7 +27,7 @@ public void WeaponMixup_Init(const Perk perk)
 	Events.OnEntitySpawned(perk, WeaponMixup_OnDroppedWeaponSpawn, Classname_DroppedWeapon, Retriever_AccountId);
 }
 
-public void WeaponMixup_ApplyPerk(const int client, const Perk perk)
+public void WeaponMixup_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Ticks = 2;
 
@@ -36,10 +36,11 @@ public void WeaponMixup_ApplyPerk(const int client, const Perk perk)
 	Cache[client].Repeat(0.5, WeaponMixup_SwitchTick);
 }
 
-public void WeaponMixup_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void WeaponMixup_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
+	TFEntity player = TFEntity(client);
 	// If Heavy was revved up, this should fix it lingering
-	TF2_RemoveCondition(client, TFCond_Slowed);
+	player.RemoveCond(view_as<int>(TFCond_Slowed));
 
 	for (int i = 0; i < 3; ++i)
 	{
@@ -53,7 +54,7 @@ public void WeaponMixup_RemovePerk(const int client, const RTDRemoveReason eRemo
 	}
 }
 
-void WeaponMixup_Apply(const int client)
+void WeaponMixup_Apply(int client)
 {
 	for (int i = 0; i < 3; ++i)
 	{
@@ -67,12 +68,12 @@ void WeaponMixup_Apply(const int client)
 	}
 }
 
-public void WeaponMixup_OnDroppedWeaponSpawn(const int client, const int iEnt)
+public void WeaponMixup_OnDroppedWeaponSpawn(int client, const int iEnt)
 {
 	AcceptEntityInput(iEnt, "Kill");
 }
 
-Action WeaponMixup_SwitchTick(const int client)
+Action WeaponMixup_SwitchTick(int client)
 {
 	if (--Cache[client].Ticks > 0)
 		return Plugin_Continue;
@@ -95,13 +96,13 @@ Action WeaponMixup_SwitchTick(const int client)
 	return Plugin_Continue;
 }
 
-bool WeaponMixup_OnAttackCritCheck(const int client, const int iWeapon)
+bool WeaponMixup_OnAttackCritCheck(int client, const int iWeapon)
 {
 	Cache[client].Ticks = 0;
 	return false;
 }
 
-int WeaponMixup_GetNextSlot(const int client, const int iCurrentWeapon)
+int WeaponMixup_GetNextSlot(int client, const int iCurrentWeapon)
 {
 	static int iSlotOrder[] = {0, 1, 2, 0, 1, 2};
 	int iCurrentSlot = 0;

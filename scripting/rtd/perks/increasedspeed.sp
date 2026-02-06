@@ -16,7 +16,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-public void IncreasedSpeed_Call(const int client, const Perk perk, const bool apply)
+public void IncreasedSpeed_Call(int client, const Perk perk, const bool apply)
 {
 	if(apply)
 	{

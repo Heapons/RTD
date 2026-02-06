@@ -26,13 +26,13 @@ public void PowerfulHits_Init(const Perk perk)
 	Events.OnEntitySpawned(perk, PowerfulHits_OnDroppedWeaponSpawn, Classname_DroppedWeapon, Retriever_AccountId);
 }
 
-public void PowerfulHits_ApplyPerk(const int client, const Perk perk)
+public void PowerfulHits_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Multiplier = perk.GetPrefFloat("multiplier", 3.0);
 	PowerfulHits_Apply(client);
 }
 
-public void PowerfulHits_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void PowerfulHits_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	for (int i = 0; i < 3; ++i)
 	{
@@ -45,7 +45,7 @@ public void PowerfulHits_RemovePerk(const int client, const RTDRemoveReason eRem
 	}
 }
 
-public void PowerfulHits_Apply(const int client)
+public void PowerfulHits_Apply(int client)
 {
 	for (int i = 0; i < 3; ++i)
 	{
@@ -58,7 +58,7 @@ public void PowerfulHits_Apply(const int client)
 	}
 }
 
-public void PowerfulHits_OnDroppedWeaponSpawn(const int client, const int iEnt)
+public void PowerfulHits_OnDroppedWeaponSpawn(int client, const int iEnt)
 {
 	AcceptEntityInput(iEnt, "Kill");
 }

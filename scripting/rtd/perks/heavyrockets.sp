@@ -28,7 +28,7 @@ public void HeavyRockets_Init(const Perk perk)
 	Events.OnEntitySpawned(perk, HeavyRockets_OnRocketSpawned, HeavyRockets_ClassFilter, Retriever_OwnerEntity);
 }
 
-void HeavyRockets_OnRocketSpawned(const int client, const int iRocket)
+void HeavyRockets_OnRocketSpawned(int client, const int iRocket)
 {
 	// Timer mechanics limit this to around 0.1ish, except for the initial call
 	CreateTimer(0.0, Timer_HeavyRockets_Think, EntIndexToEntRef(iRocket), TIMER_REPEAT);

@@ -31,7 +31,7 @@ public void FireBreath_Init(const Perk perk)
 	Events.OnVoice(perk, FireBreath_OnVoice);
 }
 
-void FireBreath_ApplyPerk(const int client, const Perk perk)
+void FireBreath_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Rate = perk.GetPrefFloat("rate", 2.0);
 	Cache[client].CritChance = perk.GetPrefFloat("crit", 0.05);
@@ -40,7 +40,7 @@ void FireBreath_ApplyPerk(const int client, const Perk perk)
 	Notify.Attack(client);
 }
 
-void FireBreath_OnVoice(const int client)
+void FireBreath_OnVoice(int client)
 {
 	float fTime = GetEngineTime();
 	if (fTime < Cache[client].LastAttack + Cache[client].Rate)
@@ -60,7 +60,7 @@ void FireBreath_OnVoice(const int client)
 	Code borrowed from: [TF2] Spell casting!
 	https://forums.alliedmods.net/showthread.php?p=2054678
 */
-void FireBreath_Fireball(const int client)
+void FireBreath_Fireball(int client)
 {
 	float fAng[3], fPos[3];
 	GetClientEyeAngles(client, fAng);

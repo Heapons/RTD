@@ -403,4 +403,18 @@ methodmap TFEntity
         Format(buffer, sizeof(buffer), "self.CancelTaunt()");
         return this.RunScriptCode(buffer);
     }
+
+    public bool AddCond(int condition, float duration = -1.0)
+    {
+        char buffer[64];
+        Format(buffer, sizeof(buffer), "self.AddCond(%d, %f)", condition, duration);
+        return this.RunScriptCode(buffer);
+    }
+
+    public bool RemoveCond(int condition)
+    {
+        char buffer[48];
+        Format(buffer, sizeof(buffer), "self.RemoveCond(%d)", condition);
+        return this.RunScriptCode(buffer);
+    }
 }

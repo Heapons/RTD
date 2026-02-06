@@ -20,14 +20,14 @@
 
 DEFINE_CALL_APPLY_REMOVE(Weakened)
 
-public void Weakened_ApplyPerk(const int client, const Perk perk)
+public void Weakened_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Multiplier = perk.GetPrefFloat("multiplier", 2.5);
 
 	SDKHook(client, SDKHook_OnTakeDamage, Weakened_OnTakeDamage);
 }
 
-public void Weakened_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Weakened_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	SDKUnhook(client, SDKHook_OnTakeDamage, Weakened_OnTakeDamage);
 }

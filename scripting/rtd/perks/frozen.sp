@@ -69,8 +69,9 @@ public void Frozen_Init(const Perk perk)
 	Events.OnSound(perk, Frozen_OnSound);
 }
 
-void Frozen_ApplyPerk(const int client, const Perk perk)
+void Frozen_ApplyPerk(int client, const Perk perk)
 {
+	TFEntity player = TFEntity(client);
 	Cache[client].OriginalAlpha = Frozen_GetEntityAlpha(client);
 	Cache[client].Volume = MinInt(perk.GetPrefCell("volume", 50), 100);
 	Cache[client].LastFireTouch = 0.0;
@@ -85,7 +86,7 @@ void Frozen_ApplyPerk(const int client, const Perk perk)
 
 	DisarmWeapons(client, true);
 	ApplyPreventCapture(client);
-	TF2_RemoveCondition(client, TFCond_OnFire); // remove afterburn
+	player.RemoveCond(view_as<int>(TFCond_OnFire)); // remove afterburn
 
 	SetEntityMoveType(client, MOVETYPE_NONE);
 	SetVariantInt(1);
@@ -180,7 +181,7 @@ void Frozen_ApplyPerk(const int client, const Perk perk)
 	}
 }
 
-public void Frozen_ApplyPost(const int client)
+public void Frozen_ApplyPost(int client)
 {
 	int iStatue = Cache[client].GetEnt(Statue).Index;
 	if (iStatue <= MaxClients)
@@ -224,7 +225,7 @@ public Action Timer_FrozenFreezeAnimation(Handle hTimer, const int iEntRef)
 	return Plugin_Stop;
 }
 
-public void Frozen_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Frozen_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	Frozen_Set(client, Cache[client].OriginalAlpha);
 	DisarmWeapons(client, false);
@@ -259,7 +260,7 @@ public void Frozen_RemovePerk(const int client, const RTDRemoveReason eRemoveRea
 }
 
 // WARNING: This function runs outside of perk time of the player yet attempts to use their cache.
-public void Frozen_OnResupply_Any(const int client)
+public void Frozen_OnResupply_Any(int client)
 {
 	// Make sure we are dealing with Frozen cache specifically, do not run otherwise
 	if (!Frozen_IsPostFrozen(client))
@@ -315,7 +316,7 @@ public Action Timer_FrozenSetResultingHealth(Handle hTimer, DataPack hData)
 	return Plugin_Continue;
 }
 
-bool Frozen_OnSound(const int client, const char[] sSound)
+bool Frozen_OnSound(int client, const char[] sSound)
 {
 	if (!IsVoicelineSound(sSound))
 		return true;
@@ -459,7 +460,7 @@ bool Frozen_OnSound(const int client, const char[] sSound)
 	return false;
 }
 
-void Frozen_TransferWearables(const int client, const int iStatue)
+void Frozen_TransferWearables(int client, const int iStatue)
 {
 	char sClassname[12];
 	for (int iEnt = MaxClients + 1; iEnt < GetMaxEntities(); ++iEnt)
@@ -699,7 +700,7 @@ void Frozen_GetIceTransformCorrected(int client, float fPos[3], float fAng[3])
 	}
 }
 
-bool Frozen_IsPostFrozen(const int client)
+bool Frozen_IsPostFrozen(int client)
 {
 	return !g_hRollers.GetInRoll(client) && g_hRollers.IsInPerkHistory(client, g_ePerkFrozen, 1);
 }

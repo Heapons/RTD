@@ -48,7 +48,7 @@ public void MadarasWhistle_Init(const Perk perk)
 	Events.OnVoice(perk, MadarasWhistle_OnVoice);
 }
 
-void MadarasWhistle_ApplyPerk(const int client, const Perk perk)
+void MadarasWhistle_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].DamageOthers = perk.GetPrefCell("damage", 150);
 	Cache[client].DamageSelf = perk.GetPrefCell("selfdamage", 150);
@@ -60,7 +60,7 @@ void MadarasWhistle_ApplyPerk(const int client, const Perk perk)
 	Notify.Attack(client);
 }
 
-void MadarasWhistle_OnVoice(const int client)
+void MadarasWhistle_OnVoice(int client)
 {
 	float fTime = GetEngineTime();
 	if (fTime < Cache[client].LastAttack + Cache[client].Rate)

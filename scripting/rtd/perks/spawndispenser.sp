@@ -28,7 +28,7 @@ public void SpawnDispenser_Init(const Perk perk)
 	Events.OnVoice(perk, SpawnDispenser_OnVoice);
 }
 
-public void SpawnDispenser_ApplyPerk(const int client, const Perk perk)
+public void SpawnDispenser_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Level = perk.GetPrefCell("level", 3);
 	Cache[client].Cleanup = perk.GetPrefCell("keep", 1) > 0 ? view_as<int>(EntCleanup_None) : view_as<int>(EntCleanup_Auto);
@@ -38,7 +38,7 @@ public void SpawnDispenser_ApplyPerk(const int client, const Perk perk)
 	Notify.Dispenser(client);
 }
 
-public void SpawnDispenser_OnVoice(const int client)
+public void SpawnDispenser_OnVoice(int client)
 {
 	int iSpawned = Cache[client].Spawned;
 	int iMax = Cache[client].Max;

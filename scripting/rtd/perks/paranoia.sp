@@ -91,7 +91,7 @@ public void Paranoia_Init(const Perk perk)
 	PrecacheModel(MODEL_SPY); // does this really need precaching?
 }
 
-public void Paranoia_ApplyPerk(const int client, const Perk perk)
+public void Paranoia_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].VoiceTick = Paranoia_GetTicks();
 	Cache[client].VisualTick = Paranoia_GetTicks();
@@ -134,7 +134,7 @@ public void Paranoia_ApplyPerk(const int client, const Perk perk)
 	Cache[client].Repeat(0.5, Paranoia_Visual);
 }
 
-Action Paranoia_Voice(const int client)
+Action Paranoia_Voice(int client)
 {
 	if (--Cache[client].VoiceTick > 0)
 		return Plugin_Continue;
@@ -146,7 +146,7 @@ Action Paranoia_Voice(const int client)
 	return Plugin_Continue;
 }
 
-Action Paranoia_Visual(const int client)
+Action Paranoia_Visual(int client)
 {
 	if (--Cache[client].VisualTick > 0)
 		return Plugin_Continue;
@@ -184,7 +184,7 @@ Action Paranoia_Visual(const int client)
 	return Plugin_Continue;
 }
 
-void Paranoia_EmitSound(const int client, const char[][] sArray, const int iArrayLength)
+void Paranoia_EmitSound(int client, const char[][] sArray, const int iArrayLength)
 {
 	int iSource = CreateEntityByName("info_target");
 	if (iSource <= MaxClients)

@@ -37,7 +37,7 @@ public void NecroMash_Init(const Perk perk)
 	PrecacheSound("doors/vent_open2.wav");
 }
 
-public void NecroMash_ApplyPerk(const int client, const Perk perk)
+public void NecroMash_ApplyPerk(int client, const Perk perk)
 {
 	if (IsGrounded(client))
 	{
@@ -62,7 +62,7 @@ public Action Timer_NecroMash_Retry(Handle hTimer, const int iUserId)
 	return Plugin_Stop;
 }
 
-void NecroMash_SmashClient(const int client)
+void NecroMash_SmashClient(int client)
 {
 	float flPos[3], flPpos[3], flAngles[3];
 	GetClientAbsOrigin(client, flPos);

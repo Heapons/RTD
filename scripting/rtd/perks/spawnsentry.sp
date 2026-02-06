@@ -28,7 +28,7 @@ public void SpawnSentry_Init(const Perk perk)
 	Events.OnVoice(perk, SpawnSentry_OnVoice);
 }
 
-public void SpawnSentry_ApplyPerk(const int client, const Perk perk)
+public void SpawnSentry_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Level = perk.GetPrefCell("level", 2);
 	Cache[client].Cleanup = perk.GetPrefCell("keep", 0) > 0 ? view_as<int>(EntCleanup_None) : view_as<int>(EntCleanup_Auto);
@@ -38,7 +38,7 @@ public void SpawnSentry_ApplyPerk(const int client, const Perk perk)
 	Notify.Sentry(client);
 }
 
-void SpawnSentry_OnVoice(const int client)
+void SpawnSentry_OnVoice(int client)
 {
 	int iSpawned = Cache[client].Spawned;
 	int iMax = Cache[client].Max;

@@ -52,7 +52,7 @@ public void LowGravity_ApplyPerk(int client, Perk perk)
 		player.AddAttribute(Attribs.NoFallDamage, 1.0);
 }
 
-public void LowGravity_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void LowGravity_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	TFEntity player = TFEntity(client);
 	if (Cache[client].JumpMode)
@@ -68,7 +68,7 @@ public void LowGravity_RemovePerk(const int client, const RTDRemoveReason eRemov
 		player.RemoveAttribute(Attribs.NoFallDamage);
 }
 
-bool LowGravity_OnPlayerRunCmd(const int client, int& iButtons, float fVel[3], float fAng[3])
+bool LowGravity_OnPlayerRunCmd(int client, int& iButtons, float fVel[3], float fAng[3])
 {
 	if (!(iButtons & IN_JUMP))
 		return false;

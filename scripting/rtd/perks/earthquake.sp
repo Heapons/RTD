@@ -23,7 +23,7 @@
 
 DEFINE_CALL_APPLY_REMOVE(Earthquake)
 
-public void Earthquake_ApplyPerk(const int client, const Perk perk)
+public void Earthquake_ApplyPerk(int client, const Perk perk)
 {
 	float fPerkTime = GetPerkTimeFloat(perk);
 
@@ -35,7 +35,7 @@ public void Earthquake_ApplyPerk(const int client, const Perk perk)
 	UserMessages.Shake(client, Cache[client].Amplitude, Cache[client].Frequency, fPerkTime);
 }
 
-public void Earthquake_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Earthquake_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	float fRemainingTime = Cache[client].FinishTime - GetEngineTime();
 	float fPercentageLeft = fRemainingTime / Cache[client].PerkTime;

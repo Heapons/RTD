@@ -22,7 +22,7 @@
 
 DEFINE_CALL_APPLY_REMOVE(Lag)
 
-public void Lag_ApplyPerk(const int client, const Perk perk)
+public void Lag_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].TickTeleport = GetRandomInt(6, 14);
 	Lag_SetPosition(client); // sets Pos and TickSetPosition
@@ -31,12 +31,12 @@ public void Lag_ApplyPerk(const int client, const Perk perk)
 	Cache[client].Repeat(0.1, Lag_SetPositionCheck);
 }
 
-public void Lag_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Lag_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	FixPotentialStuck(client);
 }
 
-public Action Lag_Teleport(const int client)
+public Action Lag_Teleport(int client)
 {
 	if (--Cache[client].TickTeleport > 0)
 		return Plugin_Continue;
@@ -52,7 +52,7 @@ public Action Lag_Teleport(const int client)
 	return Plugin_Continue;
 }
 
-public Action Lag_SetPositionCheck(const int client)
+public Action Lag_SetPositionCheck(int client)
 {
 	if (--Cache[client].TickSetPosition <= 0)
 		Lag_SetPosition(client);
@@ -60,7 +60,7 @@ public Action Lag_SetPositionCheck(const int client)
 	return Plugin_Continue;
 }
 
-void Lag_SetPosition(const int client)
+void Lag_SetPosition(int client)
 {
 	float fPos[3];
 	GetClientAbsOrigin(client, fPos);

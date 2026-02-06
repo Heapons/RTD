@@ -38,7 +38,7 @@ public void DeadlyVoice_Init(const Perk perk)
 	Events.OnVoice(perk, DeadlyVoice_OnVoice);
 }
 
-void DeadlyVoice_ApplyPerk(const int client, const Perk perk)
+void DeadlyVoice_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].LastAttack = 0.0;
 	Cache[client].Rate = perk.GetPrefFloat("rate", 0.8);
@@ -48,7 +48,7 @@ void DeadlyVoice_ApplyPerk(const int client, const Perk perk)
 	Notify.Attack(client);
 }
 
-void DeadlyVoice_OnVoice(const int client)
+void DeadlyVoice_OnVoice(int client)
 {
 	float fEngineTime = GetEngineTime();
 	float fRate = Cache[client].Rate;

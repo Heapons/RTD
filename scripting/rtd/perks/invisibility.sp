@@ -38,8 +38,9 @@ public void Invisibility_Init(const Perk perk)
 	Events.OnResupply(perk, Invisibility_OnResupply);
 }
 
-void Invisibility_ApplyPerk(const int client, const Perk perk)
+void Invisibility_ApplyPerk(int client, const Perk perk)
 {
+	TFEntity player = TFEntity(client);
 	int iAlpha = perk.GetPrefCell("alpha", 0);
 	bool bOnFoe = perk.GetPrefCell("blink_on_foe", 1) > 0;
 	bool bOnBump = perk.GetPrefCell("blink_on_bump", 0) > 0;
@@ -52,7 +53,7 @@ void Invisibility_ApplyPerk(const int client, const Perk perk)
 
 	Invisibility_SetOverlay(client);
 	Invisibility_Set(client, iAlpha);
-	TF2_AddCondition(client, TFCond_DisguisedAsDispenser);
+	player.AddCond(view_as<int>(TFCond_DisguisedAsDispenser));
 	ApplyPreventCapture(client);
 
 	if (bOnFoe && !bOnBump)
@@ -68,15 +69,16 @@ void Invisibility_ApplyPerk(const int client, const Perk perk)
 		SDKHook(client, SDKHook_OnTakeDamagePost, Invisibility_OnTakeDamage);
 }
 
-public void Invisibility_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Invisibility_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
+	TFEntity player = TFEntity(client);
 	SDKUnhook(client, SDKHook_StartTouchPost, Invisibility_OnStartTouchPlayerOnly);
 	SDKUnhook(client, SDKHook_StartTouchPost, Invisibility_OnStartTouchAny);
 	SDKUnhook(client, SDKHook_OnTakeDamagePost, Invisibility_OnTakeDamage);
 
 	Invisibility_UnsetOverlay(client);
 	Invisibility_Set(client, Cache[client].BaseAlpha);
-	TF2_RemoveCondition(client, TFCond_DisguisedAsDispenser);
+	player.RemoveCond(view_as<int>(TFCond_DisguisedAsDispenser));
 	RemovePreventCapture(client);
 }
 
@@ -100,7 +102,7 @@ public void Invisibility_OnTakeDamage(int client, int attacker)
 	Invisibility_Blink(client);
 }
 
-public bool Invisiblity_OnAttackCritCheck(const int client, const int iWeapon)
+public bool Invisiblity_OnAttackCritCheck(int client, const int iWeapon)
 {
 	if (Cache[client].BlinkOnAttack)
 		Invisibility_Blink(client);
@@ -108,7 +110,7 @@ public bool Invisiblity_OnAttackCritCheck(const int client, const int iWeapon)
 	return false;
 }
 
-void Invisibility_Blink(const int client)
+void Invisibility_Blink(int client)
 {
 	float fEngineTime = GetEngineTime();
 	if (fEngineTime < Cache[client].LastBlink + Cache[client].BlinkRate)
@@ -142,7 +144,7 @@ void Invisibility_Blink(const int client)
 	Cache[client].Delay(Cache[client].BlinkRate / 2, Invisibility_SetOverlay);
 }
 
-void Invisibility_Set(const int client, const int iValue)
+void Invisibility_Set(int client, const int iValue)
 {
 	if(GetEntityRenderMode(client) == RENDER_NORMAL)
 		SetEntityRenderMode(client, RENDER_TRANSCOLOR);
@@ -174,22 +176,22 @@ void Invisibility_Set(const int client, const int iValue)
 	}
 }
 
-public void Invisibility_SetOverlay(const int client)
+public void Invisibility_SetOverlay(int client)
 {
 	SetOverlay(client, ClientOverlay_Stealth);
 }
 
-public void Invisibility_UnsetOverlay(const int client)
+public void Invisibility_UnsetOverlay(int client)
 {
 	SetOverlay(client, ClientOverlay_None);
 }
 
-public void Invisibility_OnResupply(const int client)
+public void Invisibility_OnResupply(int client)
 {
 	Invisibility_Set(client, Cache[client].Alpha);
 }
 
-stock bool IsCorrectWearable(const int client, const int iEnt, char[] sClass, const int iBufferSize)
+stock bool IsCorrectWearable(int client, const int iEnt, char[] sClass, const int iBufferSize)
 {
 	if (!IsValidEntity(iEnt))
 		return false;

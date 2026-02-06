@@ -28,7 +28,7 @@ public void Blind_Init(const Perk perk)
 	Events.OnPlayerAttacked(perk, Blind_OnPlayerAttacked);
 }
 
-void Blind_ApplyPerk(const int client, const Perk perk)
+void Blind_ApplyPerk(int client, const Perk perk)
 {
 	int iAlpha = perk.GetPrefCell("alpha", 254);
 	Cache[client].Alpha = iAlpha;
@@ -47,7 +47,7 @@ void Blind_ApplyPerk(const int client, const Perk perk)
 	}
 }
 
-public void Blind_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void Blind_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	Blind_SendFade(client, 0);
 	SetOverlay(client, ClientOverlay_None);
@@ -56,13 +56,13 @@ public void Blind_RemovePerk(const int client, const RTDRemoveReason eRemoveReas
 		Blind_UpdateAnnotations(client, true);
 }
 
-public Action Blind_UpdateAnnotationsCheck(const int client)
+public Action Blind_UpdateAnnotationsCheck(int client)
 {
 	Blind_UpdateAnnotations(client);
 	return Plugin_Continue;
 }
 
-void Blind_UpdateAnnotations(const int client, const bool bForceDisable=false)
+void Blind_UpdateAnnotations(int client, const bool bForceDisable=false)
 {
 	int iOtherTeam = GetOppositeTeamOf(client);
 
@@ -84,7 +84,7 @@ void Blind_UpdateAnnotations(const int client, const bool bForceDisable=false)
 	}
 }
 
-public void Blind_OnPlayerAttacked(const int client, const int victim, const int damage, const int health)
+public void Blind_OnPlayerAttacked(int client, const int victim, const int damage, const int health)
 {
 	if(!Cache[client].TriggerUnblind)
 		return;
@@ -96,7 +96,7 @@ public void Blind_OnPlayerAttacked(const int client, const int victim, const int
 	Blind_SendFade(client, Cache[client].Alpha, true);
 }
 
-bool Blind_IsValidTarget(const int client, const int iTarget, const int iTargetTeam)
+bool Blind_IsValidTarget(int client, const int iTarget, const int iTargetTeam)
 {
 	if (iTarget == client || !IsClientInGame(iTarget) || !IsPlayerAlive(iTarget) || TF2_IsPlayerInCondition(iTarget, TFCond_Cloaked))
 		return false;
@@ -116,7 +116,7 @@ bool Blind_IsValidTarget(const int client, const int iTarget, const int iTargetT
 	return CanEntitySeeTarget(client, iTarget);
 }
 
-void Blind_SendFade(const int client, const int iAlpha, const bool bFast=false)
+void Blind_SendFade(int client, const int iAlpha, const bool bFast=false)
 {
 	int iTargets[2];
 	iTargets[0] = client;

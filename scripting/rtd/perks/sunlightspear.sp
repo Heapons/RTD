@@ -47,7 +47,7 @@ public void SunlightSpear_Init(const Perk perk)
 	Events.OnVoice(perk, SunlightSpear_OnVoice);
 }
 
-void SunlightSpear_ApplyPerk(const int client, const Perk perk)
+void SunlightSpear_ApplyPerk(int client, const Perk perk)
 {
 	Cache[client].Ticks = perk.GetPrefCell("ticks", 5);
 	Cache[client].Slowdown = ClampInt(RoundFloat(perk.GetPrefFloat("slowdown", 0.2) * 100), 0, 100);
@@ -69,7 +69,7 @@ void SunlightSpear_ApplyPerk(const int client, const Perk perk)
 	Notify.Attack(client);
 }
 
-void SunlightSpear_OnVoice(const int client)
+void SunlightSpear_OnVoice(int client)
 {
 	float fTime = GetEngineTime();
 	if (fTime < Cache[client].NextAttack)
@@ -146,14 +146,15 @@ public Action SunlightSpear_OnTouch(const int iProjectile, const int victim)
 	int victimUserId = -1;
 	if (1 <= victim <= MaxClients)
 	{
-		victimUserId = GetClientUserId(victim);
+		TFEntity target = TFEntity(victim);
+		victimUserId = target.userid;
 
 		int iParticle = Cache[attacker].ElectrocuteEffect;
 		SendTEParticleAttached(view_as<TEParticleId>(iParticle), victim);
 
 		if (TF2_GetClientTeam(attacker) == TF2_GetClientTeam(victim))
 		{
-			TF2_AddCondition(victim, TFCond_SpeedBuffAlly, float(Cache[attacker].AllySpeed) / 100.0);
+			target.AddCond(view_as<int>(TFCond_SpeedBuffAlly), float(Cache[attacker].AllySpeed) / 100.0);
 			return Plugin_Handled;
 		}
 

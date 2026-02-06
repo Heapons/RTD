@@ -21,28 +21,28 @@
 
 DEFINE_CALL_APPLY_REMOVE(TinyMann)
 
-public void TinyMann_ApplyPerk(const int client, const Perk perk)
+public void TinyMann_ApplyPerk(int client, const Perk perk)
 {
+	TFEntity player = TFEntity(client);
 	float fScale = perk.GetPrefFloat("scale", 0.15);
 
 	Cache[client].SpeedBoost = perk.GetPrefCell("boost", 1);
 	Cache[client].BaseScale = GetEntPropFloat(client, Prop_Send, "m_flModelScale");
-	TFEntity player = TFEntity(client);
 	player.AddAttribute(Attribs.VoicePitch, 1.0 / fScale / 2.0);
 	SetEntPropFloat(client, Prop_Send, "m_flModelScale", fScale);
 
 	if (Cache[client].SpeedBoost)
-		TF2_AddCondition(client, TFCond_SpeedBuffAlly);
+		player.AddCond(view_as<int>(TFCond_SpeedBuffAlly));
 }
 
-public void TinyMann_RemovePerk(const int client, const RTDRemoveReason eRemoveReason)
+public void TinyMann_RemovePerk(int client, const RTDRemoveReason eRemoveReason)
 {
 	TFEntity player = TFEntity(client);
 	player.RemoveAttribute(Attribs.VoicePitch);
 	SetEntPropFloat(client, Prop_Send, "m_flModelScale", Cache[client].BaseScale);
 
 	if (Cache[client].SpeedBoost)
-		TF2_RemoveCondition(client, TFCond_SpeedBuffAlly);
+		player.RemoveCond(view_as<int>(TFCond_SpeedBuffAlly));
 
 	FixPotentialStuck(client);
 }
