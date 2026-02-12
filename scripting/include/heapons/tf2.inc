@@ -407,7 +407,7 @@ methodmap TFEntity
     public bool AddCond(int condition, float duration = -1.0)
     {
         char buffer[64];
-        Format(buffer, sizeof(buffer), "self.AddCond(%d, %f)", condition, duration);
+        Format(buffer, sizeof(buffer), "self.AddCondEx(%d, %f, null)", condition, duration);
         return this.RunScriptCode(buffer);
     }
 
